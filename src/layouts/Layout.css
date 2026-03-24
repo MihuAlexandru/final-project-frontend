@@ -7,4 +7,6 @@
 .layout-content {
   flex: 1;
   padding: var(--space-lg);
+  margin: 0;
+  padding: 0;
 }
