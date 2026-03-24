@@ -1,0 +1,32 @@
+import { createRoot } from "react-dom/client";
+import "./App.css";
+import { BrowserRouter } from "react-router-dom";
+
+import { Routes, Route } from "react-router-dom";
+import Login from "./pages/Login.jsx";
+import Signup from "./pages/Signup.jsx";
+import Catalog from "./pages/Catalog.jsx";
+import Product from "./pages/Product.jsx";
+import Profile from "./pages/Profile.jsx";
+import Checkout from "./pages/Checkout.jsx";
+import Wishlist from "./pages/Wishlist.jsx";
+import Cart from "./pages/Cart.jsx";
+import AdminPanel from "./pages/AdminPanel.jsx";
+import Navbar from "./components/Navbar.jsx";
+
+createRoot(document.getElementById("root")).render(
+  <BrowserRouter>
+    <Navbar />
+    <Routes>
+      <Route path="/" element={<Catalog />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
+      <Route path="/product/:id" element={<Product />} />
+      <Route path="/profile" element={<Profile />} />
+      <Route path="/checkout" element={<Checkout />} />
+      <Route path="/wishlist" element={<Wishlist />} />
+      <Route path="/cart" element={<Cart />} />
+      <Route path="/admin" element={<AdminPanel />} />
+    </Routes>
+  </BrowserRouter>,
+);
