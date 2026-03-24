@@ -15,12 +15,15 @@ import AdminPanel from "./pages/AdminPanel.jsx";
 import "./styles/variables.css";
 import "./styles/globals.css";
 import Layout from "./layouts/Layout.jsx";
+import LandingPage from "./pages/LandingPage/LandingPage.jsx";
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
+    <Routes></Routes>
     <Layout>
       <Routes>
-        <Route path="/" element={<Catalog />} />
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/catalog" element={<Catalog />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/product/:id" element={<Product />} />
