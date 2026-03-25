@@ -1,0 +1,23 @@
+.attributeRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.flexInput {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.actionColumn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  align-self: stretch;
+}
+
+.actionColumn button {
+  padding-right: 0px;
+}
