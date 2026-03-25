@@ -19,7 +19,7 @@
   min-width: 300px;
   max-width: 420px;
   pointer-events: auto;
-  color: #fff;
+  color: var(--color-white);
 
   animation: toast-in 0.3s ease forwards;
 }
@@ -29,19 +29,19 @@
 }
 
 .toastSuccess {
-  background-color: #28a745;
+  background-color: var(--color-success);
 }
 
 .toastError {
-  background-color: #dc3545;
+  background-color: var(--color-danger);
 }
 
 .toastWarning {
-  background-color: #ffc107;
+  background-color: var(--color-warning);
 }
 
 .toastInfo {
-  background-color: #007bff;
+  background-color: var(--color-info);
 }
 
 .toastIcon {
