@@ -1,0 +1,52 @@
+.container {
+  flex-direction: row;
+  border-radius: var(--radius-lg);
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+}
+
+.colorBlock {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 10px;
+  background-color: black;
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.formWrapper {
+  flex: 1.2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: left;
+  padding: 30px;
+  gap: 10px;
+  background-color: white;
+}
+
+.formWrapper form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 500px;
+}
+
+.textWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+h1 {
+  font-size: 7ch;
+  margin: 0;
+}
