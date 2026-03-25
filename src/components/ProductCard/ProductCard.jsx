@@ -4,8 +4,11 @@ import styles from "./ProductCard.module.css";
 import { Link } from "react-router-dom";
 
 export default function ProductCard({ product }) {
+  const isOutOfStock = product.stock_quantity === 0;
   return (
-    <div className={styles.cardHoverWrapper}>
+    <div
+      className={`${styles.cardHoverWrapper} ${isOutOfStock ? styles.outOfStock : ""}`}
+    >
       <Card>
         <div className={styles.productCardContainer}>
           <button className={styles.iconBtn} aria-label="Add to wishlist">
@@ -23,7 +26,7 @@ export default function ProductCard({ product }) {
             <h3 className={styles.title}>{product.name}</h3>
           </Link>
           <div className={styles.details}>
-            {product.stock_quantity > 0 && product.stock_quantity <= 3 ? (
+            {product.stock_quantity > 0 && product.stock_quantity <= 5 ? (
               <p className={styles.stoc}>
                 Only {product.stock_quantity} products left!
               </p>
@@ -33,7 +36,7 @@ export default function ProductCard({ product }) {
               </p>
             ) : (
               <p className={styles.stoc} style={{ color: "green" }}>
-                In stock
+                In stock ({product.stock_quantity})
               </p>
             )}
             <p className={styles.price}>
@@ -43,7 +46,7 @@ export default function ProductCard({ product }) {
 
           <div className={styles.action}>
             <Button disabled={product.stock_quantity === 0}>
-              {product.stock_quantity === 0 ? "Unavailable" : "Add to Chart"}
+              {product.stock_quantity === 0 ? "Out of stock!" : "Add to Cart"}
             </Button>
           </div>
         </div>
