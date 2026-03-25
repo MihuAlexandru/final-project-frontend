@@ -50,13 +50,13 @@
 }
 
 .role.admin {
-  background: color-mix(in srgb, var(--color-primary) 15%, transparent);
+  background: color-mix(in srgb, var(--color-dark) 15%, transparent);
   color: var(--color-primary);
 }
 
 .role.user {
   background: color-mix(in srgb, var(--color-secondary) 15%, transparent);
-  color: var(--color-secondary);
+  color: var(--color-dark);
 }
 
 .actions {
@@ -71,13 +71,13 @@
   font-size: 0.8rem;
   font-weight: 600;
   border-radius: var(--radius-sm);
-  border: 1.5px solid var(--color-primary);
-  color: var(--color-primary);
+  border: 1.5px solid var(--color-dark);
+  color: var(--color-dark);
   background: transparent;
 }
 
 .promoteBtn:hover {
-  background: color-mix(in srgb, var(--color-primary) 10%, transparent);
+  background: color-mix(in srgb, var(--color-dark) 8%, transparent);
 }
 
 .demoteBtn {
@@ -85,14 +85,13 @@
   font-size: 0.8rem;
   font-weight: 600;
   border-radius: var(--radius-sm);
-  border: 1.5px solid var(--color-border);
-  color: var(--color-text-light);
+  border: 1.5px solid var(--color-warning);
   background: transparent;
 }
 
 .demoteBtn:hover {
   background: var(--color-gray-200);
-  border-color: var(--color-secondary);
+  border-color: var(--color-warning);
 }
 
 .deleteBtn {

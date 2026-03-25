@@ -39,16 +39,15 @@ export default function UsersPanel() {
   const { addToast } = useToast();
 
   const filtered = users.filter((u) =>
-    u.email.toLowerCase().includes(searchQuery.toLowerCase())
+    u.email.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   const totalPages = Math.ceil(filtered.length / ROWS_PER_PAGE);
   const safePage = Math.min(currentPage, totalPages || 1);
   const pageUsers = filtered.slice(
     (safePage - 1) * ROWS_PER_PAGE,
-    safePage * ROWS_PER_PAGE
+    safePage * ROWS_PER_PAGE,
   );
-
 
   const paddedRows = [
     ...pageUsers,
@@ -61,18 +60,31 @@ export default function UsersPanel() {
   }
 
   function handlePromote(id) {
-    setUsers((prev) =>
-      prev.map((u) => (u.id === id ? { ...u, role: "admin" } : u))
-    );
     const user = users.find((u) => u.id === id);
+    if (user.role === "admin") {
+      addToast({
+        type: "error",
+        message: `${user.email} is already an admin.`,
+      });
+      return;
+    }
+
+    setUsers((prev) =>
+      prev.map((u) => (u.id === id ? { ...u, role: "admin" } : u)),
+    );
+
     addToast({ type: "success", message: `${user.email} promoted to admin.` });
   }
 
   function handleDemote(id) {
-    setUsers((prev) =>
-      prev.map((u) => (u.id === id ? { ...u, role: "user" } : u))
-    );
     const user = users.find((u) => u.id === id);
+    if (user.role === "user") {
+      addToast({ type: "error", message: `${user.email} is already an user.` });
+      return;
+    }
+    setUsers((prev) =>
+      prev.map((u) => (u.id === id ? { ...u, role: "user" } : u)),
+    );
     addToast({ type: "info", message: `${user.email} demoted to user.` });
   }
 
@@ -112,8 +124,12 @@ export default function UsersPanel() {
                 onDelete={handleDelete}
               />
             ) : (
-              <li key={`ghost-${idx}`} className={style.ghostRow} aria-hidden="true" />
-            )
+              <li
+                key={`ghost-${idx}`}
+                className={style.ghostRow}
+                aria-hidden="true"
+              />
+            ),
           )
         )}
       </ul>

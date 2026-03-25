@@ -22,11 +22,11 @@
 
 .pageBtn:hover:not(:disabled):not(.active) {
   background: var(--color-gray-100);
-  border-color: var(--color-primary);
+  border-color: var(--color-dark);
 }
 
 .pageBtn.active:hover {
-  background: color-mix(in srgb, var(--color-primary) 85%, black);
+  background: color-mix(in srgb, var(--color-dark) 85%, black);
 }
 
 .pageBtn:disabled {
@@ -35,8 +35,8 @@
 }
 
 .pageBtn.active {
-  background: var(--color-primary);
-  border-color: var(--color-primary);
+  background: var(--color-dark);
+  border-color: var(--color-dark);
   color: var(--color-white);
   font-weight: 600;
 }

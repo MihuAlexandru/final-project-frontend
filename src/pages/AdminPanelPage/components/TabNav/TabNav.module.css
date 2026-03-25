@@ -27,8 +27,8 @@
 }
 
 .tabBtn.active {
-  background: color-mix(in srgb, var(--color-primary) 10%, transparent);
-  color: var(--color-primary);
+  background: color-mix(in srgb, var(--color-dark) 10%, transparent);
+  color: var(--color-dark);
   font-weight: 600;
 }
 
@@ -51,6 +51,6 @@
   }
 
   .tabBtn.active {
-    border-left-color: var(--color-primary);
+    border-left-color: var(--color-dark);
   }
 }
