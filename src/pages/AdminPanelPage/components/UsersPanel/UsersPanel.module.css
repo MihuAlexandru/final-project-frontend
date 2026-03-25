@@ -1,0 +1,55 @@
+.panel {
+  flex: 1;
+  min-width: 0;
+  padding: var(--space-md);
+}
+
+.header {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.count {
+  font-size: 0.85rem;
+  color: var(--color-text-light);
+}
+
+.searchWrap {
+  margin-bottom: var(--space-md);
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.empty {
+  color: var(--color-text-light);
+  text-align: center;
+  padding: var(--space-xl);
+}
+
+
+.ghostRow {
+  height: 4rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.ghostRow:last-child {
+  border-bottom: none;
+}
