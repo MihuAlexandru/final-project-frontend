@@ -1,12 +1,14 @@
 .btn {
   background: var(--color-primary);
-  color: white;
-  padding: var(--space-sm) var(--space-md);
+  color: var(--color-text);
+  padding: var(--space-md) var(--space-lg);
   border: none;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-xl);
   cursor: pointer;
   font-size: 1rem;
+  font-weight: bold;
   transition: background 0.2s;
+  text-decoration: none;
 }
 
 .btn:hover {
