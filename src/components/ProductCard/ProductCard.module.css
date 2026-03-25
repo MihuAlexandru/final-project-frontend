@@ -1,4 +1,4 @@
-.outOfStock {
+.unavailable {
   opacity: 0.6;
   filter: grayscale(100%);
 }
@@ -13,6 +13,9 @@
   transition:
     box-shadow 0.3s ease,
     transform 0.3s ease;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
 }
 
 .cardHoverWrapper:hover > div {

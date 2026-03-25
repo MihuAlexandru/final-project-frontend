@@ -14,6 +14,7 @@ export default function Catalog() {
           display: "grid",
           gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
           gap: "20px",
+          margin: "20px",
         }}
       >
         {mockProducts.map((item) => (

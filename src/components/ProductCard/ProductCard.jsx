@@ -5,9 +5,10 @@ import { Link } from "react-router-dom";
 
 export default function ProductCard({ product }) {
   const isOutOfStock = product.stock_quantity === 0;
+  const isUnavailable = product.is_available === false;
   return (
     <div
-      className={`${styles.cardHoverWrapper} ${isOutOfStock ? styles.outOfStock : ""}`}
+      className={`${styles.cardHoverWrapper} ${isUnavailable ? styles.unavailable : ""}`}
     >
       <Card>
         <div className={styles.productCardContainer}>
@@ -25,12 +26,16 @@ export default function ProductCard({ product }) {
             <h3 className={styles.title}>{product.name}</h3>
           </Link>
           <div className={styles.details}>
-            {product.stock_quantity > 0 && product.stock_quantity <= 5 ? (
+            {isUnavailable ? (
+              <p className={styles.stock} style={{ color: "grey" }}>
+                Unavailable
+              </p>
+            ) : product.stock_quantity > 0 && product.stock_quantity <= 5 ? (
               <p className={styles.stock}>
                 Only {product.stock_quantity} products left!
               </p>
-            ) : product.stock_quantity === 0 ? (
-              <p className={styles.stoc} style={{ color: "grey" }}>
+            ) : isOutOfStock ? (
+              <p className={styles.stock} style={{ color: "grey" }}>
                 Out of stock!
               </p>
             ) : (
@@ -43,8 +48,12 @@ export default function ProductCard({ product }) {
             </p>
           </div>
           <div className={styles.action}>
-            <Button disabled={isOutOfStock}>
-              {product.stock_quantity === 0 ? "Out of stock" : "Add to Cart"}
+            <Button disabled={isOutOfStock || isUnavailable}>
+              {isUnavailable
+                ? "Unavailable"
+                : isOutOfStock
+                  ? "Out of stock"
+                  : "Add to Cart"}
             </Button>
           </div>
         </div>
