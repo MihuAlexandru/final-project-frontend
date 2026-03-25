@@ -1,0 +1,109 @@
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  border-bottom: 1px solid var(--color-border);
+  transition: background 0.15s;
+  flex-wrap: wrap;
+}
+
+.row:last-child {
+  border-bottom: none;
+}
+
+.row:hover {
+  background: var(--color-gray-100);
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  min-width: 0;
+}
+
+.icon {
+  color: var(--color-text-light);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.email {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.role {
+  display: inline-block;
+  font-size: 0.75rem;
+  padding: 0.125rem var(--space-sm);
+  border-radius: var(--radius-xl);
+  font-weight: 600;
+  margin-top: 0.125rem;
+}
+
+.role.admin {
+  background: color-mix(in srgb, var(--color-dark) 15%, transparent);
+  color: var(--color-primary);
+}
+
+.role.user {
+  background: color-mix(in srgb, var(--color-secondary) 15%, transparent);
+  color: var(--color-dark);
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-xs);
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.promoteBtn {
+  padding: var(--space-xs) var(--space-sm);
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--color-dark);
+  color: var(--color-dark);
+  background: transparent;
+}
+
+.promoteBtn:hover {
+  background: color-mix(in srgb, var(--color-dark) 8%, transparent);
+}
+
+.demoteBtn {
+  padding: var(--space-xs) var(--space-sm);
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--color-warning);
+  background: transparent;
+}
+
+.demoteBtn:hover {
+  background: var(--color-gray-200);
+  border-color: var(--color-warning);
+}
+
+.deleteBtn {
+  padding: var(--space-xs) var(--space-sm);
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  border: none;
+  background: var(--color-danger);
+  color: var(--color-white);
+}
+
+.deleteBtn:hover {
+  background: color-mix(in srgb, var(--color-danger) 85%, black);
+}
