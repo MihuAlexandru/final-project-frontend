@@ -15,12 +15,12 @@
   background: var(--color-gray-200);
 }
 .btn:disabled {
-  background-color: #e0e0e0;
-  color: #a0a0a0;
+  background-color: var(--color-gray-300);
+  color: var(--color-gray-500);
   cursor: not-allowed;
   box-shadow: none;
 }
 
 .btn:disabled:hover {
-  background-color: #e0e0e0;
+  background-color: var(--color-gray-300);
 }

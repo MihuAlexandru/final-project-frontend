@@ -22,12 +22,11 @@ export default function ProductCard({ product }) {
                 className={styles.image}
               />
             </div>
-
             <h3 className={styles.title}>{product.name}</h3>
           </Link>
           <div className={styles.details}>
             {product.stock_quantity > 0 && product.stock_quantity <= 5 ? (
-              <p className={styles.stoc}>
+              <p className={styles.stock}>
                 Only {product.stock_quantity} products left!
               </p>
             ) : product.stock_quantity === 0 ? (
@@ -35,7 +34,7 @@ export default function ProductCard({ product }) {
                 Out of stock!
               </p>
             ) : (
-              <p className={styles.stoc} style={{ color: "green" }}>
+              <p className={styles.stock} style={{ color: "green" }}>
                 In stock ({product.stock_quantity})
               </p>
             )}
@@ -43,9 +42,8 @@ export default function ProductCard({ product }) {
               {product.price.toLocaleString("ro-RO")} Lei
             </p>
           </div>
-
           <div className={styles.action}>
-            <Button disabled={product.stock_quantity === 0}>
+            <Button disabled={isOutOfStock}>
               {product.stock_quantity === 0 ? "Out of stock" : "Add to Cart"}
             </Button>
           </div>
