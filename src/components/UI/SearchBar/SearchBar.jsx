@@ -1,11 +1,11 @@
 import Input from "../Input/Input.jsx";
 import style from "./SearchBar.module.css";
 
-export default function SearchBar({ onSearch, placeholder = "Search products..." }) {
+export default function SearchBar({ onSearch }) {
   return (
     <div className={style.searchbar}>
       <Input
-        placeholder={placeholder}
+        placeholder="Search products..."
         onChange={(e) => onSearch(e.target.value)}
       />
     </div>
