@@ -1,5 +1,8 @@
 import { useToast } from "../context/ToastContext";
 
+import ProductEditModal from "../components/Admin/ProductEditModal";
+import { useState } from "react";
+
 export default function Catalog() {
   const { addToast } = useToast();
 
@@ -37,6 +40,30 @@ export default function Catalog() {
           Test Info
         </button>
       </div>
+    </div>
+  );
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div style={{ padding: "40px", textAlign: "center" }}>
+      <h1>Pagina Inventar (Test)</h1>
+      {/* 2. Butonul care schimbă starea în 'true' */}
+      <button
+        onClick={() => setIsOpen(true)}
+        style={{ padding: "10px 20px", cursor: "pointer" }}
+      >
+        Deschide Modalul
+      </button>
+      {/* 3. Logica de afișare: dacă isOpen e true, randează componenta */}
+      {isOpen && (
+        <ProductEditModal
+          onClose={() => setIsOpen(false)} // Când modalul cere închidere, facem starea 'false'
+          onSubmit={(data) => {
+            console.log("Date salvate:", data);
+            setIsOpen(false); // Închidem după "salvare"
+          }}
+        />
+      )}
     </div>
   );
 }
