@@ -9,7 +9,7 @@
   background: transparent;
 }
 
-.navbar-links a {
+.navbarLinks a {
   margin-right: 20px;
   color: var(--color-text);
   text-decoration: none;
@@ -17,6 +17,6 @@
   font-size: 1rem;
 }
 
-.navbar-links a:hover {
+.navbarLinks a:hover {
   opacity: 0.7;
 }

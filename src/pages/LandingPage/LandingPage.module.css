@@ -22,25 +22,25 @@
   background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
 }
 
-.hero-content {
+.heroContent {
   position: relative;
   text-align: center;
   color: var(--color-text);
   z-index: 5;
 }
 
-.hero-content h1 {
+.heroContent h1 {
   font-size: 4rem;
   letter-spacing: 2px;
   margin-bottom: 10px;
 }
 
-.hero-content h2 {
+.heroContent h2 {
   font-size: 1.5rem;
   margin-bottom: 25px;
   opacity: 0.9;
 }
 
-.landing-page .hero {
+.landingPage .hero {
   padding: 0 !important;
 }

@@ -11,7 +11,7 @@ import Profile from "./pages/Profile.jsx";
 import Checkout from "./pages/Checkout.jsx";
 import Wishlist from "./pages/Wishlist.jsx";
 import Cart from "./pages/Cart.jsx";
-import AdminPanel from "./pages/AdminPanel.jsx";
+import AdminPanel from "./pages/AdminPanelPage/AdminPanel.jsx";
 import "./styles/variables.css";
 import "./styles/globals.css";
 import Layout from "./layouts/Layout.jsx";
