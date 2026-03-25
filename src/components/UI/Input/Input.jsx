@@ -1,8 +1,8 @@
-import "./Input.css";
+import style from "./Input.module.css";
 
 export default function Input({ label, ...props }) {
   return (
-    <div className="input-group">
+    <div className={style.inputGroup}>
       {label && <label>{label}</label>}
       <input {...props} />
     </div>

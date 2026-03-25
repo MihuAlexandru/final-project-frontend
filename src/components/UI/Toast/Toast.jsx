@@ -1,4 +1,4 @@
-import "./Toast.css";
+import style from "./Toast.module.css";
 
 const icons = {
   success: (
@@ -42,13 +42,17 @@ const icons = {
 export default function Toast({ id, type, message, exiting, onClose }) {
   return (
     <div
-      className={`toast toast--${type} ${exiting ? "toast--exiting" : ""}`}
+      className={`
+  ${style.toast} 
+  ${style[`toast${type.charAt(0).toUpperCase() + type.slice(1)}`]} 
+  ${exiting ? style.toastExiting : ""}
+`}
       role="alert"
     >
-      <span className="toast__icon">{icons[type]}</span>
-      <p className="toast__message">{message}</p>
+      <span className={style.toastIcon}>{icons[type]}</span>
+      <p className={style.toastMessage}>{message}</p>
       <button
-        className="toast__close"
+        className={style.toastClose}
         onClick={() => onClose(id)}
         aria-label="Dismiss"
       >
