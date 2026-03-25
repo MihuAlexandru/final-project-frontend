@@ -14,11 +14,11 @@ export default function Input({
       {label && <label>{label}</label>}
 
       {type === "password" ? (
-        <div className="password-wrapper">
+        <div className={style.passwordWrapper}>
           <input type={inputType} {...props} />
           <button
             type="button"
-            className="toggle"
+            className={style.toggle}
             onClick={togglePassword}
             aria-label={showPassword ? "Hide password" : "Show password"}
           >

@@ -56,7 +56,7 @@ export default function Login() {
             <Input
               label="Email address"
               type="email"
-              placeholder="name@example.com"
+              placeholder="example@email.com"
               value={email}
               onChange={(e) => {
                 setEmail(e.target.value);
@@ -88,7 +88,7 @@ export default function Login() {
             Don’t have an account? <Link to="/signup">Sign up</Link>
           </p>
 
-          <Button disabled={loading}>
+          <Button className={styles.loginButton} disabled={loading}>
             {loading ? "Logging in..." : "Login"}
           </Button>
         </form>

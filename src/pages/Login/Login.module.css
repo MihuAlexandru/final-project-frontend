@@ -54,7 +54,7 @@
 }
 
 .title {
-  font-size: clamp(2.55rem, 5.2vw, 3.75rem);
+  font-size: clamp(3.55rem, 5.2vw, 4.05rem);
   line-height: 1.1;
   color: var(--color-text);
   font-weight: 700;
@@ -69,9 +69,13 @@
 }
 
 .signupText {
-  margin: var(--space-xs) 0 0;
+  margin: var(--space-md) 0 0;
   font-size: clamp(1.04rem, 1.3vw, 1.14rem);
-  color: var(--color-text-light);
+  color: var(--color-text);
+}
+
+.signupText a {
+  color: var(--color-secondary);
 }
 
 .formWrapper form .btn {
@@ -84,8 +88,18 @@
 }
 
 .signupText a:hover {
-  color: var(--color-text);
+  color: var(--color-secondary);
   text-decoration: underline;
+}
+
+.loginButton {
+  margin-top: var(--space-sm);
+  background: #000000;
+  color: #ffffff;
+}
+
+.loginButton:hover {
+  background: var(--color-secondary);
 }
 
 @media (max-width: 900px) {

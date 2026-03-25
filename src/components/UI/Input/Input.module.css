@@ -12,7 +12,7 @@
   color: var(--color-text);
 }
 
-.password-wrapper {
+.passwordWrapper {
   display: flex;
   align-items: center;
   border: 1px solid var(--color-border);
@@ -20,7 +20,7 @@
   overflow: hidden;
 }
 
-.password-wrapper input {
+.passwordWrapper input {
   flex: 1;
   border: none;
   border-radius: 0;
@@ -29,12 +29,12 @@
   color: var(--color-text);
 }
 
-.input-group input:-webkit-autofill,
-.input-group input:-webkit-autofill:hover,
-.input-group input:-webkit-autofill:focus,
-.password-wrapper input:-webkit-autofill,
-.password-wrapper input:-webkit-autofill:hover,
-.password-wrapper input:-webkit-autofill:focus {
+.inputGroup input:-webkit-autofill,
+.inputGroup input:-webkit-autofill:hover,
+.inputGroup input:-webkit-autofill:focus,
+.passwordWrapper input:-webkit-autofill,
+.passwordWrapper input:-webkit-autofill:hover,
+.passwordWrapper input:-webkit-autofill:focus {
   -webkit-text-fill-color: var(--color-text);
   box-shadow: 0 0 0 1000px var(--color-surface) inset;
   transition: background-color 9999s ease-in-out 0s;
