@@ -1,17 +1,17 @@
-import "./Footer.css";
+import style from "./Footer.module.css";
 
 export default function Footer() {
   return (
-    <footer className="footer">
-      <div className="footer-top">100% INDEPENDENT</div>
+    <footer className={style.footer}>
+      <div className={style.footerTop}>100% INDEPENDENT</div>
 
-      <div className="footer-content">
-        <div className="footer-column">
+      <div className={style.footerContent}>
+        <div className={style.footerColumn}>
           <h4>Customer</h4>
           <a>Contact us</a>
         </div>
 
-        <div className="footer-column">
+        <div className={style.footerColumn}>
           <h4>Shop</h4>
           <a>All Products</a>
           <a>Music</a>
@@ -20,7 +20,7 @@ export default function Footer() {
           <a>Home & Lifestyle</a>
         </div>
 
-        <div className="footer-column">
+        <div className={style.footerColumn}>
           <h4>Legal</h4>
           <a>Cookie Policy</a>
           <a>Privacy Policy</a>
@@ -29,7 +29,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="footer-bottom">© 2026 Your Brand</div>
+      <div className={style.footerBottom}>© 2026 Your Brand</div>
     </footer>
   );
 }

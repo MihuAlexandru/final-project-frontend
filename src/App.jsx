@@ -4,14 +4,14 @@ import { BrowserRouter } from "react-router-dom";
 
 import { Routes, Route } from "react-router-dom";
 import Login from "./pages/Login.jsx";
-import Signup from "./pages/Signup.jsx";
+import Signup from "./pages/Signup/Signup.jsx";
 import Catalog from "./pages/Catalog.jsx";
 import Product from "./pages/Product.jsx";
 import Profile from "./pages/Profile.jsx";
 import Checkout from "./pages/Checkout.jsx";
 import Wishlist from "./pages/Wishlist.jsx";
 import Cart from "./pages/Cart.jsx";
-import AdminPanel from "./pages/AdminPanel.jsx";
+import AdminPanel from "./pages/AdminPanelPage/AdminPanel.jsx";
 import "./styles/variables.css";
 import "./styles/globals.css";
 import Layout from "./layouts/Layout.jsx";
