@@ -1,3 +1,19 @@
+.cardHoverWrapper {
+  height: 100%;
+  width: 100%;
+}
+
+.cardHoverWrapper :global(.card) {
+  height: 100%;
+  transition:
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
+}
+
+.cardHoverWrapper:hover :global(.card) {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
 .productCardContainer {
   display: flex;
   flex-direction: column;
@@ -9,9 +25,9 @@
 }
 
 .iconBtn {
-  background-color: var(--color-surface, #fff);
+  background-color: var(--color-surface);
   border-radius: 50%;
-  border: var(--color-border, #e0e0e0) solid 1px;
+  border: var(--color-border) solid 1px;
   position: absolute;
   top: 8px;
   right: 16px;
@@ -93,4 +109,18 @@
   width: 100%;
   font-weight: bold;
   padding: 12px 10px;
+  background-color: var(--color-secondary);
+}
+
+.action button:hover {
+  background-color: #c93b82;
+}
+
+.productLink {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  cursor: pointer;
 }

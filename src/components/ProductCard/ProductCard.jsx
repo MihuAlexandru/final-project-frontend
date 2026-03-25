@@ -1,40 +1,53 @@
 import Button from "../UI/Button/Button";
 import Card from "../UI/Card/Card";
 import styles from "./ProductCard.module.css";
+import { Link } from "react-router-dom";
 
-export default function ProductCard({ data }) {
-  const product = data || {
-    title:
-      'Laptop Apple MacBook Air 13", cu procesor Apple M4, 10 nuclee CPU si 8 nuclee GPU, 16GB RAM, 256GB',
-    price: 4799.99,
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSScqnjw-17-IYMVuxZLswqjWLnOCPihEgLqA&s",
-  };
-
+export default function ProductCard({ product }) {
   return (
-    <Card>
-      <div className={styles.productCardContainer}>
-        <button className={styles.iconBtn} aria-label="Add to wishlist">
-          ♡
-        </button>
+    <div className={styles.cardHoverWrapper}>
+      <Card>
+        <div className={styles.productCardContainer}>
+          <button className={styles.iconBtn} aria-label="Add to wishlist">
+            ♡
+          </button>
+          <Link to={`/product/${product.id}`} className={styles.productLink}>
+            <div className={styles.imageContainer}>
+              <img
+                src={product.images[0].url}
+                alt={product.name}
+                className={styles.image}
+              />
+            </div>
 
-        <div className={styles.imageContainer}>
-          <img src={product.image} alt="MacBook Air" className={styles.image} />
+            <h3 className={styles.title}>{product.name}</h3>
+          </Link>
+          <div className={styles.details}>
+            {product.stock_quantity > 0 && product.stock_quantity <= 3 ? (
+              <p className={styles.stoc}>
+                Only {product.stock_quantity} products left!
+              </p>
+            ) : product.stock_quantity === 0 ? (
+              <p className={styles.stoc} style={{ color: "grey" }}>
+                Out of stock!
+              </p>
+            ) : (
+              <p className={styles.stoc} style={{ color: "green" }}>
+                In stock
+              </p>
+            )}
+            <p className={styles.price}>
+              {product.price.toLocaleString("ro-RO")} Lei
+            </p>
+          </div>
+
+          <div className={styles.action}>
+            <Button disabled={product.stock_quantity === 0}>
+              {product.stock_quantity === 0 ? "Unavailable" : "Add to Chart"}
+            </Button>
+          </div>
         </div>
-
-        <h3 className={styles.title}>{product.title}</h3>
-
-        <div className={styles.details}>
-          <p className={styles.stoc}>Au mai ramas 3 produse!</p>
-          <p className={styles.price}>
-            {product.price.toLocaleString("ro-RO")} Lei
-          </p>
-        </div>
-
-        <div className={styles.action}>
-          <Button>Adauga in Cos</Button>
-        </div>
-      </div>
-    </Card>
+      </Card>
+    </div>
   );
 }
