@@ -46,7 +46,7 @@ export default function ProductCard({ product }) {
 
           <div className={styles.action}>
             <Button disabled={product.stock_quantity === 0}>
-              {product.stock_quantity === 0 ? "Out of stock!" : "Add to Cart"}
+              {product.stock_quantity === 0 ? "Out of stock" : "Add to Cart"}
             </Button>
           </div>
         </div>

@@ -3,11 +3,6 @@
   filter: grayscale(100%);
 }
 
-.outOfStock:hover :global(.card) {
-  box-shadow: none !important;
-  transform: none !important;
-}
-
 .cardHoverWrapper {
   height: 100%;
   width: 100%;
