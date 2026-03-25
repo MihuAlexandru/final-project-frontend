@@ -4,6 +4,7 @@ import UserRow from "../UserRow/UserRow.jsx";
 import Pagination from "../Pagination/Pagination.jsx";
 import { useToast } from "../../../../context/ToastContext.jsx";
 import style from "./UsersPanel.module.css";
+import ConfirmDeleteModal from "../../../../components/ConfirmDeleteModal/ConfirmDeleteModal.jsx";
 
 const ROWS_PER_PAGE = 10;
 
@@ -36,6 +37,7 @@ export default function UsersPanel() {
   const [users, setUsers] = useState(INITIAL_USERS);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [pendingDelete, setPendingDelete] = useState(null);
   const { addToast } = useToast();
 
   const filtered = users.filter((u) =>
@@ -89,9 +91,14 @@ export default function UsersPanel() {
   }
 
   function handleDelete(id) {
-    const user = users.find((u) => u.id === id);
-    setUsers((prev) => prev.filter((u) => u.id !== id));
+    setPendingDelete(id);
+  }
+
+  function confirmDelete() {
+    const user = users.find((u) => u.id === pendingDelete);
+    setUsers((prev) => prev.filter((u) => u.id !== pendingDelete));
     addToast({ type: "error", message: `${user.email} has been deleted.` });
+    setPendingDelete(null);
   }
 
   return (
@@ -137,6 +144,12 @@ export default function UsersPanel() {
         currentPage={safePage}
         totalPages={totalPages}
         onPageChange={setCurrentPage}
+      />
+      <ConfirmDeleteModal 
+        open={pendingDelete !== null}
+        onClose={() => setPendingDelete(null)}
+        onConfirm={confirmDelete}
+        itemName="User"
       />
     </section>
   );
