@@ -1,7 +1,21 @@
+import { useState } from "react";
 import { useToast } from "../context/ToastContext";
+import ConfirmDeleteModal from "../components/ConfirmDeleteModal/ConfirmDeleteModal";
 
 export default function Catalog() {
   const { addToast } = useToast();
+  const [deleteModal, setDeleteModal] = useState({ open: false, type: "" });
+
+  const openDelete = (type) => setDeleteModal({ open: true, type });
+  const closeDelete = () => setDeleteModal({ open: false, type: "" });
+
+  const handleConfirmDelete = () => {
+    addToast({
+      type: "success",
+      message: `${deleteModal.type} deleted successfully!`,
+    });
+    closeDelete();
+  };
 
   return (
     <div>
@@ -37,6 +51,19 @@ export default function Catalog() {
           Test Info
         </button>
       </div>
+
+      <h2 style={{ marginTop: "32px" }}>Delete Modal Test</h2>
+      <div style={{ display: "flex", gap: "8px", marginTop: "8px" }}>
+        <button onClick={() => openDelete("User")}>Delete User</button>
+        <button onClick={() => openDelete("Product")}>Delete Product</button>
+      </div>
+
+      <ConfirmDeleteModal
+        open={deleteModal.open}
+        onClose={closeDelete}
+        onConfirm={handleConfirmDelete}
+        itemName={deleteModal.type}
+      />
     </div>
   );
 }
