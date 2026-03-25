@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Input from "../../components/UI/Input/Input";
 import Button from "../../components/UI/Button/Button";
 import { useToast } from "../../context/ToastContext";
+import { login as loginUser } from "../../services/authService";
 import styles from "./Login.module.css";
 import loginBg from "../../assets/dark-surface-illustration.jpg";
 
@@ -34,11 +35,19 @@ export default function Login() {
 
     setLoading(true);
 
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      const { access_token, token_type } = await loginUser(email, password);
+      localStorage.setItem("access_token", access_token);
+      if (token_type) {
+        localStorage.setItem("token_type", token_type);
+      }
       addToast({ type: "success", message: "Logged in successfully!" });
       navigate("/catalog");
-    }, 1500);
+    } catch (err) {
+      addToast({ type: "error", message: err.message });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
