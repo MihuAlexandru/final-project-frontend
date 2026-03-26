@@ -1,7 +1,6 @@
 import { X, ImagePlus, Trash2 } from "lucide-react";
 import styles from "./ProductEditModal.module.css";
 import FormInput from "../UI/Input/FormInput";
-import { useState, useEffect } from "react";
 
 import img1 from "./MockPictures/1.avif";
 import img2 from "./MockPictures/2.avif";
@@ -11,48 +10,20 @@ import img5 from "./MockPictures/5.avif";
 import IconButton from "../UI/Button/IconButton";
 import FormButton from "../UI/Button/FormButton";
 import ProductAttributeRow from "./ProductAttributeRow";
-import { getProductById } from "../../services/productService";
+import { useProductForm } from "../../hooks/useProductEditForm";
 
 export default function ProductEditModal({ productId, onClose, onSubmit }) {
   const productImages = [img1, img2, img3, img4, img5];
+  const {
+    product,
+    isLoading,
+    handleAddAttribute,
+    handleRemoveAttribute,
+    handleAttributeChange,
+    handleSubmit,
+  } = useProductForm(productId, onSubmit, onClose);
 
-  const [product, setProduct] = useState(null);
-
-  function handleAddAttribute() {
-    const newAttribute = {
-      id: Date.now(),
-      name: "",
-      value: "",
-    };
-    setProduct({
-      ...product,
-      attributes: [...product.attributes, newAttribute],
-    });
-  }
-
-  function handleRemoveAttributeRow(id) {
-    setProduct({
-      ...product,
-      attributes: product.attributes.filter((attr) => attr.id !== id),
-    });
-  }
-
-  useEffect(() => {
-    async function loadProduct() {
-      try {
-        const data = await getProductById(productId);
-        console.log("Produsul primit:", data);
-        setProduct(data);
-        console.log(product);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-
-    loadProduct();
-  }, [productId]);
-
-  if (!product) {
+  if (isLoading) {
     return <div className={styles.overlay}>Loading...</div>;
   }
 
@@ -69,9 +40,8 @@ export default function ProductEditModal({ productId, onClose, onSubmit }) {
           />
         </div>
 
-        <form className={styles.formBody} onSubmit={onSubmit}>
+        <form className={styles.formBody} onSubmit={handleSubmit}>
           <div className={styles.scrollArea}>
-            {/* IMAGES SECTION */}
             <div className={styles.inputGroup}>
               <label>Product Gallery</label>
               <div className={styles.imageGrid}>
@@ -80,7 +50,6 @@ export default function ProductEditModal({ productId, onClose, onSubmit }) {
                   <span>Upload Photo</span>
                 </div>
 
-                {/* RENDER EXISTING PICTURES */}
                 {productImages.map((imgSrc, index) => (
                   <div key={index} className={styles.imageThumb}>
                     <img src={imgSrc} alt={`Product ${index}`} />
@@ -90,11 +59,11 @@ export default function ProductEditModal({ productId, onClose, onSubmit }) {
               </div>
             </div>
 
-            {/* INFO SECTION */}
             <div className={styles.inputGroup}>
               <FormInput
                 label="Product Name"
                 id="name"
+                name="name"
                 defaultValue={product.name}
               />
             </div>
@@ -103,6 +72,7 @@ export default function ProductEditModal({ productId, onClose, onSubmit }) {
               <FormInput
                 label="Price (RON)"
                 id="price"
+                name="price"
                 type="number"
                 defaultValue={product.price}
               />
@@ -110,6 +80,7 @@ export default function ProductEditModal({ productId, onClose, onSubmit }) {
               <FormInput
                 label="Stock"
                 id="stock"
+                name="stock"
                 type="number"
                 defaultValue={product.stock_quantity}
               />
@@ -117,6 +88,7 @@ export default function ProductEditModal({ productId, onClose, onSubmit }) {
               <FormInput
                 label="Category"
                 id="category"
+                name="category"
                 type="number"
                 defaultValue={product.category_id}
               />
@@ -125,12 +97,12 @@ export default function ProductEditModal({ productId, onClose, onSubmit }) {
             <FormInput
               label="Description"
               id="description"
+              name="description"
               type="textarea"
               defaultValue={product.description}
               rows="4"
             />
 
-            {/* ATTRIBUTES SECTION */}
             <div className={styles.inputGroup}>
               <label>Attributes</label>
               {product.attributes.map((attr) => (
@@ -138,19 +110,21 @@ export default function ProductEditModal({ productId, onClose, onSubmit }) {
                   key={attr.id}
                   name={attr.name}
                   value={attr.value}
-                  onRemove={() => {
-                    handleRemoveAttributeRow(attr.id);
-                  }}
+                  isNew={attr.isNew}
+                  onChangeName={(e) =>
+                    handleAttributeChange(attr.id, "name", e.target.value)
+                  }
+                  onChangeValue={(e) =>
+                    handleAttributeChange(attr.id, "value", e.target.value)
+                  }
+                  onRemove={() => handleRemoveAttribute(attr.id)}
                 />
               ))}
               <ProductAttributeRow
                 isPlaceholder={true}
                 name=""
                 value=""
-                onAdd={(e) => {
-                  e.preventDefault();
-                  handleAddAttribute();
-                }}
+                onAdd={handleAddAttribute}
               />
             </div>
           </div>

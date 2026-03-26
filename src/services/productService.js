@@ -1,5 +1,4 @@
-// src/services/productService.js
-const API_URL = "http://localhost:8000"; // Adresa ta de backend
+const API_URL = "http://localhost:8000";
 
 export const getProductById = async (id) => {
   try {
@@ -13,3 +12,20 @@ export const getProductById = async (id) => {
     throw error;
   }
 };
+
+export async function updateProduct(productId, updateData) {
+  const response = await fetch(`http://localhost:8000/products/${productId}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(updateData),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.detail || "Failed to update product");
+  }
+
+  return await response.json();
+}

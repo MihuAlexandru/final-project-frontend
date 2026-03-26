@@ -1,3 +1,4 @@
+import { useRef, useEffect } from "react";
 import { Trash2, Plus } from "lucide-react";
 import FormInput from "../UI/Input/FormInput";
 import IconButton from "../UI/Button/IconButton";
@@ -7,35 +8,39 @@ export default function ProductAttributeRow({
   name,
   value,
   isPlaceholder,
+  isNew,
   onAdd,
   onRemove,
+  onChangeName,
+  onChangeValue,
 }) {
+  const nameRef = useRef(null);
+
   const rowClass = isPlaceholder
     ? `${styles.attributeRow} ${styles.placeholderRow}`
     : styles.attributeRow;
 
-  const handleRowClick = (e) => {
-    if (isPlaceholder && onAdd) {
-      onAdd(e);
+  useEffect(() => {
+    if (isNew && nameRef.current) {
+      nameRef.current.focus();
     }
-  };
+  }, [isNew]);
 
   return (
-    <div
-      className={rowClass}
-      onClick={handleRowClick}
-      role={isPlaceholder ? "button" : undefined}
-    >
+    <div className={rowClass} onClick={isPlaceholder ? onAdd : undefined}>
       <FormInput
+        ref={nameRef}
         placeholder="Attribute (e.g. Color)"
-        defaultValue={name}
+        value={name || ""}
+        onChange={onChangeName}
         className={styles.flexInput}
         readOnly={isPlaceholder}
       />
 
       <FormInput
         placeholder="Value (e.g. Red)"
-        defaultValue={value}
+        value={value || ""}
+        onChange={onChangeValue}
         className={styles.flexInput}
         readOnly={isPlaceholder}
       />
@@ -49,7 +54,10 @@ export default function ProductAttributeRow({
             variant="delete"
             size={18}
             aria-label="Remove attribute"
-            onClick={onRemove}
+            onClick={(e) => {
+              e.stopPropagation();
+              onRemove();
+            }}
           />
         )}
       </div>

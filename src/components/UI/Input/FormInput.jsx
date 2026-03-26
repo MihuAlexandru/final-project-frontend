@@ -1,25 +1,32 @@
 import styles from "./FormInput.module.css";
+import { forwardRef } from "react";
 
-export default function FormInput({
-  label,
-  id,
-  type = "text",
-  placeholder,
-  className = "",
-  options = [],
-  ...props
-}) {
+function FormInput(
+  {
+    label,
+    id,
+    type = "text",
+    placeholder,
+    className = "",
+    options = [],
+    onClick,
+    ...props
+  },
+  ref,
+) {
   const isTextArea = type === "textarea";
   const isSelect = type === "select";
 
   return (
-    <div className={`${styles.inputGroup} ${className}`}>
+    <div className={`${styles.inputGroup} ${className}`} onClick={onClick}>
       {label && <label htmlFor={id}>{label}</label>}
 
-      {isTextArea && <textarea id={id} placeholder={placeholder} {...props} />}
+      {isTextArea && (
+        <textarea ref={ref} id={id} placeholder={placeholder} {...props} />
+      )}
 
       {isSelect && (
-        <select id={id} {...props}>
+        <select ref={ref} id={id} {...props}>
           {placeholder && (
             <option value="" disabled>
               {placeholder}
@@ -34,8 +41,16 @@ export default function FormInput({
       )}
 
       {!isTextArea && !isSelect && (
-        <input id={id} type={type} placeholder={placeholder} {...props} />
+        <input
+          ref={ref}
+          id={id}
+          type={type}
+          placeholder={placeholder}
+          {...props}
+        />
       )}
     </div>
   );
 }
+
+export default forwardRef(FormInput);
