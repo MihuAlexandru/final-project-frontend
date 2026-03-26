@@ -1,6 +1,7 @@
 import { X, ImagePlus, Trash2 } from "lucide-react";
 import styles from "./ProductEditModal.module.css";
 import FormInput from "../UI/Input/FormInput";
+import { useState, useEffect } from "react";
 
 import img1 from "./MockPictures/1.avif";
 import img2 from "./MockPictures/2.avif";
@@ -10,9 +11,50 @@ import img5 from "./MockPictures/5.avif";
 import IconButton from "../UI/Button/IconButton";
 import FormButton from "../UI/Button/FormButton";
 import ProductAttributeRow from "./ProductAttributeRow";
+import { getProductById } from "../../services/productService";
 
-export default function ProductEditModal({ onClose, onSubmit }) {
+export default function ProductEditModal({ productId, onClose, onSubmit }) {
   const productImages = [img1, img2, img3, img4, img5];
+
+  const [product, setProduct] = useState(null);
+
+  function handleAddAttribute() {
+    const newAttribute = {
+      id: Date.now(),
+      name: "",
+      value: "",
+    };
+    setProduct({
+      ...product,
+      attributes: [...product.attributes, newAttribute],
+    });
+  }
+
+  function handleRemoveAttributeRow(id) {
+    setProduct({
+      ...product,
+      attributes: product.attributes.filter((attr) => attr.id !== id),
+    });
+  }
+
+  useEffect(() => {
+    async function loadProduct() {
+      try {
+        const data = await getProductById(productId);
+        console.log("Produsul primit:", data);
+        setProduct(data);
+        console.log(product);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    loadProduct();
+  }, [productId]);
+
+  if (!product) {
+    return <div className={styles.overlay}>Loading...</div>;
+  }
 
   return (
     <div className={styles.overlay}>
@@ -53,7 +95,7 @@ export default function ProductEditModal({ onClose, onSubmit }) {
               <FormInput
                 label="Product Name"
                 id="name"
-                placeholder="e.g. Gaming Laptop"
+                defaultValue={product.name}
               />
             </div>
 
@@ -62,23 +104,21 @@ export default function ProductEditModal({ onClose, onSubmit }) {
                 label="Price (RON)"
                 id="price"
                 type="number"
-                placeholder="0.00"
+                defaultValue={product.price}
               />
 
               <FormInput
                 label="Stock"
                 id="stock"
                 type="number"
-                placeholder="10"
+                defaultValue={product.stock_quantity}
               />
 
               <FormInput
                 label="Category"
                 id="category"
-                type="select"
-                placeholder="Choose the category"
-                defaultValue=""
-                options={["Option 1", "Option 2", "Option 3"]}
+                type="number"
+                defaultValue={product.category_id}
               />
             </div>
 
@@ -86,21 +126,32 @@ export default function ProductEditModal({ onClose, onSubmit }) {
               label="Description"
               id="description"
               type="textarea"
-              placeholder="Add product details..."
+              defaultValue={product.description}
               rows="4"
             />
 
             {/* ATTRIBUTES SECTION */}
             <div className={styles.inputGroup}>
               <label>Attributes</label>
-              <ProductAttributeRow />
-              <ProductAttributeRow />
-              <ProductAttributeRow />
-              <ProductAttributeRow />
-              <ProductAttributeRow />
-              <ProductAttributeRow />
-              <ProductAttributeRow />
-              <ProductAttributeRow />
+              {product.attributes.map((attr) => (
+                <ProductAttributeRow
+                  key={attr.id}
+                  name={attr.name}
+                  value={attr.value}
+                  onRemove={() => {
+                    handleRemoveAttributeRow(attr.id);
+                  }}
+                />
+              ))}
+              <ProductAttributeRow
+                isPlaceholder={true}
+                name=""
+                value=""
+                onAdd={(e) => {
+                  e.preventDefault();
+                  handleAddAttribute();
+                }}
+              />
             </div>
           </div>
 

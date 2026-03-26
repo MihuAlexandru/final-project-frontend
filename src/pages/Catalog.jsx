@@ -51,6 +51,7 @@ export default function Catalog() {
         </button>
         {isOpen && (
           <ProductEditModal
+            productId={1}
             onClose={() => setIsOpen(false)}
             onSubmit={() => {
               setIsOpen(false);

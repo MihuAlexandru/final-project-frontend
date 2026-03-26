@@ -128,3 +128,20 @@
   border-top: 1px solid var(--color-border);
   margin-top: var(--space-sm);
 }
+
+.attributesHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.attributesHeader label {
+  margin-bottom: 0;
+  align-self: center;
+  cursor: default;
+}
+
+.attributesHeader button {
+  padding: 4px;
+}

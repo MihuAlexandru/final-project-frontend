@@ -1,3 +1,4 @@
+/* Structura ta originală rămâne NEATINSĂ */
 .attributeRow {
   display: flex;
   align-items: center;
@@ -20,4 +21,22 @@
 
 .actionColumn button {
   padding-right: 0px;
+}
+
+.placeholderRow {
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.placeholderRow:hover {
+  opacity: 0.8;
+  background-color: #f9f9f9;
+}
+
+.placeholderRow .flexInput {
+  pointer-events: none;
+}
+
+.placeholderRow .flexInput input {
+  border: 1px dashed var(--color-gray-400);
 }
