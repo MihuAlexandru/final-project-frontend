@@ -8,6 +8,10 @@
   background: transparent;
 }
 
+.desktop {
+  display: flex;
+}
+
 .left,
 .right {
   display: flex;
@@ -90,7 +94,12 @@
   .mobileMenu a {
     font-size: 1.2rem;
   }
-
+  .mobileMenu img {
+    display: none;
+  }
+  .desktop {
+    display: none;
+  }
   .logout {
     color: var(--color-danger);
     font-weight: bold;

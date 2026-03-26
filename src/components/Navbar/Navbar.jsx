@@ -1,8 +1,7 @@
-import { Link } from "react-router-dom";
-import shopIcon from "../../assets/shopping-cart.png";
-import heartIcon from "../../assets/heart.png";
-import userIcon from "../../assets/user.png";
+import { useState } from "react";
+import style from "./Navbar.module.css";
 import exitIcon from "../../assets/exit.png";
+import NavItems from "../NavItems/NavItems";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -11,87 +10,33 @@ export default function Navbar() {
 
   return (
     <nav className={style.navbar}>
-      <div className={style.left}>
-        <Link to="/" onClick={closeMenu}>
-          Home
-        </Link>
-        <Link to="/catalog" onClick={closeMenu}>
-          Shop
-        </Link>
-
-        <Link to="/admin" onClick={closeMenu}>
-          Admin Panel
-        </Link>
+      <div className={`${style.left} ${style.desktop}`}>
+        <NavItems position="left" closeMenu={closeMenu} isMobile={false} />
       </div>
 
-      <div className={style.right}>
-        <Link to="/wishlist" onClick={closeMenu}>
-          <img src={heartIcon} alt="" />
-        </Link>
-
-        <Link to="/cart" onClick={closeMenu}>
-          <img src={shopIcon} alt="" />
-        </Link>
-
-        <Link to="/profile" onClick={closeMenu}>
-          <img src={userIcon} alt="" />
-        </Link>
-
-        <span>
+      <div className={`${style.right} ${style.desktop}`}>
+        <NavItems position="right" closeMenu={closeMenu} isMobile={false} />
+        <span className={style.logout} onClick={closeMenu}>
           <img src={exitIcon} alt="" />
         </span>
-
-        <Link to="/login" onClick={closeMenu}>
-          Login
-        </Link>
-        <Link to="/signup" onClick={closeMenu}>
-          Signup
-        </Link>
       </div>
 
       <button
         className={style.menuButton}
-        onClick={() => setMenuOpen(!menuOpen)}
+        onClick={() => setMenuOpen((prev) => !prev)}
       >
         ☰
       </button>
 
-      {/* MOBILE DROPDOWN MENU */}
       {menuOpen && (
         <div className={style.mobileMenu}>
-          <Link to="/" onClick={closeMenu}>
-            Home
-          </Link>
-          <Link to="/catalog" onClick={closeMenu}>
-            Shop
-          </Link>
-
-          <Link to="/admin" onClick={closeMenu}>
-            Admin Panel
-          </Link>
-
-          <Link to="/wishlist" onClick={closeMenu}>
-            Wishlist
-          </Link>
-
-          <Link to="/cart" onClick={closeMenu}>
-            Cart
-          </Link>
-          <Link to="/profile" onClick={closeMenu}>
-            Profile
-          </Link>
-          <span className={style.logout}>Logout</span>
-
-          <Link to="/login" onClick={closeMenu}>
-            Login
-          </Link>
-          <Link to="/signup" onClick={closeMenu}>
-            Signup
-          </Link>
+          <NavItems position="left" closeMenu={closeMenu} isMobile={true} />
+          <NavItems position="right" closeMenu={closeMenu} isMobile={true} />
+          <span className={style.logout} onClick={closeMenu}>
+            Logout
+          </span>
         </div>
       )}
     </nav>
   );
 }
-import { useState } from "react";
-import style from "./Navbar.module.css";
