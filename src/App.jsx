@@ -5,7 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import { Routes, Route } from "react-router-dom";
 import Login from "./pages/Login/Login.jsx";
 import Signup from "./pages/Signup/Signup.jsx";
-import Catalog from "./pages/Catalog.jsx";
+import Catalog from "./pages/Catalog/Catalog.jsx";
 import Product from "./pages/Product.jsx";
 import Profile from "./pages/Profile.jsx";
 import Checkout from "./pages/Checkout.jsx";

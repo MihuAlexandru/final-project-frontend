@@ -1,4 +1,7 @@
-import { useToast } from "../context/ToastContext";
+import { mockProducts } from "../../../MockData/mockProducts";
+import ProductCard from "../../components/ProductCard/ProductCard";
+import { useToast } from "../../context/ToastContext";
+import styles from "./Catalog.module.css";
 
 export default function Catalog() {
   const { addToast } = useToast();
@@ -6,8 +9,13 @@ export default function Catalog() {
   return (
     <div>
       <h1>Catalog page</h1>
+      <div className={styles.catalogContainer}>
+        {mockProducts.map((item) => (
+          <ProductCard key={item.id} product={item} />
+        ))}
+      </div>
 
-      <div style={{ display: "flex", gap: "8px", marginTop: "16px" }}>
+      <div className={styles.toastTest}>
         <button
           onClick={() =>
             addToast({ type: "success", message: "Item added to cart!" })
