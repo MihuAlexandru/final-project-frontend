@@ -58,6 +58,14 @@
   transform: scale(1.1);
 }
 
+.favoriteActive {
+  color: var(--color-red);
+  font-size: 1.7rem;
+}
+
+.iconBtn.favoriteActive:hover {
+  transform: scale(1.1);
+}
 .imageContainer {
   display: flex;
   justify-content: center;
