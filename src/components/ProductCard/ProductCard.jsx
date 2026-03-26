@@ -2,6 +2,7 @@ import Button from "../UI/Button/Button";
 import Card from "../UI/Card/Card";
 import styles from "./ProductCard.module.css";
 import { Link } from "react-router-dom";
+import noImage from "../../assets/no-image-available.png";
 
 export default function ProductCard({ product }) {
   const isOutOfStock = product.stock_quantity === 0;
@@ -18,7 +19,7 @@ export default function ProductCard({ product }) {
           <Link to={`/product/${product.id}`} className={styles.productLink}>
             <div className={styles.imageContainer}>
               <img
-                src={product.images[0].url}
+                src={product.images?.[0]?.url || noImage}
                 alt={product.name}
                 className={styles.image}
               />

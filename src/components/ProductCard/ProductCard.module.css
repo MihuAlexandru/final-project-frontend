@@ -76,7 +76,7 @@
 .title {
   font-size: clamp(0.875rem, 2vw, 0.9375rem);
   font-weight: 500;
-  margin: 4px 0 0;
+  margin: var(--space-md) var(--space-xs);
   line-height: 1.4;
   color: var(--color-text);
   display: -webkit-box;
@@ -91,7 +91,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-xs);
-  margin-top: var(--space-sm);
+  margin: var(--space-sm) var(--space-xs);
 }
 
 .stock {
