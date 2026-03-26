@@ -22,6 +22,7 @@ export default function ProductCard({ product }) {
                 src={product.images?.[0]?.url || noImage}
                 alt={product.name}
                 className={styles.image}
+                loading="lazy"
               />
             </div>
             <h3 className={styles.title}>{product.name}</h3>
