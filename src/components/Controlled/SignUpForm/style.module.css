@@ -19,3 +19,13 @@
   background-color: black;
   color: white;
 }
+
+.signupText {
+  margin: var(--space-md) 0 0;
+  font-size: clamp(1.04rem, 1.3vw, 1.14rem);
+  color: var(--color-text);
+}
+
+.signupText a {
+  color: var(--color-secondary);
+}
