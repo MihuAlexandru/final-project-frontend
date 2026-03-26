@@ -1,0 +1,21 @@
+.errorMessage {
+  color: red;
+  font-size: 0.875rem;
+  display: block;
+  margin-top: -4px;
+  margin-bottom: 8px;
+}
+
+.summaryErrorContainer {
+  margin-bottom: 10px;
+}
+
+.summaryErrorText {
+  color: red;
+  font-weight: bold;
+}
+
+.submitButton {
+  background-color: black;
+  color: white;
+}

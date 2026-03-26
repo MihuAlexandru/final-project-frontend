@@ -1,13 +1,17 @@
-import Input from "../UI/Input/Input";
-import Button from "../UI/Button/Button";
+import Input from "../../UI/Input/Input";
+import Button from "../../UI/Button/Button";
 import { useState } from "react";
+import { useNavigation } from "react-router-dom";
+import { useToast } from "../../../context/ToastContext";
+import styles from "./style.module.css";
+
 import {
   validatePassword,
   doPasswordsMatch,
   validateEmail,
   validatePhone,
-} from "../../utils/validation";
-import { signup } from "../../services/register";
+} from "../../../utils/validation";
+import { signup } from "../../../services/register";
 
 export default function SignUpForm() {
   const [formData, setFormData] = useState({
@@ -17,9 +21,11 @@ export default function SignUpForm() {
     phone: "",
     password: "",
     confirmPassword: "",
-    role: "customer",
   });
 
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigation();
+  const addToast = useToast();
   const [wasSubmitted, setWasSubmitted] = useState(false);
 
   const isSurname = formData.last_name.trim().length > 0;
@@ -48,12 +54,18 @@ export default function SignUpForm() {
 
     if (!isFormValid) return;
 
+    setLoading(true);
     try {
-      const result = await signup(formData);
-      localStorage.setItem("token", result.access_token);
-      window.location.href = "/login";
+      const payload = { ...formData };
+      delete payload.confirmPassword;
+      const result = await signup(payload);
+      localStorage.setItem("access_token", result.access_token);
+      addToast({ type: "success", message: "Registered successfully!" });
+      navigate("/catalog", { replace: true });
     } catch (err) {
-      console.log(err.message);
+      addToast({ type: "error", message: err.message });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -84,7 +96,7 @@ export default function SignUpForm() {
         onChange={handleChange}
       />
       {!isEmailValid && formData.email && (
-        <span style={{ color: "red" }}>Invalid Email</span>
+        <span className={styles.errorMessage}>Invalid Email</span>
       )}
       <Input
         type="password"
@@ -93,7 +105,7 @@ export default function SignUpForm() {
         onChange={handleChange}
       />
       {!isPasswordValid && formData.password && (
-        <span style={{ color: "red" }}>Invalid Password</span>
+        <span className={styles.errorMessage}>Invalid Password</span>
       )}
 
       <Input
@@ -103,19 +115,19 @@ export default function SignUpForm() {
         onChange={handleChange}
       />
       {!isMatch && formData.confirmPassword && (
-        <span style={{ color: "red" }}>{"Passwords don't match"}</span>
+        <span className={styles.errorMessage}>{"Passwords don't match"}</span>
       )}
 
       {wasSubmitted && !isFormValid && (
-        <div style={{ marginBottom: "10px" }}>
-          <span style={{ color: "red", fontWeight: "bold" }}>
+        <div className={styles.summaryErrorContainer}>
+          <span className={styles.summaryErrorText}>
             Please fill in all fields correctly to register.
           </span>
         </div>
       )}
 
-      <Button style={{ backgroundColor: "black", color: "white" }}>
-        Register
+      <Button disabled={loading} className={styles.submitButton}>
+        {loading ? "Creating account..." : "Create Account"}
       </Button>
     </form>
   );
