@@ -6,30 +6,18 @@ import noImage from "../../assets/no-image-available.png";
 import { useState } from "react";
 import heartEmpty from "../../assets/heart.png";
 import heartFilled from "../../assets/heart-filled.png";
+import { getFavorites, toggleFavoriteInStorage } from "../../utils/favorites";
 
 export default function ProductCard({ product }) {
   const isOutOfStock = product.stock_quantity === 0;
   const isUnavailable = product.is_available === false;
   const [isFavorite, setIsFavorite] = useState(() => {
-    const savedFavorites = JSON.parse(
-      localStorage.getItem("favorites") || "[]",
-    );
-    return savedFavorites.includes(product.id);
+    return getFavorites().includes(product.id);
   });
 
   const toggleFavorite = (e) => {
     e.preventDefault();
-    const savedFavorites = JSON.parse(
-      localStorage.getItem("favorites") || "[]",
-    );
-    let newFavorites;
-
-    if (isFavorite) {
-      newFavorites = savedFavorites.filter((id) => id !== product.id);
-    } else {
-      newFavorites = [...savedFavorites, product.id];
-    }
-    localStorage.setItem("favorites", JSON.stringify(newFavorites));
+    toggleFavoriteInStorage(product.id, isFavorite);
     setIsFavorite(!isFavorite);
   };
 
@@ -48,7 +36,7 @@ export default function ProductCard({ product }) {
           >
             <img
               src={isFavorite ? heartFilled : heartEmpty}
-              alt=""
+              alt="Favorite Icon"
               className={styles.heartIcon}
             />
           </button>
