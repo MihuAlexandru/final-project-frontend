@@ -3,6 +3,8 @@ import shopIcon from "../../assets/shopping-cart.png";
 import heartIcon from "../../assets/heart.png";
 import userIcon from "../../assets/user.png";
 import exitIcon from "../../assets/exit.png";
+import { useState } from "react";
+import style from "./Navbar.module.css";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -56,7 +58,6 @@ export default function Navbar() {
         ☰
       </button>
 
-      {/* MOBILE DROPDOWN MENU */}
       {menuOpen && (
         <div className={style.mobileMenu}>
           <Link to="/" onClick={closeMenu}>
@@ -93,5 +94,3 @@ export default function Navbar() {
     </nav>
   );
 }
-import { useState } from "react";
-import style from "./Navbar.module.css";
