@@ -3,7 +3,7 @@ import Card from "../UI/Card/Card";
 import styles from "./ProductCard.module.css";
 import { Link } from "react-router-dom";
 import noImage from "../../assets/no-image-available.png";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import heartEmpty from "../../assets/heart.png";
 import heartFilled from "../../assets/heart-filled.png";
 import { getFavorites, toggleFavoriteInStorage } from "../../utils/favorites";
@@ -15,12 +15,14 @@ export default function ProductCard({ product }) {
     return getFavorites().includes(product.id);
   });
 
-  const toggleFavorite = (e) => {
-    e.preventDefault();
-    toggleFavoriteInStorage(product.id, isFavorite);
-    setIsFavorite(!isFavorite);
-  };
-
+  const toggleFavorite = useCallback(
+    (e) => {
+      e.preventDefault();
+      toggleFavoriteInStorage(product.id, isFavorite);
+      setIsFavorite((prev) => !prev);
+    },
+    [product.id, isFavorite],
+  );
   return (
     <div
       className={`${styles.cardHoverWrapper} ${isUnavailable ? styles.unavailable : ""}`}
