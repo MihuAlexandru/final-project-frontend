@@ -5,9 +5,6 @@ import userIcon from "../../assets/user.png";
 import exitIcon from "../../assets/exit.png";
 
 export default function Navbar() {
-  const isUser = true;
-  const isSuperadmin = true;
-
   const [menuOpen, setMenuOpen] = useState(false);
 
   const closeMenu = () => setMenuOpen(false);
@@ -21,11 +18,10 @@ export default function Navbar() {
         <Link to="/catalog" onClick={closeMenu}>
           Shop
         </Link>
-        {isSuperadmin && (
-          <Link to="/admin" onClick={closeMenu}>
-            Admin Panel
-          </Link>
-        )}
+
+        <Link to="/admin" onClick={closeMenu}>
+          Admin Panel
+        </Link>
       </div>
 
       <div className={style.right}>
@@ -33,30 +29,24 @@ export default function Navbar() {
           <img src={heartIcon} alt="" />
         </Link>
 
-        {isUser ? (
-          <>
-            <Link to="/cart" onClick={closeMenu}>
-              <img src={shopIcon} alt="" />
-            </Link>
+        <Link to="/cart" onClick={closeMenu}>
+          <img src={shopIcon} alt="" />
+        </Link>
 
-            <Link to="/profile" onClick={closeMenu}>
-              <img src={userIcon} alt="" />
-            </Link>
+        <Link to="/profile" onClick={closeMenu}>
+          <img src={userIcon} alt="" />
+        </Link>
 
-            <span>
-              <img src={exitIcon} alt="" />
-            </span>
-          </>
-        ) : (
-          <>
-            <Link to="/login" onClick={closeMenu}>
-              Login
-            </Link>
-            <Link to="/signup" onClick={closeMenu}>
-              Signup
-            </Link>
-          </>
-        )}
+        <span>
+          <img src={exitIcon} alt="" />
+        </span>
+
+        <Link to="/login" onClick={closeMenu}>
+          Login
+        </Link>
+        <Link to="/signup" onClick={closeMenu}>
+          Signup
+        </Link>
       </div>
 
       <button
@@ -75,36 +65,29 @@ export default function Navbar() {
           <Link to="/catalog" onClick={closeMenu}>
             Shop
           </Link>
-          {isSuperadmin && (
-            <Link to="/admin" onClick={closeMenu}>
-              Admin Panel
-            </Link>
-          )}
+
+          <Link to="/admin" onClick={closeMenu}>
+            Admin Panel
+          </Link>
 
           <Link to="/wishlist" onClick={closeMenu}>
             Wishlist
           </Link>
 
-          {isUser ? (
-            <>
-              <Link to="/cart" onClick={closeMenu}>
-                Cart
-              </Link>
-              <Link to="/profile" onClick={closeMenu}>
-                Profile
-              </Link>
-              <span className={style.logout}>Logout</span>
-            </>
-          ) : (
-            <>
-              <Link to="/login" onClick={closeMenu}>
-                Login
-              </Link>
-              <Link to="/signup" onClick={closeMenu}>
-                Signup
-              </Link>
-            </>
-          )}
+          <Link to="/cart" onClick={closeMenu}>
+            Cart
+          </Link>
+          <Link to="/profile" onClick={closeMenu}>
+            Profile
+          </Link>
+          <span className={style.logout}>Logout</span>
+
+          <Link to="/login" onClick={closeMenu}>
+            Login
+          </Link>
+          <Link to="/signup" onClick={closeMenu}>
+            Signup
+          </Link>
         </div>
       )}
     </nav>
