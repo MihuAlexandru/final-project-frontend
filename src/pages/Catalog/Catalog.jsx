@@ -1,5 +1,5 @@
 import { useState } from "react";
-import ConfirmDeleteModal from "../components/ConfirmDeleteModal/ConfirmDeleteModal";
+import ConfirmDeleteModal from "../../components/ConfirmDeleteModal/ConfirmDeleteModal";
 import { mockProducts } from "../../../MockData/mockProducts";
 import ProductCard from "../../components/ProductCard/ProductCard";
 import { useToast } from "../../context/ToastContext";
