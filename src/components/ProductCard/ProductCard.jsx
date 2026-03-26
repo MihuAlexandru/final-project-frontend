@@ -4,6 +4,8 @@ import styles from "./ProductCard.module.css";
 import { Link } from "react-router-dom";
 import noImage from "../../assets/no-image-available.png";
 import { useState } from "react";
+import heartEmpty from "../../assets/heart.png";
+import heartFilled from "../../assets/heart-filled.png";
 
 export default function ProductCard({ product }) {
   const isOutOfStock = product.stock_quantity === 0;
@@ -44,7 +46,11 @@ export default function ProductCard({ product }) {
             }
             onClick={toggleFavorite}
           >
-            {isFavorite ? "♥︎" : "♡"}
+            <img
+              src={isFavorite ? heartFilled : heartEmpty}
+              alt=""
+              className={styles.heartIcon}
+            />
           </button>
           <Link to={`/product/${product.id}`} className={styles.productLink}>
             <div className={styles.imageContainer}>

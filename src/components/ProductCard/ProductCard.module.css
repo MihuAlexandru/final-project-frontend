@@ -60,12 +60,14 @@
 
 .favoriteActive {
   color: var(--color-red);
-  font-size: 1.7rem;
 }
 
-.iconBtn.favoriteActive:hover {
-  transform: scale(1.1);
+.heartIcon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
 }
+
 .imageContainer {
   display: flex;
   justify-content: center;
