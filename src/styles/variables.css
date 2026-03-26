@@ -1,6 +1,5 @@
-
 :root {
-/* primary colors from design book */
+  /* primary colors from design book */
   --color-blue: #0d6efd;
   --color-indigo: #6610f2;
   --color-purple: #6f42c1;
@@ -12,7 +11,7 @@
   --color-teal: #20c997;
   --color-cyan: #0dcaf0;
 
-/* generals from design book */
+  /* generals from design book */
   --color-white: #fff;
   --color-gray-100: #f8f9fa;
   --color-gray-200: #e9ecef;
@@ -25,7 +24,7 @@
   --color-gray-900: #212529;
   --color-black: #000;
 
-/* derivates */
+  /* derivates */
   --color-primary: var(--color-blue);
   --color-secondary: var(--color-gray-600);
   --color-success: var(--color-green);
@@ -40,23 +39,33 @@
   --color-text: var(--color-gray-900);
   --color-text-light: var(--color-gray-600);
   --color-border: var(--color-gray-300);
+  --color-button: var(--color-black);
+  --color-button-hover: var(--color-gray-700);
 
-/* spacing */
+  /* typography scale */
+  --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+  --text-sm: clamp(0.875rem, 0.8rem + 0.375vw, 1rem);
+  --text-md: clamp(1rem, 0.9rem + 0.5vw, 1.125rem);
+  --text-lg: clamp(1.125rem, 1rem + 0.625vw, 1.25rem);
+  --text-xl: clamp(1.25rem, 1.1rem + 0.75vw, 1.5rem);
+  --text-xxl: clamp(1.5rem, 1.3rem + 1vw, 2rem);
+
+  /* spacing */
   --space-xs: 4px;
   --space-sm: 8px;
   --space-md: 16px;
   --space-lg: 24px;
   --space-xl: 32px;
 
-/* border radius */
+  /* border radius */
   --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 16px;
   --radius-xl: 32px;
   --radius-xxl: 40px;
 
-/* shadows */
+  /* shadows */
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
-

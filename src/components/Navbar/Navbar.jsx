@@ -1,20 +1,42 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
 import style from "./Navbar.module.css";
+import exitIcon from "../../assets/exit.png";
+import NavItems from "../NavItems/NavItems";
 
 export default function Navbar() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const closeMenu = () => setMenuOpen(false);
+
   return (
     <nav className={style.navbar}>
-      <div className={style.navbarLinks}>
-        <Link to="/">Home</Link>
-        <Link to="/catalog">Shop</Link>
-        <Link to="/wishlist">Wishlist</Link>
-        <Link to="/cart">Cart</Link>
-        <Link to="/profile">Profile</Link>
-        <Link to="/checkout">Checkout</Link>
-        <Link to="/login">Login</Link>
-        <Link to="/signup">Signup</Link>
-        <Link to="/admin">Admin</Link>
+      <div className={`${style.left} ${style.desktop}`}>
+        <NavItems position="left" closeMenu={closeMenu} isMobile={false} />
       </div>
+
+      <div className={`${style.right} ${style.desktop}`}>
+        <NavItems position="right" closeMenu={closeMenu} isMobile={false} />
+        <span className={style.logout} onClick={closeMenu}>
+          <img src={exitIcon} alt="" />
+        </span>
+      </div>
+
+      <button
+        className={style.menuButton}
+        onClick={() => setMenuOpen((prev) => !prev)}
+      >
+        ☰
+      </button>
+
+      {menuOpen && (
+        <div className={style.mobileMenu}>
+          <NavItems position="left" closeMenu={closeMenu} isMobile={true} />
+          <NavItems position="right" closeMenu={closeMenu} isMobile={true} />
+          <span className={style.logout} onClick={closeMenu}>
+            Logout
+          </span>
+        </div>
+      )}
     </nav>
   );
 }
