@@ -41,17 +41,11 @@
   transform: scale(1.1);
 }
 
+.add:hover {
+  color: var(--color-black);
+  transform: scale(1.2);
+}
+
 .add {
-  color: var(--color-white);
-  background-color: var(--color-success);
-
-  width: 1.5rem;
-  height: 1.5rem;
-  border-radius: 50%;
-
-  box-shadow: var(--shadow-sm);
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  color: var(--color-text);
 }

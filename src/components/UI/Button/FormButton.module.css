@@ -20,7 +20,7 @@
 }
 
 .primary:hover {
-  background-color: var(--color-gray-700);
+  background-color: var(--color-black);
   border-color: var(--color-dark);
   transform: scale(1.01);
 }

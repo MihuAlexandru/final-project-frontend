@@ -47,7 +47,7 @@ export default function ProductAttributeRow({
 
       <div className={styles.actionColumn}>
         {isPlaceholder ? (
-          <IconButton icon={Plus} variant="primary" size={18} type="button" />
+          <IconButton icon={Plus} variant="add" size={18} type="button" />
         ) : (
           <IconButton
             icon={Trash2}
