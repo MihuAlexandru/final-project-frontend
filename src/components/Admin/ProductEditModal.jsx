@@ -40,7 +40,7 @@ export default function ProductEditModal({ productId, onClose, onSubmit }) {
           />
         </div>
 
-        <form className={styles.formBody} onSubmit={handleSubmit}>
+        <form className={styles.formBody} onSubmit={handleSubmit} noValidate>
           <div className={styles.scrollArea}>
             <div className={styles.inputGroup}>
               <label>Product Gallery</label>
