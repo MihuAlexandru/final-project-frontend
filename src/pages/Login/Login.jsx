@@ -42,7 +42,7 @@ export default function Login() {
         localStorage.setItem("token_type", token_type);
       }
       addToast({ type: "success", message: "Logged in successfully!" });
-      navigate("/catalog");
+      navigate("/catalog", { replace: true });
     } catch (err) {
       addToast({ type: "error", message: err.message });
     } finally {

@@ -1,6 +1,6 @@
 import styles from "./style.module.css";
 import signupBg from "../../assets/dark-surface-illustration.jpg";
-import SignUpForm from "../../components/Controlled/SignUpForm";
+import SignUpForm from "../../components/Controlled/SignUpForm/SignUpForm";
 
 export default function Signup() {
   return (
