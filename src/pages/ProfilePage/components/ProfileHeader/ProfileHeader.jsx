@@ -24,7 +24,7 @@ export default function ProfileHeader({ user }) {
   const fullName = `${user.first_name} ${user.last_name}`;
 
   return (
-    <header className={style.header}>
+    <section className={style.header}>
       <div className={style.avatar} aria-hidden="true">
         <AvatarIcon />
       </div>
@@ -33,6 +33,6 @@ export default function ProfileHeader({ user }) {
         <p className={style.email}>{user.email}</p>
         <span className={`${style.role} ${style[user.role]}`}>{user.role}</span>
       </div>
-    </header>
+    </section>
   );
 }
