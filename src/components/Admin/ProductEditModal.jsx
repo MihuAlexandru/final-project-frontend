@@ -9,8 +9,8 @@ import img4 from "./MockPictures/4.avif";
 import img5 from "./MockPictures/5.avif";
 import IconButton from "../UI/Button/IconButton";
 import FormButton from "../UI/Button/FormButton";
-import ProductAttributeRow from "./ProductAttributeRow";
 import { useProductForm } from "../../hooks/useProductEditForm";
+import ProductAttributeRow from "./ProductAttributeRow";
 
 export default function ProductEditModal({ productId, onClose, onSubmit }) {
   const productImages = [img1, img2, img3, img4, img5];

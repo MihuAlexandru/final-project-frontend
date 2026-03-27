@@ -1,0 +1,66 @@
+.container {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e1e1e1;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: #1a1a1a;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 0.5rem;
+}
+
+.itemList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.itemInfo h4 {
+  margin: 0;
+  font-size: 1rem;
+  color: #333;
+}
+
+.itemInfo p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.price {
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.divider {
+  height: 1px;
+  background-color: #eee;
+  margin: 1rem 0;
+}
+
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #2c3e50;
+  margin-top: 1rem;
+}
+
+.totalAmount {
+  color: #e67e22; /* O culoare de accent pentru preț */
+}

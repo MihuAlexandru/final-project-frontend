@@ -1,9 +1,9 @@
 import { mockProducts } from "../../../MockData/mockProducts";
+import ProductEditModal from "../../components/admin/ProductEditModal";
 import ProductCard from "../../components/ProductCard/ProductCard";
 import { useToast } from "../../context/ToastContext";
 import styles from "./Catalog.module.css";
 
-import ProductEditModal from "../components/Admin/ProductEditModal";
 import { useState } from "react";
 
 export default function Catalog() {

@@ -34,6 +34,7 @@ createRoot(document.getElementById("root")).render(
           <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/admin" element={<AdminPanel />} />
+          <Route path="/checkout" element={<Checkout />} />
         </Routes>
       </Layout>
       <ToastContainer />

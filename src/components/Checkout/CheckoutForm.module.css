@@ -1,0 +1,46 @@
+.form {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.sectionTitle {
+  font-size: 1.25rem;
+  margin-bottom: 1.5rem;
+  color: #333;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.5rem;
+}
+
+.inputGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Două coloane */
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.fullWidth {
+  grid-column: span 2;
+}
+
+.paymentContainer {
+  margin-bottom: 2.5rem;
+  max-width: 300px;
+}
+
+.submitBtn {
+  width: 100%;
+  padding: 1rem !important;
+  font-size: 1.1rem !important;
+}
+
+/* Responsivitate pentru ecrane mici */
+@media (max-width: 600px) {
+  .inputGrid {
+    grid-template-columns: 1fr;
+  }
+  .fullWidth {
+    grid-column: span 1;
+  }
+}
