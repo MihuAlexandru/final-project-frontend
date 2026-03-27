@@ -1,13 +1,25 @@
 import Input from "../Input/Input.jsx";
-import style from "./SearchBar.module.css";
+import { useState, useEffect } from "react";
+import styles from "./SearchBar.module.css";
 
-export default function SearchBar({ onSearch }) {
+export default function SearchBar({ onSearch, delay = 1000 }) {
+  const [value, setValue] = useState("");
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onSearch(value);
+    }, delay);
+
+    return () => clearTimeout(timer);
+  }, [value, delay, onSearch]);
+
   return (
-    <div className={style.searchbar}>
-      <Input
-        placeholder="Search products..."
-        onChange={(e) => onSearch(e.target.value)}
-      />
-    </div>
+    <Input
+      type="text"
+      placeholder="Caută produse..."
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+      className={styles.searchBar}
+    />
   );
 }
