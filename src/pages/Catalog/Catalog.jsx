@@ -3,8 +3,12 @@ import ProductCard from "../../components/ProductCard/ProductCard";
 import { useToast } from "../../context/ToastContext";
 import styles from "./Catalog.module.css";
 
+import ProductEditModal from "../components/Admin/ProductEditModal";
+import { useState } from "react";
+
 export default function Catalog() {
   const { addToast } = useToast();
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div>
@@ -44,6 +48,24 @@ export default function Catalog() {
         >
           Test Info
         </button>
+      </div>
+
+      <div style={{ padding: "40px", textAlign: "center" }}>
+        <button
+          onClick={() => setIsOpen(true)}
+          style={{ padding: "10px 20px", cursor: "pointer" }}
+        >
+          Open Modal
+        </button>
+        {isOpen && (
+          <ProductEditModal
+            productId={1}
+            onClose={() => setIsOpen(false)}
+            onSubmit={() => {
+              setIsOpen(false);
+            }}
+          />
+        )}
       </div>
     </div>
   );
