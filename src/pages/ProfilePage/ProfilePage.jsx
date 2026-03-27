@@ -42,27 +42,27 @@ export default function ProfilePage() {
   if (!token) return null;
   if (isLoading) {
     return (
-      <main className={style.page}>
+      <section className={style.page}>
         <p className={style.statusMsg} aria-live="polite">
           Loading profile...
         </p>
-      </main>
+      </section>
     );
   }
 
   if (error) {
     return (
-      <main className={style.page}>
+      <section className={style.page}>
         <p className={style.errorMsg} role="alert">
           {error}
         </p>
-      </main>
+      </section>
     );
   }
   if (!user) return null;
 
   return (
-    <main className={style.page}>
+    <section className={style.page}>
       <h1 className={style.pageTitle}>My Profile</h1>
       <article className={style.card}>
         <ProfileHeader user={user} />
@@ -88,6 +88,6 @@ export default function ProfilePage() {
 
         <ProfileActions />
       </article>
-    </main>
+    </section>
   );
 }
