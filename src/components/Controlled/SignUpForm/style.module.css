@@ -1,0 +1,31 @@
+.errorMessage {
+  color: red;
+  font-size: 0.875rem;
+  display: block;
+  margin-top: -4px;
+  margin-bottom: 8px;
+}
+
+.summaryErrorContainer {
+  margin-bottom: 10px;
+}
+
+.summaryErrorText {
+  color: red;
+  font-weight: bold;
+}
+
+.submitButton {
+  background-color: black;
+  color: white;
+}
+
+.signupText {
+  margin: var(--space-md) 0 0;
+  font-size: clamp(1.04rem, 1.3vw, 1.14rem);
+  color: var(--color-text);
+}
+
+.signupText a {
+  color: var(--color-secondary);
+}

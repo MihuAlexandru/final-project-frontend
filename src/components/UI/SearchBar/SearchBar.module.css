@@ -1,3 +1,10 @@
-.searchbar {
+.searchBar {
+  width: 100%;
+  max-width: 400px;
+  padding: 10px 15px;
   margin-bottom: var(--space-lg);
+  margin-bottom: 20px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
 }
