@@ -2,6 +2,7 @@
   padding: var(--space-lg) var(--space-md);
   max-width: 50rem;
   margin: 0 auto;
+  min-height: 60vh;
 }
 
 .pageTitle {

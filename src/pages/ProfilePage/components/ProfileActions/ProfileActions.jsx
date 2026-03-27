@@ -12,7 +12,7 @@ export default function ProfileActions() {
   }
 */
   return (
-    <footer className={style.actions}>
+    <section className={style.actions}>
       <Button disabled aria-disabled="true" className={style.editBtn}>
         Edit profile
       </Button>
@@ -30,6 +30,6 @@ export default function ProfileActions() {
         onConfirm={handleDeleteConfirm}
         itemName="account"
       /> {*/}
-    </footer>
+    </section>
   );
 }
