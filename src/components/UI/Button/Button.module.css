@@ -14,3 +14,13 @@
 .btn:hover {
   background: var(--color-gray-200);
 }
+.btn:disabled {
+  background-color: var(--color-gray-300);
+  color: var(--color-gray-500);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.btn:disabled:hover {
+  background-color: var(--color-gray-300);
+}

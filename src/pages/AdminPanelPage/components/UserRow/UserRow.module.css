@@ -54,7 +54,7 @@
   color: var(--color-primary);
 }
 
-.role.user {
+.role.customer {
   background: color-mix(in srgb, var(--color-secondary) 15%, transparent);
   color: var(--color-dark);
 }

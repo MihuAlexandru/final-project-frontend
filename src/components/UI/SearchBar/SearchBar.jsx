@@ -5,7 +5,7 @@ export default function SearchBar({ onSearch }) {
   return (
     <div className={style.searchbar}>
       <Input
-        placeholder="Search products..."
+        placeholder="Search..."
         onChange={(e) => onSearch(e.target.value)}
       />
     </div>
