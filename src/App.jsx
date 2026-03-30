@@ -7,7 +7,7 @@ import Login from "./pages/Login/Login.jsx";
 import Signup from "./pages/Signup/Signup.jsx";
 import Catalog from "./pages/Catalog/Catalog.jsx";
 import Product from "./pages/Product.jsx";
-import Profile from "./pages/Profile.jsx";
+import Profile from "./pages/ProfilePage/ProfilePage.jsx";
 import Checkout from "./pages/Checkout.jsx";
 import Wishlist from "./pages/Wishlist.jsx";
 import Cart from "./pages/Cart.jsx";

@@ -46,3 +46,15 @@
   padding: 0 var(--space-sm);
   cursor: pointer;
 }
+
+.checkboxWrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-md);
+  cursor: pointer;
+}
+
+.checkboxWrapper input[type="checkbox"] {
+  cursor: pointer;
+  margin-right: var(--space-sm);
+}
