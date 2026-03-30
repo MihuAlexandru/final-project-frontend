@@ -35,10 +35,7 @@ createRoot(document.getElementById("root")).render(
           <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/admin" element={<AdminPanel />} />
-<<<<<<< HEAD
-=======
           <Route path="*" element={<NotFound />} />
->>>>>>> a3b4075 (Merge branch 'main' of https://github.com/MihuAlexandru/final-project-frontend)
         </Routes>
       </Layout>
       <ToastContainer />
