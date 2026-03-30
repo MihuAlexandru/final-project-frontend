@@ -1,8 +1,28 @@
 import { mockProducts } from "../../../MockData/mockProducts";
 import ProductCard from "../../components/ProductCard/ProductCard";
+import Pagination from "../../components/Pagination/Pagination";
 import styles from "./Catalog.module.css";
+import { useMemo, useState } from "react";
 
 export default function Catalog() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
+  const totalItems = useMemo(() => mockProducts.length, []);
+  const totalPages = useMemo(() => {
+    return Math.ceil(totalItems / itemsPerPage);
+  }, [totalItems, itemsPerPage]);
+
+  const currentProducts = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return mockProducts.slice(startIndex, endIndex);
+  }, [currentPage, itemsPerPage]);
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <div className={styles.catalogPage}>
       <header className={styles.pageHeader}>
@@ -21,17 +41,17 @@ export default function Catalog() {
 
         <div className={styles.gridWrapper}>
           <div className={styles.catalogContainer}>
-            {mockProducts.map((item) => (
+            {currentProducts.map((item) => (
               <ProductCard key={item.id} product={item} />
             ))}
           </div>
 
           <div className={styles.paginationContainer}>
-            <button disabled className={styles.pageBtn}>
-              Previous
-            </button>
-            <span className={styles.pageText}>Page 1 of 5</span>
-            <button className={styles.pageBtn}>Next</button>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
           </div>
         </div>
       </div>
