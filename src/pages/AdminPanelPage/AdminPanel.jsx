@@ -1,32 +1,39 @@
-import ProductEditModal from "../../components/admin/ProductEditModal";
-import style from "./AdminPanel.module.css";
 import { useState } from "react";
+import TabNav from "./components/TabNav/TabNav.jsx";
+import UsersPanel from "./components/UsersPanel/UsersPanel.jsx";
+import ProductsPanel from "./components/ProductsPanel/ProductsPanel.jsx";
+import style from "./AdminPanel.module.css";
 
 export default function AdminPanel() {
-  const [isOpen, setIsOpen] = useState(false);
-  const productId = 1; /* ONLY FOR TESTING */
+  const [activeTab, setActiveTab] = useState("users");
+
   return (
-    <>
-      <h1 className={style.something}>Admin Panel Page</h1>;
-      {/* TESTING FOR ADMIN PANEL */}
-      <div style={{ padding: "40px", textAlign: "center" }}>
-        <h2>Only for product id 1 (yet)</h2>
-        <button
-          onClick={() => setIsOpen(true)}
-          style={{ padding: "10px 20px", cursor: "pointer" }}
-        >
-          Open Modal
-        </button>
-        {isOpen && (
-          <ProductEditModal
-            productId={productId}
-            onClose={() => setIsOpen(false)}
-            onSubmit={() => {
-              setIsOpen(false);
-            }}
-          />
-        )}
+    <main className={style.page}>
+      <h1 className={style.heading}>Admin Panel</h1>
+      <div className={style.layout}>
+        <TabNav activeTab={activeTab} onTabChange={setActiveTab} />
+
+        <div className={style.content}>
+          <section
+            role="tabpanel"
+            id="panel-users"
+            aria-labelledby="tab-users"
+            hidden={activeTab !== "users"}
+            className={style.tabPanel}
+          >
+            <UsersPanel />
+          </section>
+          <section
+            role="tabpanel"
+            id="panel-products"
+            aria-labelledby="tab-products"
+            hidden={activeTab !== "products"}
+            className={style.tabPanel}
+          >
+            <ProductsPanel />
+          </section>
+        </div>
       </div>
-    </>
+    </main>
   );
 }

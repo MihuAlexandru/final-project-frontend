@@ -14,12 +14,14 @@ export default function SearchBar({ onSearch, delay = 1000 }) {
   }, [value, delay, onSearch]);
 
   return (
-    <Input
-      type="text"
-      placeholder="Caută produse..."
-      value={value}
-      onChange={(e) => setValue(e.target.value)}
-      className={styles.searchBar}
-    />
+    <div className={styles.searchBarWrapper}>
+      <Input
+        type="text"
+        placeholder="Search products..."
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        className={styles.searchBar}
+      />
+    </div>
   );
 }

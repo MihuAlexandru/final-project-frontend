@@ -9,6 +9,15 @@ export default function Input({
 }) {
   const inputType = showPassword && type === "password" ? "text" : type;
 
+  if (type === "checkbox") {
+    return (
+      <label className={style.checkboxWrapper}>
+        <input type="checkbox" {...props} />
+        {label && <span>{label}</span>}
+      </label>
+    );
+  }
+
   return (
     <div className={style.inputGroup}>
       {label && <label>{label}</label>}
