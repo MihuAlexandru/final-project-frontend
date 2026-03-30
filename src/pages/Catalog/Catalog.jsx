@@ -1,66 +1,71 @@
 import { useState, useEffect, useRef } from "react";
-import { mockProducts } from "../../../MockData/mockProducts";
+
 import ProductCard from "../../components/ProductCard/ProductCard";
 import Pagination from "../../components/Pagination/Pagination";
 import styles from "./Catalog.module.css";
 import SearchBar from "../../components/UI/SearchBar/SearchBar";
 import Filters from "../../components/Filters/Filters";
+import { getProductsPaginated } from "../../services/productService";
 
 export default function Catalog() {
   const topRef = useRef(null);
-
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [sortType, setSortType] = useState("");
-
   const [priceRange, setPriceRange] = useState({
     min: 0,
     max: 10000,
   });
-
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [inStockOnly, setInStockOnly] = useState(false);
 
+  const [currentProducts, setCurrentProducts] = useState([]);
+  const [totalPages, setTotalPages] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 8;
+  const itemsPerPage = 12;
 
   useEffect(() => {
     setCurrentPage(1);
   }, [debouncedSearch, sortType, priceRange, selectedCategories, inStockOnly]);
 
-  const filteredProducts = mockProducts
-    .filter((item) =>
-      item.name.toLowerCase().includes(debouncedSearch.toLowerCase()),
-    )
-    .filter(
-      (item) => item.price >= priceRange.min && item.price <= priceRange.max,
-    )
-    .filter((item) =>
-      selectedCategories.length === 0
-        ? true
-        : selectedCategories.includes(item.category_id),
-    )
-    .filter((item) => (inStockOnly ? item.stock_quantity > 0 : true))
-    .sort((a, b) => {
-      switch (sortType) {
-        case "name-asc":
-          return a.name.localeCompare(b.name);
-        case "name-desc":
-          return b.name.localeCompare(a.name);
-        case "price-asc":
-          return a.price - b.price;
-        case "price-desc":
-          return b.price - a.price;
-        default:
-          return 0;
-      }
-    });
+  useEffect(() => {
+    const fetchCatalog = async () => {
+      setIsLoading(true);
+      try {
+        const categoryId =
+          selectedCategories.length > 0 ? selectedCategories[0] : null;
 
-  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentProducts = filteredProducts.slice(
-    startIndex,
-    startIndex + itemsPerPage,
-  );
+        const data = await getProductsPaginated(
+          currentPage,
+          itemsPerPage,
+          debouncedSearch,
+          categoryId,
+          priceRange.min,
+          priceRange.max,
+        );
+
+        setCurrentProducts(data.items || []);
+
+        const calculatedPages = Math.ceil(
+          (data.total_items || 0) / itemsPerPage,
+        );
+        setTotalPages(calculatedPages || 1);
+      } catch (error) {
+        console.error("Failed to fetch catalog data:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchCatalog();
+  }, [
+    currentPage,
+    debouncedSearch,
+    sortType,
+    priceRange,
+    selectedCategories,
+    inStockOnly,
+  ]);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -103,7 +108,11 @@ export default function Catalog() {
 
         <div className={styles.gridWrapper}>
           <div className={styles.catalogContainer}>
-            {currentProducts.length > 0 ? (
+            {isLoading ? (
+              <p style={{ fontWeight: "bold", padding: "20px" }}>
+                Loading products...
+              </p>
+            ) : currentProducts.length > 0 ? (
               currentProducts.map((item) => (
                 <ProductCard key={item.id} product={item} />
               ))
@@ -112,7 +121,7 @@ export default function Catalog() {
             )}
           </div>
 
-          {totalPages > 1 && (
+          {!isLoading && totalPages > 1 && (
             <div className={styles.paginationContainer}>
               <Pagination
                 currentPage={currentPage}
