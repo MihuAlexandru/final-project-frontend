@@ -1,4 +1,4 @@
-const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const BASE_URL = import.meta.env.VITE_API_URL;
 
 export async function apiFetch(path, options = {}) {
   const token = localStorage.getItem("access_token");

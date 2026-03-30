@@ -39,7 +39,7 @@ export default function Checkout() {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>Finalizare Comandă</h1>
+      <h1 className={styles.title}>Place Order</h1>
       <div className={styles.layout}>
         <div className={styles.mainContent}>
           <CheckoutForm onSubmit={handleOrderSubmit} />

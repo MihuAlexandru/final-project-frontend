@@ -1,23 +1,24 @@
 .form {
-  background: white;
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  background-color: var(--color-surface);
+  border-radius: var(--radius-md);
+  padding: var(--text-xxl);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--color-border);
 }
 
 .sectionTitle {
-  font-size: 1.25rem;
-  margin-bottom: 1.5rem;
-  color: #333;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 0.5rem;
+  font-size: var(--text-lg);
+  margin-bottom: var(--space-lg);
+  color: var(--color-text);
+  border-bottom: 1px solid var(--color-gray-200);
+  padding-bottom: var(--space-sm);
 }
 
 .inputGrid {
   display: grid;
-  grid-template-columns: 1fr 1fr; /* Două coloane */
-  gap: 1rem;
-  margin-bottom: 2rem;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl);
 }
 
 .fullWidth {
@@ -25,17 +26,23 @@
 }
 
 .paymentContainer {
-  margin-bottom: 2.5rem;
+  margin-bottom: var(--text-xxl);
   max-width: 300px;
 }
 
 .submitBtn {
   width: 100%;
-  padding: 1rem !important;
-  font-size: 1.1rem !important;
+  padding: var(--text-md) !important;
+  font-size: var(--text-md) !important;
+  background-color: var(--color-button);
+  color: var(--color-white);
+  border-radius: var(--radius-sm);
 }
 
-/* Responsivitate pentru ecrane mici */
+.submitBtn:hover {
+  background-color: var(--color-button-hover);
+}
+
 @media (max-width: 600px) {
   .inputGrid {
     grid-template-columns: 1fr;

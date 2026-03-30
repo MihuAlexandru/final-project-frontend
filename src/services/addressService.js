@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_API_BASE_URL;
+const API_URL = import.meta.env.VITE_API_URL;
 
 export async function updateMyAddress(addressData) {
   const token = localStorage.getItem("access_token");
