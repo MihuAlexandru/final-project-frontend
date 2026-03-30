@@ -7,17 +7,17 @@ import SearchBar from "../../components/UI/SearchBar/SearchBar";
 import Filters from "../../components/Filters/Filters";
 
 export default function Catalog() {
-  const { addToast } = useToast();
+  //const { addToast } = useToast();
   const [deleteModal, setDeleteModal] = useState({ open: false, type: "" });
 
   const openDelete = (type) => setDeleteModal({ open: true, type });
   const closeDelete = () => setDeleteModal({ open: false, type: "" });
 
   const handleConfirmDelete = () => {
-    addToast({
-      type: "success",
-      message: `${deleteModal.type} deleted successfully!`,
-    });
+    // addToast({
+    //   type: "success",
+    //   message: `${deleteModal.type} deleted successfully!`,
+    //  });
     closeDelete();
   };
   const [debouncedSearch, setDebouncedSearch] = useState("");
