@@ -14,7 +14,11 @@ export function usePaginatedFetch(fetchFn, { pageSize = 10 } = {}) {
     setIsLoading(true);
     setError(null);
     try {
-      const data = await fetchFn({ page: currentPage, limit: pageSize, search: searchQuery });
+      const data = await fetchFn({
+        page: currentPage,
+        limit: pageSize,
+        search: searchQuery,
+      });
       setItems(data.items);
       setTotalItems(data.total_items);
     } catch (err) {
@@ -28,10 +32,10 @@ export function usePaginatedFetch(fetchFn, { pageSize = 10 } = {}) {
     fetch();
   }, [fetch]);
 
-  function handleSearch(query) {
+  const handleSearch = useCallback((query) => {
     setSearchQuery(query);
     setCurrentPage(1);
-  }
+  }, []);
 
   return {
     items,
