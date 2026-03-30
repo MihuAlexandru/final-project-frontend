@@ -1,19 +1,18 @@
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
-export const getProductsPaginated = async (
+export async function getProductsPaginated(
   page = 1,
   limit = 12,
   search = "",
   categoryId = null,
   minPrice = null,
   maxPrice = null,
-) => {
-  try {
-    // Start building the query URL
-    let url = `${API_URL}/products/?page=${page}&limit=${limit}`;
-    const token = localStorage.getItem("access_token");
+) {
+  const token = localStorage.getItem("access_token");
 
-    // Append filters dynamically if they exist
+  try {
+    let url = `${API_URL}/products/?page=${page}&limit=${limit}`;
+
     if (search) url += `&search=${encodeURIComponent(search)}`;
     if (categoryId) url += `&category_id=${categoryId}`;
     if (minPrice !== null) url += `&min_price=${minPrice}`;
@@ -22,18 +21,21 @@ export const getProductsPaginated = async (
     const response = await fetch(url, {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
     });
 
-    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
     return await response.json();
   } catch (error) {
     console.error("Error fetching paginated products:", error);
     throw error;
   }
-};
+}
 
 export async function getProductById(id) {
   const token = localStorage.getItem("access_token");

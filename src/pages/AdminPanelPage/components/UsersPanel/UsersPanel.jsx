@@ -1,13 +1,18 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import SearchBar from "../../../../components/UI/SearchBar/SearchBar.jsx";
 import UserRow from "../UserRow/UserRow.jsx";
 import Pagination from "../Pagination/Pagination.jsx";
 import { useToast } from "../../../../context/ToastContext.jsx";
 import style from "./UsersPanel.module.css";
 import ConfirmDeleteModal from "../../../../components/ConfirmDeleteModal/ConfirmDeleteModal.jsx";
-import { getUsers } from "../../../../services/usersService.js";
+import {
+  getUsers,
+  deactivateUser,
+  reactivateUser,
+  promoteUser,
+  demoteUser,
+} from "../../../../services/usersService.js";
 import { usePaginatedFetch } from "../../../../hooks/usePaginatedFetch.js";
-import { useState } from "react";
 
 const ROWS_PER_PAGE = 10;
 
@@ -17,7 +22,6 @@ export default function UsersPanel() {
     items: users,
     setItems: setUsers,
     totalItems,
-    setTotalItems,
     currentPage,
     setCurrentPage,
     totalPages,
@@ -29,36 +33,87 @@ export default function UsersPanel() {
   const [pendingDelete, setPendingDelete] = useState(null);
   const { addToast } = useToast();
 
-  function handlePromote(id) {
+  async function handlePromote(id) {
     const user = users.find((u) => u.id === id);
     if (user.role === "admin") {
-      addToast({ type: "error", message: `${user.email} is already an admin.` });
+      addToast({
+        type: "error",
+        message: `${user.email} is already an admin.`,
+      });
       return;
     }
-    setUsers((prev) => prev.map((u) => (u.id === id ? { ...u, role: "admin" } : u)));
-    addToast({ type: "success", message: `${user.email} promoted to admin.` });
+    try {
+      await promoteUser(id);
+      setUsers((prev) =>
+        prev.map((u) => (u.id === id ? { ...u, role: "admin" } : u)),
+      );
+      addToast({
+        type: "success",
+        message: `${user.email} promoted to admin.`,
+      });
+    } catch (err) {
+      addToast({ type: "error", message: err.message });
+    }
   }
 
-  function handleDemote(id) {
+  async function handleDemote(id) {
     const user = users.find((u) => u.id === id);
     if (user.role === "customer") {
-      addToast({ type: "error", message: `${user.email} is already a customer.` });
+      addToast({
+        type: "error",
+        message: `${user.email} is already a customer.`,
+      });
       return;
     }
-    setUsers((prev) => prev.map((u) => (u.id === id ? { ...u, role: "customer" } : u)));
-    addToast({ type: "info", message: `${user.email} demoted to customer.` });
+    try {
+      await demoteUser(id);
+      setUsers((prev) =>
+        prev.map((u) => (u.id === id ? { ...u, role: "customer" } : u)),
+      );
+      addToast({ type: "info", message: `${user.email} demoted to customer.` });
+    } catch (err) {
+      addToast({ type: "error", message: err.message });
+    }
   }
 
   function handleDelete(id) {
     setPendingDelete(id);
   }
 
-  function confirmDelete() {
+  async function confirmDelete() {
     const user = users.find((u) => u.id === pendingDelete);
-    setUsers((prev) => prev.filter((u) => u.id !== pendingDelete));
-    setTotalItems((prev) => prev - 1);
-    addToast({ type: "error", message: `${user.email} has been deleted.` });
-    setPendingDelete(null);
+    try {
+      await deactivateUser(pendingDelete);
+      setUsers((prev) =>
+        prev.map((u) =>
+          u.id === pendingDelete ? { ...u, is_active: false } : u,
+        ),
+      );
+      addToast({
+        type: "success",
+        message: `${user.email} has been deactivated.`,
+      });
+    } catch (err) {
+      addToast({ type: "error", message: err.message });
+    } finally {
+      setPendingDelete(null);
+    }
+  }
+
+  async function handleReactivate(id) {
+    const user = users.find((u) => u.id === id);
+    try {
+      await reactivateUser(id);
+      setUsers((prev) =>
+        prev.map((u) => (u.id === id ? { ...u, is_active: true } : u)),
+      );
+      addToast({
+        type: "success",
+        message: `${user.email} has been reactivated.`,
+      });
+    } catch (err) {
+      addToast({ type: "error", message: err.message });
+    }
   }
 
   const paddedRows = [
@@ -99,9 +154,14 @@ export default function UsersPanel() {
                 onPromote={handlePromote}
                 onDemote={handleDemote}
                 onDelete={handleDelete}
+                onReactivate={handleReactivate}
               />
             ) : (
-              <li key={`ghost-${idx}`} className={style.ghostRow} aria-hidden="true" />
+              <li
+                key={`ghost-${idx}`}
+                className={style.ghostRow}
+                aria-hidden="true"
+              />
             ),
           )
         )}
