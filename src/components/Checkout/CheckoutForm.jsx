@@ -9,7 +9,8 @@ export default function CheckoutForm({ onSubmit }) {
     street: "",
     house_number: "",
     postal_code: "",
-    phone: "",
+    state: "",
+    country: "",
     payment_type: "cash",
   });
 
@@ -25,13 +26,31 @@ export default function CheckoutForm({ onSubmit }) {
 
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
-      <h2 className={styles.sectionTitle}>Detalii Livrare</h2>
+      <h2 className={styles.sectionTitle}>Delivery Details</h2>
 
       <div className={styles.inputGrid}>
         <FormInput
+          id="country"
+          label="Country"
+          placeholder="e.g., Romania"
+          value={formData.country}
+          onChange={handleChange}
+          required
+        />
+
+        <FormInput
+          id="state"
+          label="State"
+          placeholder="e.g., Iasi"
+          value={formData.state}
+          onChange={handleChange}
+          required
+        />
+
+        <FormInput
           id="city"
-          label="Oraș"
-          placeholder="ex: București"
+          label="City"
+          placeholder="e.g., Letcani"
           value={formData.city}
           onChange={handleChange}
           required
@@ -39,8 +58,8 @@ export default function CheckoutForm({ onSubmit }) {
 
         <FormInput
           id="postal_code"
-          label="Cod Poștal"
-          placeholder="ex: 010101"
+          label="Postal Code"
+          placeholder="e.g., 700001"
           value={formData.postal_code}
           onChange={handleChange}
           required
@@ -48,8 +67,8 @@ export default function CheckoutForm({ onSubmit }) {
 
         <FormInput
           id="street"
-          label="Stradă"
-          placeholder="Numele străzii"
+          label="Street"
+          placeholder="e.g., Street Cuza Voda"
           className={styles.fullWidth}
           value={formData.street}
           onChange={handleChange}
@@ -58,42 +77,32 @@ export default function CheckoutForm({ onSubmit }) {
 
         <FormInput
           id="house_number"
-          label="Nr. / Bloc / Ap."
-          placeholder="ex: Nr. 5, Bl. A, Sc. 1, Ap. 12"
+          label="Nr. / Flat / Ap."
+          placeholder="e.g., Nr. 5, Bl. A, Ap. 12"
           value={formData.house_number}
-          onChange={handleChange}
-          required
-        />
-
-        <FormInput
-          id="phone"
-          label="Telefon"
-          type="tel"
-          placeholder="07xx xxx xxx"
-          value={formData.phone}
           onChange={handleChange}
           required
         />
       </div>
 
-      <h2 className={styles.sectionTitle}>Metodă de Plată</h2>
+      <h2 className={styles.sectionTitle}>Payment Method</h2>
       <div className={styles.paymentContainer}>
         <FormInput
           id="payment_type"
           type="select"
-          label="Alege modalitatea de plată"
+          label="Choose payment method"
           value={formData.payment_type}
           onChange={handleChange}
           options={[
-            { value: "cash", label: "Plată la livrare (Cash)" },
-            { value: "card", label: "Card Online" },
+            { value: "cash", label: "Cash on delivery" },
+            { value: "card", label: "Card" },
           ]}
         />
       </div>
 
       <div className={styles.actions}>
         <Button type="submit" variant="primary" className={styles.submitBtn}>
-          Finalizează Comanda
+          Send Order
         </Button>
       </div>
     </form>

@@ -1,48 +1,44 @@
 import React, { useEffect, useState } from "react";
 import styles from "./CheckoutCartDetails.module.css";
+import { getProductById } from "../../services/productService";
 
-export default function CheckoutCartDetails({ onTotalChange }) {
+export default function CheckoutCartDetails({ onTotalChange, onItemsLoad }) {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchCartData = async () => {
+    const fetchRealProducts = async () => {
       try {
-        const mockData = [
-          {
-            id: 101,
-            quantity: 2,
-            product: { name: "T-Shirt Genc Black", price: 120.0 },
-          },
-          {
-            id: 102,
-            quantity: 1,
-            product: { name: "Jeans Premium Blue", price: 350.5 },
-          },
+        setLoading(true);
+
+        const [prod1, prod2] = await Promise.all([
+          getProductById(1),
+          getProductById(2),
+        ]);
+
+        const realData = [
+          { id: 101, quantity: 2, product: prod1 },
+          { id: 102, quantity: 1, product: prod2 },
         ];
 
-        setCartItems(mockData);
+        setCartItems(realData);
+        if (onItemsLoad) onItemsLoad(realData);
 
-        const total = mockData.reduce(
+        const total = realData.reduce(
           (acc, item) => acc + item.product.price * item.quantity,
           0,
         );
 
         if (onTotalChange) onTotalChange(total);
       } catch (error) {
-        console.error("Eroare la încărcarea coșului:", error);
+        console.error("Error loading products:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchCartData();
-  }, [onTotalChange]);
-
-  if (loading)
-    return (
-      <div className={styles.container}>Se încarcă detaliile coșului...</div>
-    );
+    fetchRealProducts();
+  }, [onTotalChange, onItemsLoad]);
 
   const calculateTotal = () => {
     return cartItems
@@ -50,16 +46,18 @@ export default function CheckoutCartDetails({ onTotalChange }) {
       .toFixed(2);
   };
 
+  if (loading) return <div className={styles.container}>Loading cart...</div>;
+
   return (
     <div className={styles.container}>
-      <h2 className={styles.title}>Sumar Comandă</h2>
+      <h2 className={styles.title}>Order Summary</h2>
 
       <div className={styles.itemList}>
         {cartItems.map((item) => (
           <div key={item.id} className={styles.item}>
             <div className={styles.itemInfo}>
               <h4>{item.product.name}</h4>
-              <p>Cantitate: {item.quantity}</p>
+              <p>Quantity: {item.quantity}</p>
             </div>
             <span className={styles.price}>
               {(item.product.price * item.quantity).toFixed(2)} RON
@@ -71,7 +69,7 @@ export default function CheckoutCartDetails({ onTotalChange }) {
       <div className={styles.divider} />
 
       <div className={styles.totalRow}>
-        <span>Total de plată</span>
+        <span>Total to pay</span>
         <span className={styles.totalAmount}>{calculateTotal()} RON</span>
       </div>
     </div>
