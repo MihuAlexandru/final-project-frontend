@@ -1,58 +1,118 @@
+import { useState, useEffect } from "react";
 import { mockProducts } from "../../../MockData/mockProducts";
 import ProductCard from "../../components/ProductCard/ProductCard";
 import Pagination from "../../components/Pagination/Pagination";
 import styles from "./Catalog.module.css";
-import { useMemo, useState } from "react";
+import SearchBar from "../../components/UI/SearchBar/SearchBar";
+import Filters from "../../components/Filters/Filters";
 
 export default function Catalog() {
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [sortType, setSortType] = useState("");
+
+  const [priceRange, setPriceRange] = useState({
+    min: 0,
+    max: 10000,
+  });
+
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [inStockOnly, setInStockOnly] = useState(false);
+
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6;
-  const totalItems = useMemo(() => mockProducts.length, []);
-  const totalPages = useMemo(() => {
-    return Math.ceil(totalItems / itemsPerPage);
-  }, [totalItems, itemsPerPage]);
+  const itemsPerPage = 8;
 
-  const currentProducts = useMemo(() => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    return mockProducts.slice(startIndex, endIndex);
-  }, [currentPage, itemsPerPage]);
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [debouncedSearch, sortType, priceRange, selectedCategories, inStockOnly]);
 
-  const handlePageChange = (newPage) => {
-    setCurrentPage(newPage);
+  const filteredProducts = mockProducts
+    .filter((item) =>
+      item.name.toLowerCase().includes(debouncedSearch.toLowerCase()),
+    )
+    .filter(
+      (item) => item.price >= priceRange.min && item.price <= priceRange.max,
+    )
+    .filter((item) =>
+      selectedCategories.length === 0
+        ? true
+        : selectedCategories.includes(item.category_id),
+    )
+    .filter((item) => (inStockOnly ? item.stock_quantity > 0 : true))
+    .sort((a, b) => {
+      switch (sortType) {
+        case "name-asc":
+          return a.name.localeCompare(b.name);
+        case "name-desc":
+          return b.name.localeCompare(a.name);
+        case "price-asc":
+          return a.price - b.price;
+        case "price-desc":
+          return b.price - a.price;
+        default:
+          return 0;
+      }
+    });
+
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentProducts = filteredProducts.slice(
+    startIndex,
+    startIndex + itemsPerPage,
+  );
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
     <div className={styles.catalogPage}>
-      <header className={styles.pageHeader}>
-        <h1>Catalog page</h1>
-        <div className={styles.sortPlaceholder}>
-          <span>Sort by: Popularity</span>
-        </div>
-      </header>
+      <h1 className={styles.pageTitle}>Catalog page</h1>
+      <div className={styles.topBar}>
+        <SearchBar onSearch={setDebouncedSearch} delay={1000} />
 
-      <div className={styles.mainContent}>
-        <aside className={styles.filterSidebarPlaceholder}>
-          <h3>Filters</h3>
-          <p>Category</p>
-          <p>Price Range</p>
-        </aside>
+        <select
+          className={styles.sortDropdown}
+          onChange={(e) => setSortType(e.target.value)}
+        >
+          <option value="">Sort by...</option>
+          <option value="name-asc">Sort by Name ⬇</option>
+          <option value="name-desc">Sort by Name ⬆</option>
+          <option value="price-asc">Sort by Price ⬇</option>
+          <option value="price-desc">Sort by Price ⬆</option>
+        </select>
+      </div>
+
+      <div className={styles.contentLayout}>
+        <Filters
+          priceRange={priceRange}
+          setPriceRange={setPriceRange}
+          selectedCategories={selectedCategories}
+          setSelectedCategories={setSelectedCategories}
+          inStockOnly={inStockOnly}
+          setInStockOnly={setInStockOnly}
+        />
 
         <div className={styles.gridWrapper}>
           <div className={styles.catalogContainer}>
-            {currentProducts.map((item) => (
-              <ProductCard key={item.id} product={item} />
-            ))}
+            {currentProducts.length > 0 ? (
+              currentProducts.map((item) => (
+                <ProductCard key={item.id} product={item} />
+              ))
+            ) : (
+              <p>No product found</p>
+            )}
           </div>
 
-          <div className={styles.paginationContainer}>
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={handlePageChange}
-            />
-          </div>
+          {totalPages > 1 && (
+            <div className={styles.paginationContainer}>
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>

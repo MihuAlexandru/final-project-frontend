@@ -9,9 +9,9 @@ export default function LandingPage() {
         <h1>Discover What’s New</h1>
         <h2>Top products curated for you</h2>
 
-        <Button>
-          <Link to="/catalog">Shop</Link>
-        </Button>
+        <Link to="/catalog">
+          <Button>Shop</Button>
+        </Link>
       </div>
     </div>
   );
