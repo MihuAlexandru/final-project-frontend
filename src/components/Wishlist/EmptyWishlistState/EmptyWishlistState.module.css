@@ -1,0 +1,18 @@
+.emptyState {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.emptyState h2 {
+  margin: 0 0 var(--space-sm) 0;
+  color: var(--color-text-light);
+}
+
+.emptyState p {
+  margin: 0;
+  color: var(--color-text-light);
+}

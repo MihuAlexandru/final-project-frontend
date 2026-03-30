@@ -7,23 +7,30 @@ import userIcon from "../../assets/user.png";
 const leftLinks = [
   { path: "/", label: "Home" },
   { path: "/catalog", label: "Shop" },
-  { path: "/admin", label: "Admin Panel" },
+  { path: "/admin", label: "Admin Panel", adminOnly: true },
 ];
 
 const rightLinks = [
-  { path: "/wishlist", icon: heartIcon, label: "Wishlist" },
-  { path: "/cart", icon: shopIcon, label: "Cart" },
-  { path: "/profile", icon: userIcon, label: "Profile" },
-  { path: "/login", label: "Login" },
-  { path: "/signup", label: "Signup" },
+  { path: "/wishlist", icon: heartIcon, label: "Wishlist", auth: true },
+  { path: "/cart", icon: shopIcon, label: "Cart", auth: true },
+  { path: "/profile", icon: userIcon, label: "Profile", auth: true },
+  { path: "/login", label: "Login", guest: true },
+  { path: "/signup", label: "Signup", guest: true },
 ];
 
-export default function NavItems({ closeMenu, position, isMobile }) {
+export default function NavItems({ closeMenu, position, isMobile, user }) {
   const list = position === "left" ? leftLinks : rightLinks;
+
+  const filtered = list.filter((item) => {
+    if (item.adminOnly) return user?.role === "admin";
+    if (item.auth) return !!user;
+    if (item.guest) return !user;
+    return true;
+  });
 
   return (
     <>
-      {list.map((item, idx) => {
+      {filtered.map((item, idx) => {
         return (
           <Link key={idx} to={item.path} onClick={closeMenu}>
             {isMobile ? (

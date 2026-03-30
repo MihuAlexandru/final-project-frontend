@@ -1,0 +1,21 @@
+.wishlistPage {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-md);
+}
+
+.pageTitle {
+  margin: 0 0 var(--space-xl) 0;
+  font-size: 1.8rem;
+  color: var(--color-text);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--space-lg);
+}
