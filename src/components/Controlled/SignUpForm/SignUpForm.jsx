@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useToast } from "../../../context/ToastContext";
 import styles from "./style.module.css";
+import { useAuth } from "../../../context/AuthContext";
 
 import {
   validatePassword,
@@ -23,6 +24,7 @@ export default function SignUpForm() {
     confirmPassword: "",
   });
 
+  const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -60,7 +62,7 @@ export default function SignUpForm() {
       const payload = { ...formData };
       delete payload.confirmPassword;
       const result = await signup(payload);
-      localStorage.setItem("access_token", result.access_token);
+      login(result.access_token);
       addToast({ type: "success", message: "Registered successfully!" });
       navigate("/catalog", { replace: true });
     } catch (err) {

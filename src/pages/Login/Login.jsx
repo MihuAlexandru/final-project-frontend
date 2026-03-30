@@ -6,6 +6,7 @@ import { useToast } from "../../context/ToastContext";
 import { login as loginUser } from "../../services/authService";
 import styles from "./Login.module.css";
 import loginBg from "../../assets/dark-surface-illustration.jpg";
+import { useAuth } from "../../context/AuthContext";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
+  const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -36,11 +38,8 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const { access_token, token_type } = await loginUser(email, password);
-      localStorage.setItem("access_token", access_token);
-      if (token_type) {
-        localStorage.setItem("token_type", token_type);
-      }
+      const { access_token } = await loginUser(email, password);
+      login(access_token);
       addToast({ type: "success", message: "Logged in successfully!" });
       navigate("/catalog", { replace: true });
     } catch (err) {

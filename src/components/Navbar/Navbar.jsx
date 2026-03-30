@@ -2,11 +2,21 @@ import { useState } from "react";
 import style from "./Navbar.module.css";
 import exitIcon from "../../assets/exit.png";
 import NavItems from "../NavItems/NavItems";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-
+  const navigate = useNavigate();
+  const { token, logout } = useAuth();
   const closeMenu = () => setMenuOpen(false);
+
+  const handleLogout = () => {
+    logout(() => {
+      if (closeMenu) closeMenu();
+      navigate("/");
+    });
+  };
 
   return (
     <nav className={style.navbar}>
@@ -16,9 +26,11 @@ export default function Navbar() {
 
       <div className={`${style.right} ${style.desktop}`}>
         <NavItems position="right" closeMenu={closeMenu} isMobile={false} />
-        <span className={style.logout} onClick={closeMenu}>
-          <img src={exitIcon} alt="" />
-        </span>
+        {token && (
+          <span className={style.logout} onClick={closeMenu}>
+            <img src={exitIcon} alt="" />
+          </span>
+        )}
       </div>
 
       <button
@@ -31,10 +43,11 @@ export default function Navbar() {
       {menuOpen && (
         <div className={style.mobileMenu}>
           <NavItems position="left" closeMenu={closeMenu} isMobile={true} />
-          <NavItems position="right" closeMenu={closeMenu} isMobile={true} />
-          <span className={style.logout} onClick={closeMenu}>
+          <NavItems position="right" closeMenu={closeMenu} isMobile={true} />(
+          <span className={style.logout} onClick={handleLogout}>
             Logout
           </span>
+          )
         </div>
       )}
     </nav>
