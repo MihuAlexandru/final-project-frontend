@@ -17,3 +17,14 @@
   color: var(--color-text-light);
   font-weight: 500;
 }
+
+@media (max-width: 480px) {
+  .titleRow {
+    flex-wrap: wrap;
+    margin-bottom: var(--space-lg);
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+}

@@ -49,3 +49,10 @@
 .checkoutBtn:hover {
   background: var(--color-secondary);
 }
+
+@media (max-width: 950px) {
+  .summary {
+    position: static;
+    top: auto;
+  }
+}

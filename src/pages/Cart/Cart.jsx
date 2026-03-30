@@ -4,9 +4,13 @@ import CartCard from "../../components/Cart/CartCard/CartCard";
 import CartHeader from "../../components/Cart/CartHeader/CartHeader";
 import EmptyCartState from "../../components/Cart/EmptyCartState/EmptyCartState";
 import OrderSummary from "../../components/OrderSummary/OrderSummary";
-import { checkCartStock } from "../../services/cartService";
+import {
+  checkCartStock,
+  getCart,
+  removeCartItem,
+  updateCartItem,
+} from "../../services/cartService";
 import { useToast } from "../../context/ToastContext";
-import { CART_ITEMS } from "../../../MockData/cartItems";
 import style from "./Cart.module.css";
 
 function getItemCountLabel(itemCount) {
@@ -37,7 +41,8 @@ function mergeStockResults(items, stockResults) {
 }
 
 export default function Cart() {
-  const [items, setItems] = useState(CART_ITEMS);
+  const [items, setItems] = useState([]);
+  const [loadingCart, setLoadingCart] = useState(true);
   const [checkingOut, setCheckingOut] = useState(false);
   const navigate = useNavigate();
   const { addToast } = useToast();
@@ -48,36 +53,63 @@ export default function Cart() {
   useEffect(() => {
     let isMounted = true;
 
-    async function initializeStock() {
+    async function loadCartItems() {
       try {
-        const stockResults = await checkCartStock(CART_ITEMS);
+        const cart = await getCart();
 
-        if (!isMounted) return;
-        setItems((prev) => mergeStockResults(prev, stockResults));
-      } catch {
-        if (!isMounted) return;
-        setItems(CART_ITEMS);
+        if (isMounted) {
+          setItems(cart.items);
+        }
+      } catch (error) {
+        if (isMounted) {
+          setItems([]);
+          addToast({
+            type: "error",
+            message: error.message ?? "Could not load cart.",
+          });
+        }
+      } finally {
+        if (isMounted) {
+          setLoadingCart(false);
+        }
       }
     }
 
-    initializeStock();
+    loadCartItems();
 
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [addToast]);
 
-  const handleRemove = (id) => {
-    setItems((prev) => prev.filter((item) => item.id !== id));
+  const handleRemove = async (id) => {
+    try {
+      const updatedCart = await removeCartItem(id);
+      setItems(updatedCart.items);
+      addToast({
+        type: "info",
+        message: "Item removed from cart.",
+      });
+    } catch (error) {
+      addToast({
+        type: "error",
+        message: error.message ?? "Could not remove item from cart.",
+      });
+    }
   };
 
-  const handleQuantityChange = (id, newQty) => {
+  const handleQuantityChange = async (id, newQty) => {
     if (newQty < 1) return;
-    setItems((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, quantity: newQty } : item,
-      ),
-    );
+
+    try {
+      const updatedCart = await updateCartItem(id, newQty);
+      setItems(updatedCart.items);
+    } catch (error) {
+      addToast({
+        type: "error",
+        message: error.message ?? "Could not update cart quantity.",
+      });
+    }
   };
 
   const handleOpenProduct = (id) => {
@@ -117,9 +149,9 @@ export default function Cart() {
     <div className={style.page}>
       <CartHeader itemCountLabel={itemCountLabel} />
 
-      {itemCount === 0 ? (
+      {!loadingCart && itemCount === 0 ? (
         <EmptyCartState />
-      ) : (
+      ) : !loadingCart ? (
         <div className={style.layout}>
           <section className={style.itemList}>
             {items.map((item) => (
@@ -142,7 +174,7 @@ export default function Cart() {
             isDisabled={itemCount === 0}
           />
         </div>
-      )}
+      ) : null}
     </div>
   );
 }

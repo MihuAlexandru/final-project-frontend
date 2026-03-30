@@ -2,6 +2,7 @@ import style from "./CartCard.module.css";
 import CartCardDetails from "./CartCardDetails";
 import CartQuantityControl from "./CartQuantityControl";
 import CartPriceBlock from "./CartPriceBlock";
+import noImage from "../../../assets/no-image-available.png";
 
 export default function CartCard({
   item,
@@ -9,7 +10,7 @@ export default function CartCard({
   onQuantityChange,
   onOpenProduct,
 }) {
-  const { id, name, variant, price, quantity, image, stock } = item;
+  const { id, name, price, quantity, image, stock } = item;
 
   const stockExceeded = stock != null && quantity > stock;
 
@@ -28,12 +29,19 @@ export default function CartCard({
       aria-label={`Open ${name}`}
     >
       <div className={style.imageWrapper}>
-        <img src={image} alt={name} className={style.image} />
+        <img
+          src={image || noImage}
+          alt={name}
+          className={style.image}
+          onError={(event) => {
+            event.currentTarget.onerror = null;
+            event.currentTarget.src = noImage;
+          }}
+        />
       </div>
 
       <CartCardDetails
         name={name}
-        variant={variant}
         stockExceeded={stockExceeded}
         stock={stock}
       />

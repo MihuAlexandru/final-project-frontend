@@ -26,3 +26,13 @@
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 700px) {
+  .page {
+    padding: var(--space-lg) var(--space-sm);
+  }
+
+  .layout {
+    gap: var(--space-lg);
+  }
+}

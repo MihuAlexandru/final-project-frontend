@@ -158,3 +158,64 @@
   font-weight: 600;
   margin: var(--space-xs) 0 0 0;
 }
+
+@media (max-width: 700px) {
+  .card {
+    display: grid;
+    grid-template-columns: 72px minmax(0, 1fr) auto;
+    grid-template-areas:
+      "image details remove"
+      "controls controls price";
+    row-gap: var(--space-sm);
+    column-gap: var(--space-sm);
+    align-items: center;
+  }
+
+  .imageWrapper {
+    grid-area: image;
+    width: 72px;
+    height: 72px;
+  }
+
+  .details {
+    grid-area: details;
+  }
+
+  .name {
+    white-space: normal;
+  }
+
+  .controls {
+    grid-area: controls;
+  }
+
+  .priceBlock {
+    grid-area: price;
+    min-width: auto;
+  }
+
+  .remove {
+    grid-area: remove;
+    align-self: start;
+  }
+}
+
+@media (max-width: 420px) {
+  .card {
+    padding: var(--space-sm);
+  }
+
+  .qty {
+    gap: var(--space-xs);
+    padding: var(--space-xs);
+  }
+
+  .qtyBtn {
+    width: 22px;
+    height: 22px;
+  }
+
+  .qtyValue {
+    min-width: 20px;
+  }
+}
