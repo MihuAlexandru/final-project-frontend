@@ -9,9 +9,8 @@ import Catalog from "./pages/Catalog/Catalog.jsx";
 import Product from "./pages/Product.jsx";
 import Profile from "./pages/ProfilePage/ProfilePage.jsx";
 import Checkout from "./pages/Checkout.jsx";
-import Wishlist from "./pages/Wishlist.jsx";
+import Wishlist from "./pages/Wishlist/Wishlist.jsx";
 import Cart from "./pages/Cart.jsx";
-import AdminPanel from "./pages/AdminPanelPage/AdminPanel.jsx";
 import NotFound from "./pages/NotFound/NotFound.jsx";
 import "./styles/variables.css";
 import "./styles/globals.css";
@@ -34,7 +33,6 @@ createRoot(document.getElementById("root")).render(
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/cart" element={<Cart />} />
-          <Route path="/admin" element={<AdminPanel />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Layout>
