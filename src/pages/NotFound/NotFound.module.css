@@ -1,0 +1,78 @@
+.wrapper {
+  min-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: var(--space-xl) var(--space-md);
+  background: var(--color-white);
+  overflow: hidden;
+}
+
+.animArea {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.ghost {
+  margin: 0;
+  font-size: clamp(6rem, 15vw, 9rem);
+  font-weight: 900;
+  letter-spacing: -2px;
+  color: var(--color-gray-300);
+  user-select: none;
+  pointer-events: none;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.75rem;
+  max-width: 480px;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(1.5rem, 4vw, 2.25rem);
+  font-weight: 800;
+  color: var(--color-text);
+  line-height: 1.2;
+}
+
+.text {
+  margin: 0;
+  color: var(--color-text-light);
+  font-size: 1.1rem;
+  line-height: 1.5;
+  margin-bottom: 0.5rem;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
+  padding: 1rem 3rem;
+  background: #000;
+  color: #fff;
+  border-radius: 50px;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  transition: all 0.2s ease;
+}
+
+.button:hover {
+  transform: translateY(-2px);
+  background: var(--color-secondary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
