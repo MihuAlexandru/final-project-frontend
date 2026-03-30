@@ -1,0 +1,93 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9998;
+  animation: fadeIn 0.2s ease;
+}
+
+.modal {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  width: 380px;
+  max-width: 90vw;
+  text-align: center;
+  box-shadow: var(--shadow-md);
+  animation: scaleIn 0.2s ease;
+}
+
+.iconCircle {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #fde8e8;
+  color: var(--color-danger);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--space-md);
+}
+
+.title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0 0 var(--space-sm);
+}
+
+.message {
+  font-size: 0.9rem;
+  color: var(--color-text-light);
+  margin: 0 0 var(--space-lg);
+  line-height: 1.5;
+}
+
+/* button row */
+.actions {
+  display: flex;
+  gap: var(--space-sm);
+  justify-content: center;
+}
+
+.cancelBtn,
+.deleteBtn {
+  padding: var(--space-sm) var(--space-lg);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.cancelBtn {
+  background: var(--color-gray-200);
+  color: var(--color-text);
+}
+
+.cancelBtn:hover {
+  background: var(--color-gray-300);
+}
+
+.deleteBtn {
+  background: var(--color-danger);
+  color: var(--color-white);
+}
+
+.deleteBtn:hover {
+  background: #bb2d3b;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.9); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}

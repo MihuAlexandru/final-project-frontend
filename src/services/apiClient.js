@@ -14,9 +14,7 @@ export async function apiFetch(path, options = {}) {
 
   if (!res.ok) {
     const data = await res.json().catch(() => ({}));
-    const err = new Error(data.detail ?? `Request failed (${res.status})`);
-    err.status = res.status;
-    throw err;
+    throw new Error(data.detail ?? `Request failed (${res.status})`);
   }
 
   return res.json();

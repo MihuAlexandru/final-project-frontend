@@ -6,11 +6,12 @@ import { useToast } from "../../context/ToastContext";
 import { login as loginUser } from "../../services/authService";
 import styles from "./Login.module.css";
 import loginBg from "../../assets/dark-surface-illustration.jpg";
-import { useAuth } from "../../context/AuthContext";
+import { useUser } from "../../context/UserContext";
 
 export default function Login() {
   const navigate = useNavigate();
   const { addToast } = useToast();
+  const { login } = useUser();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -38,8 +39,8 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const { access_token } = await loginUser(email, password);
-      login(access_token);
+      const { access_token, token_type } = await loginUser(email, password);
+      await login(access_token, token_type);
       addToast({ type: "success", message: "Logged in successfully!" });
       navigate("/catalog", { replace: true });
     } catch (err) {

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import ConfirmDeleteModal from "../../components/ConfirmDeleteModal/ConfirmDeleteModal";
 import { mockProducts } from "../../../MockData/mockProducts";
 import ProductCard from "../../components/ProductCard/ProductCard";
 import styles from "./Catalog.module.css";
@@ -6,6 +7,19 @@ import SearchBar from "../../components/UI/SearchBar/SearchBar";
 import Filters from "../../components/Filters/Filters";
 
 export default function Catalog() {
+  //const { addToast } = useToast();
+  const [deleteModal, setDeleteModal] = useState({ open: false, type: "" });
+
+  const openDelete = (type) => setDeleteModal({ open: true, type });
+  const closeDelete = () => setDeleteModal({ open: false, type: "" });
+
+  const handleConfirmDelete = () => {
+    // addToast({
+    //   type: "success",
+    //   message: `${deleteModal.type} deleted successfully!`,
+    //  });
+    closeDelete();
+  };
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [sortType, setSortType] = useState("");
 
@@ -83,6 +97,19 @@ export default function Catalog() {
           )}
         </div>
       </div>
+
+      <h2 style={{ marginTop: "32px" }}>Delete Modal Test</h2>
+      <div style={{ display: "flex", gap: "8px", marginTop: "8px" }}>
+        <button onClick={() => openDelete("User")}>Delete User</button>
+        <button onClick={() => openDelete("Product")}>Delete Product</button>
+      </div>
+
+      <ConfirmDeleteModal
+        open={deleteModal.open}
+        onClose={closeDelete}
+        onConfirm={handleConfirmDelete}
+        itemName={deleteModal.type}
+      />
     </div>
   );
 }

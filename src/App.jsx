@@ -9,7 +9,7 @@ import Catalog from "./pages/Catalog/Catalog.jsx";
 import Product from "./pages/ProductPage/Product.jsx";
 import Profile from "./pages/ProfilePage/ProfilePage.jsx";
 import Checkout from "./pages/Checkout.jsx";
-import Wishlist from "./pages/Wishlist.jsx";
+import Wishlist from "./pages/Wishlist/Wishlist.jsx";
 import Cart from "./pages/Cart.jsx";
 import NotFound from "./pages/NotFound/NotFound.jsx";
 import "./styles/variables.css";
@@ -18,12 +18,13 @@ import Layout from "./layouts/Layout.jsx";
 import LandingPage from "./pages/LandingPage/LandingPage.jsx";
 import { ToastProvider } from "./context/ToastContext.jsx";
 import ToastContainer from "./components/UI/Toast/ToastContainer.jsx";
-import { AuthProvider } from "./context/AuthContext.jsx";
 import { mockProducts } from "../MockData/mockProducts.js";
+import { UserProvider } from "./context/UserContext.jsx";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
-    <AuthProvider>
+    <UserProvider>
       <ToastProvider>
         <Layout>
           <Routes>
@@ -31,19 +32,17 @@ createRoot(document.getElementById("root")).render(
             <Route path="/catalog" element={<Catalog />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
-            <Route
-              path="/product/:id"
-              element={<Product products={mockProducts} />}
-            />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/checkout" element={<Checkout />} />
-            <Route path="/wishlist" element={<Wishlist />} />
-            <Route path="/cart" element={<Cart />} />
+            <Route path="/product/:id" element={<Product products={mockProducts}/>
+            <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+            <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
+            <Route path="/wishlist" element={<ProtectedRoute><Wishlist /></ProtectedRoute>} />
+            <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
+            <Route path="/admin" element={<ProtectedRoute adminOnly><AdminPanel /></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>
         <ToastContainer />
       </ToastProvider>
-    </AuthProvider>
+    </UserProvider>
   </BrowserRouter>,
 );

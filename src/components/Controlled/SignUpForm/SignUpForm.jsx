@@ -13,6 +13,7 @@ import {
   validatePhone,
 } from "../../../utils/validation";
 import { signup } from "../../../services/register";
+import { useUser } from "../../../context/UserContext";
 
 export default function SignUpForm() {
   const [formData, setFormData] = useState({
@@ -29,6 +30,7 @@ export default function SignUpForm() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { addToast } = useToast();
+  const { login } = useUser();
   const [wasSubmitted, setWasSubmitted] = useState(false);
 
   const isSurname = formData.last_name.trim().length > 0;
@@ -62,7 +64,7 @@ export default function SignUpForm() {
       const payload = { ...formData };
       delete payload.confirmPassword;
       const result = await signup(payload);
-      login(result.access_token);
+      await login(result.access_token, result.token_type);
       addToast({ type: "success", message: "Registered successfully!" });
       navigate("/catalog", { replace: true });
     } catch (err) {

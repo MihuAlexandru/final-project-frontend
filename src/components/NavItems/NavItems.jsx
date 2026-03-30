@@ -6,33 +6,32 @@ import heartIcon from "../../assets/heart.png";
 import userIcon from "../../assets/user.png";
 
 const leftLinks = [
-  { path: "/", label: "Home", auth: "always" },
-  { path: "/catalog", label: "Shop", auth: "always" },
-  { path: "/admin", label: "Admin Panel", auth: "admin" },
+  { path: "/", label: "Home" },
+  { path: "/catalog", label: "Shop" },
+  { path: "/admin", label: "Admin Panel", adminOnly: true },
 ];
 
 const rightLinks = [
-  { path: "/wishlist", icon: heartIcon, label: "Wishlist", auth: "protected" },
-  { path: "/cart", icon: shopIcon, label: "Cart", auth: "protected" },
-  { path: "/profile", icon: userIcon, label: "Profile", auth: "protected" },
-  { path: "/login", label: "Login", auth: "guest" },
-  { path: "/signup", label: "Signup", auth: "guest" },
+  { path: "/wishlist", icon: heartIcon, label: "Wishlist", auth: true },
+  { path: "/cart", icon: shopIcon, label: "Cart", auth: true },
+  { path: "/profile", icon: userIcon, label: "Profile", auth: true },
+  { path: "/login", label: "Login", guest: true },
+  { path: "/signup", label: "Signup", guest: true },
 ];
 
-export default function NavItems({ closeMenu, position, isMobile }) {
-  const { token } = useAuth();
-
+export default function NavItems({ closeMenu, position, isMobile, user }) {
   const list = position === "left" ? leftLinks : rightLinks;
 
-  const filteredList = list.filter((item) => {
-    if (item.auth === "always") return true;
-    if (item.auth === "protected") return !!token;
-    if (item.auth === "guest") return !token;
+  const filtered = list.filter((item) => {
+    if (item.adminOnly) return user?.role === "admin";
+    if (item.auth) return !!user;
+    if (item.guest) return !user;
+    return true;
   });
 
   return (
     <>
-      {filteredList.map((item, idx) => {
+      {filtered.map((item, idx) => {
         return (
           <Link key={idx} to={item.path} onClick={closeMenu}>
             {isMobile ? (

@@ -1,9 +1,7 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import ProfileHeader from "./components/ProfileHeader/ProfileHeader.jsx";
 import ProfileField from "./components/ProfileField/ProfileField.jsx";
 import ProfileActions from "./components/ProfileActions/ProfileActions.jsx";
-import { fetchCurrentUser } from "../../services/profileService.js";
+import { useUser } from "../../context/UserContext.jsx";
 import style from "./ProfilePage.module.css";
 
 const ADDRESS_FIELDS = [
@@ -15,51 +13,7 @@ const ADDRESS_FIELDS = [
 ];
 
 export default function ProfilePage() {
-  const navigate = useNavigate();
-  const [user, setUser] = useState(null);
-  const [token] = useState(() => localStorage.getItem("access_token"));
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    if (!token) {
-      navigate("/login", { replace: true });
-      return;
-    }
-
-    fetchCurrentUser()
-      .then(setUser)
-      .catch((err) => {
-        if (err.status === 401) {
-          navigate("/login", { replace: true });
-        } else {
-          setError(err.message);
-        }
-      })
-      .finally(() => setIsLoading(false));
-  }, [navigate, token]);
-
-  if (!token) return null;
-  if (isLoading) {
-    return (
-      <section className={style.page}>
-        <p className={style.statusMsg} aria-live="polite">
-          Loading profile...
-        </p>
-      </section>
-    );
-  }
-
-  if (error) {
-    return (
-      <section className={style.page}>
-        <p className={style.errorMsg} role="alert">
-          {error}
-        </p>
-      </section>
-    );
-  }
-  if (!user) return null;
+  const { user, address } = useUser();
 
   return (
     <section className={style.page}>
@@ -81,7 +35,7 @@ export default function ProfilePage() {
           <h2 className={style.sectionTitle}>Delivery Address</h2>
           <dl className={style.fieldList}>
             {ADDRESS_FIELDS.map(({ label, key }) => (
-              <ProfileField key={key} label={label} value={null} />
+              <ProfileField key={key} label={label} value={address?.[key] ?? null} />
             ))}
           </dl>
         </section>
