@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { mockProducts } from "../../../MockData/mockProducts";
 import ProductCard from "../../components/ProductCard/ProductCard";
 import Pagination from "../../components/Pagination/Pagination";
@@ -7,6 +7,8 @@ import SearchBar from "../../components/UI/SearchBar/SearchBar";
 import Filters from "../../components/Filters/Filters";
 
 export default function Catalog() {
+  const topRef = useRef(null);
+
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [sortType, setSortType] = useState("");
 
@@ -62,11 +64,17 @@ export default function Catalog() {
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (topRef.current) {
+      setTimeout(() => {
+        topRef.current.scrollIntoView({ behavior: "auto", block: "start" });
+      }, 100);
+    } else {
+      window.scrollTo({ top: 0, behavior: "auto" });
+    }
   };
 
   return (
-    <div className={styles.catalogPage}>
+    <div className={styles.catalogPage} ref={topRef}>
       <h1 className={styles.pageTitle}>Catalog page</h1>
       <div className={styles.topBar}>
         <SearchBar onSearch={setDebouncedSearch} delay={1000} />
