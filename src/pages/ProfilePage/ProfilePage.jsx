@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ProfileHeader from "./components/ProfileHeader/ProfileHeader.jsx";
 import ProfileField from "./components/ProfileField/ProfileField.jsx";
 import ProfileActions from "./components/ProfileActions/ProfileActions.jsx";
-import { fetchCurrentUser } from "../../services/profileService.js";
+import { useUser } from "../../context/UserContext.jsx";
 import style from "./ProfilePage.module.css";
 
 const ADDRESS_FIELDS = [
@@ -16,31 +16,15 @@ const ADDRESS_FIELDS = [
 
 export default function ProfilePage() {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
-  const [token] = useState(() => localStorage.getItem("access_token"));
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { user, loading } = useUser();
 
   useEffect(() => {
-    if (!token) {
+    if (!loading && !user) {
       navigate("/login", { replace: true });
-      return;
     }
+  }, [loading, user, navigate]);
 
-    fetchCurrentUser()
-      .then(setUser)
-      .catch((err) => {
-        if (err.status === 401) {
-          navigate("/login", { replace: true });
-        } else {
-          setError(err.message);
-        }
-      })
-      .finally(() => setIsLoading(false));
-  }, [navigate, token]);
-
-  if (!token) return null;
-  if (isLoading) {
+  if (loading) {
     return (
       <section className={style.page}>
         <p className={style.statusMsg} aria-live="polite">
@@ -50,15 +34,6 @@ export default function ProfilePage() {
     );
   }
 
-  if (error) {
-    return (
-      <section className={style.page}>
-        <p className={style.errorMsg} role="alert">
-          {error}
-        </p>
-      </section>
-    );
-  }
   if (!user) return null;
 
   return (
