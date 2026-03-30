@@ -1,0 +1,29 @@
+.checkboxRow {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--space-sm);
+}
+
+.priceInputRow {
+  display: flex;
+  gap: var(--space-md);
+  align-items: center;
+}
+
+.priceInputGroup {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.priceInputGroup label {
+  font-size: var(--text-sm);
+  margin-bottom: var(--space-xs);
+}
+
+.priceInputGroup input {
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+}

@@ -1,0 +1,59 @@
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  padding: var(--space-xl) var(--space-lg);
+  background: var(--color-bg);
+}
+
+.avatar {
+  flex-shrink: 0;
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.info {
+  min-width: 0;
+}
+
+.name {
+  font-size: var(--text-xxl);
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0 0 var(--space-xs) 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.email {
+  font-size: var(--text-sm);
+  color: var(--color-text-light);
+  margin: 0 0 var(--space-sm) 0;
+}
+
+.role {
+  display: inline-block;
+  font-size: var(--text-xs);
+  padding: 0.25rem var(--space-sm);
+  border-radius: var(--radius-xl);
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.role.admin {
+  background: color-mix(in srgb, var(--color-dark) 15%, transparent);
+  color: var(--color-primary);
+}
+
+.role.customer,
+.role.user {
+  background: color-mix(in srgb, var(--color-secondary) 15%, transparent);
+  color: var(--color-dark);
+}

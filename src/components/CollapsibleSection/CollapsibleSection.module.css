@@ -1,0 +1,18 @@
+.section {
+  margin-bottom: var(--space-md);
+  min-width: 200px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+  font-size: var(--text-md);
+  margin-bottom: var(--space-md);
+}
+
+.content {
+  margin-left: 0;
+  margin-top: var(--space-sm);
+}

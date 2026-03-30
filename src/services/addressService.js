@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_BASE_URL;
 
 export async function updateMyAddress(addressData) {
   const token = localStorage.getItem("access_token");
@@ -20,21 +20,11 @@ export async function updateMyAddress(addressData) {
     Authorization: `Bearer ${token}`,
   };
 
-  let response = await fetch(`${API_URL}/users/me/address`, {
-    method: "PATCH",
+  const response = await fetch(`${API_URL}/users/me/address`, {
+    method: "PUT",
     headers: headers,
     body: JSON.stringify(formattedData),
   });
-
-  if (response.status === 404) {
-    console.log("Address does not exist (404). Calling POST to create...");
-
-    response = await fetch(`${API_URL}/users/me/address`, {
-      method: "POST",
-      headers: headers,
-      body: JSON.stringify(formattedData),
-    });
-  }
 
   if (!response.ok) {
     const errorData = await response.json();

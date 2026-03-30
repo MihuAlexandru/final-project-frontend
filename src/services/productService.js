@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 const API_URL = import.meta.env.VITE_API_URL;
+=======
+const API_URL = import.meta.env.VITE_API_BASE_URL;
+>>>>>>> dc15d859cef01ec801ad1a41405fd2b182dabd00
 
 export async function getProductById(id) {
   const token = localStorage.getItem("access_token");
