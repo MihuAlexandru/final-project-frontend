@@ -20,6 +20,7 @@ import LandingPage from "./pages/LandingPage/LandingPage.jsx";
 import { ToastProvider } from "./context/ToastContext.jsx";
 import ToastContainer from "./components/UI/Toast/ToastContainer.jsx";
 import { UserProvider } from "./context/UserContext.jsx";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
@@ -32,11 +33,11 @@ createRoot(document.getElementById("root")).render(
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/product/:id" element={<Product />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/checkout" element={<Checkout />} />
-            <Route path="/wishlist" element={<Wishlist />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/admin" element={<AdminPanel />} />
+            <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+            <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
+            <Route path="/wishlist" element={<ProtectedRoute><Wishlist /></ProtectedRoute>} />
+            <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
+            <Route path="/admin" element={<ProtectedRoute adminOnly><AdminPanel /></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>
