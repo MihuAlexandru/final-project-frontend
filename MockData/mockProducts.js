@@ -63,4 +63,20 @@ export const mockProducts = [
       },
     ],
   },
+  {
+    id: 5,
+    name: "Telefon mobil Apple iPhone 67 Pro, 256GB, 5G, Natural Alpha",
+    description: "Design din titan aero-spațial",
+    price: 3000,
+    stock_quantity: 6,
+    is_available: true,
+    category_id: 2,
+    images: [
+      {
+        id: 102,
+        url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSScqnjw-17-IYMVuxZLswqjWLnOCPihEgLqA&s",
+        is_primary: true,
+      },
+    ],
+  },
 ];
