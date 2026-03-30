@@ -1,0 +1,78 @@
+.panel {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding: var(--space-xl);
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+  flex-wrap: wrap;
+  flex: 1;
+  margin-bottom: 50px;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-gray-600);
+  margin: 0;
+}
+
+.btnWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.addBtn {
+  flex: 2;
+  background-color: var(--color-black);
+  color: var(--color-white);
+}
+
+.cancelBtn {
+  flex: 1;
+  background-color: var(--color-gray-200);
+  color: var(--color-black);
+}
+
+.addContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
+  border: 2px solid var(--color-gray-400);
+  padding: 20px;
+  gap: 20px;
+}
+
+.description {
+  height: 90px;
+  line-height: 60px;
+}
+
+.contentGroup {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.message {
+  font-size: 1rem;
+  color: var(--color-gray-700);
+  text-align: center;
+}
