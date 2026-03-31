@@ -5,9 +5,13 @@ import styles from "./Checkout.module.css";
 import { updateMyAddress } from "../services/addressService";
 import { placeOrder } from "../services/orderService";
 import { getMyProfile } from "../services/userService";
+import { useNavigate } from "react-router-dom";
+import Button from "../components/UI/Button/Button";
 
 export default function Checkout() {
   const [itemsToOrder, setItemsToOrder] = useState([]);
+  const [orderResponse, setOrderResponse] = useState(null);
+  const navigate = useNavigate();
 
   const handleOrderSubmit = async (formData) => {
     try {
@@ -27,13 +31,38 @@ export default function Checkout() {
         billing_address_id: finalAddressId,
       };
 
-      await placeOrder(orderPayload);
-      alert("The order was placed successfully!");
+      const response = await placeOrder(orderPayload);
+      setOrderResponse(response);
     } catch (error) {
       console.error("Checkout Error:", error);
       alert("Oops, unfortunately the order could not be placed!");
     }
   };
+
+  if (orderResponse) {
+    return (
+      <div className={styles.container}>
+        <div className={styles.successCard}>
+          <div className={styles.successIcon}>🎉</div>
+          <h1 className={styles.successTitle}>Order Placed Successfully!</h1>
+          <p className={styles.successText}>
+            Thank you for your purchase. Your order has been received and is
+            being processed.
+          </p>
+          <div className={styles.orderIdBox}>
+            Order ID:{" "}
+            <span className={styles.idNumber}>#{orderResponse.id}</span>
+          </div>
+
+          <div className={styles.successActions}>
+            <Button onClick={() => navigate("/")} className={styles.blackBtn}>
+              Continue Shopping
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.container}>
