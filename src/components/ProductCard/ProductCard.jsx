@@ -24,6 +24,7 @@ export default function ProductCard({ product, isAdmin, onEdit }) {
     },
     [product.id, isFavorite],
   );
+
   return (
     <div
       className={`${styles.cardHoverWrapper} ${isUnavailable ? styles.unavailable : ""}`}
@@ -48,13 +49,17 @@ export default function ProductCard({ product, isAdmin, onEdit }) {
             {isAdmin && (
               <button
                 className={styles.editBtn}
-                onClick={() => onEdit(product.id)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  onEdit(product.id);
+                }}
                 title="Edit Product"
               >
                 <Pencil size={18} />
               </button>
             )}
           </div>
+
           <Link to={`/product/${product.id}`} className={styles.productLink}>
             <div className={styles.imageContainer}>
               <img
@@ -66,6 +71,7 @@ export default function ProductCard({ product, isAdmin, onEdit }) {
             </div>
             <h3 className={styles.title}>{product.name}</h3>
           </Link>
+
           <div className={styles.details}>
             {isUnavailable ? (
               <p className={styles.stock} style={{ color: "grey" }}>
@@ -88,6 +94,7 @@ export default function ProductCard({ product, isAdmin, onEdit }) {
               {product.price.toLocaleString("ro-RO")} Lei
             </p>
           </div>
+
           <div className={styles.action}>
             <Button disabled={isOutOfStock || isUnavailable}>
               {isUnavailable

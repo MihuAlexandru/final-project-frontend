@@ -6,20 +6,20 @@ import SearchBar from "../../components/UI/SearchBar/SearchBar";
 import Filters from "../../components/Filters/Filters";
 import { getProductById } from "../../services/productService";
 import ProductEditModal from "../../components/Admin/ProductEditModal";
-import { useUser } from "../../context/UserContext"; // Importăm contextul
+import { useUser } from "../../context/UserContext";
+import { mockProducts } from "../../../MockData/mockProducts";
 
 export default function Catalog() {
-  const { user, loading: userLoading } = useUser(); // Extragem user-ul și starea de loading din context
-  const [products, setProducts] = useState([]);
+  const { user, loading: userLoading } = useUser();
+  const [apiProducts, setApiProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [deleteModal, setDeleteModal] = useState({ open: false, type: "" });
   const [editingProductId, setEditingProductId] = useState(null);
 
-  // Verificăm dacă user-ul este admin folosind datele din context
   const isAdmin = user?.role === "admin" || user?.is_admin === true;
 
   const handleEditSubmit = (updatedProduct) => {
-    setProducts((prev) =>
+    setApiProducts((prev) =>
       prev.map((p) => (p.id === updatedProduct.id ? updatedProduct : p)),
     );
     setEditingProductId(null);
@@ -32,9 +32,9 @@ export default function Catalog() {
         const ids = [1, 2, 3];
         const productPromises = ids.map((id) => getProductById(id));
         const results = await Promise.all(productPromises);
-        setProducts(results);
+        setApiProducts(results);
       } catch (error) {
-        console.error("Eroare la încărcarea produselor:", error);
+        console.error("Error loading API products:", error);
       } finally {
         setLoading(false);
       }
@@ -56,7 +56,9 @@ export default function Catalog() {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [inStockOnly, setInStockOnly] = useState(false);
 
-  const filteredProducts = products
+  const allProducts = [...apiProducts, ...mockProducts];
+
+  const filteredProducts = allProducts
     .filter((item) =>
       item.name.toLowerCase().includes(debouncedSearch.toLowerCase()),
     )
@@ -84,9 +86,8 @@ export default function Catalog() {
       }
     });
 
-  // Dacă contextul încă încarcă datele profilului, putem afișa un loader
   if (userLoading) {
-    return <p>Se verifică profilul...</p>;
+    return <p>Verifying profile...</p>;
   }
 
   return (
@@ -117,8 +118,8 @@ export default function Catalog() {
         />
 
         <div className={styles.catalogContainer}>
-          {loading ? (
-            <p>Se încarcă produsele din API...</p>
+          {loading && apiProducts.length === 0 ? (
+            <p>Loading products...</p>
           ) : filteredProducts.length > 0 ? (
             filteredProducts.map((item) => (
               <ProductCard
@@ -129,7 +130,7 @@ export default function Catalog() {
               />
             ))
           ) : (
-            <p>Niciun produs găsit.</p>
+            <p>No products found.</p>
           )}
         </div>
       </div>
