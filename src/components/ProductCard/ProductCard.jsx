@@ -8,7 +8,8 @@ import heartEmpty from "../../assets/heart.png";
 import heartFilled from "../../assets/heart-filled.png";
 import { getFavorites, toggleFavoriteInStorage } from "../../utils/favorites";
 import { useToast } from "../../context/ToastContext";
-
+import { useUser } from "../../context/UserContext";
+import LoginPromptModal from "../LoginPromptModal/LoginPromptModal";
 // const API_URL = import.meta.env.VITE_API_BASE_URL;
 
 export default function ProductCard({ product }) {
@@ -16,8 +17,9 @@ export default function ProductCard({ product }) {
   const isUnavailable = product.is_active === false;
 
   const { addToast } = useToast();
+  const { user } = useUser();
   const [isAddingToCart, setIsAddingToCart] = useState(false);
-
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const [isFavorite, setIsFavorite] = useState(() => {
     return getFavorites().some((fav) => fav.id === product.id);
   });
@@ -25,14 +27,25 @@ export default function ProductCard({ product }) {
   const toggleFavorite = useCallback(
     (e) => {
       e.preventDefault();
+
+      if (!user) {
+        setShowAuthModal(true);
+        return;
+      }
+
       toggleFavoriteInStorage(product, isFavorite);
       setIsFavorite((prev) => !prev);
     },
-    [product, isFavorite],
+    [product, isFavorite, user],
   );
 
   const handleAddToCart = async (e) => {
     e.preventDefault();
+
+    if (!user) {
+      setShowAuthModal(true);
+      return;
+    }
 
     if (isUnavailable) {
       addToast({
@@ -71,7 +84,7 @@ export default function ProductCard({ product }) {
       setIsAddingToCart(false);
     }
   };
-
+  // TO BE MODIFIED
   // const rawImagePath = product.images?.[0]?.image_path;
   // const imageUrl = rawImagePath
   //   ? rawImagePath.startsWith("http")
@@ -81,6 +94,7 @@ export default function ProductCard({ product }) {
   const imageUrl = noImage;
 
   return (
+    <>
     <div
       className={`${styles.cardHoverWrapper} ${isUnavailable ? styles.unavailable : ""}`}
     >
@@ -149,5 +163,10 @@ export default function ProductCard({ product }) {
         </div>
       </Card>
     </div>
+    <LoginPromptModal 
+        isOpen={showAuthModal} 
+        onClose={() => setShowAuthModal(false)} 
+      />
+      </>
   );
 }
