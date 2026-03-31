@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useToast } from "../../../context/ToastContext";
 import styles from "./style.module.css";
+import { useAuth } from "../../../context/AuthContext";
 
 import {
   validatePassword,
@@ -24,6 +25,7 @@ export default function SignUpForm() {
     confirmPassword: "",
   });
 
+  const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();

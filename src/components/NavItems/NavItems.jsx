@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 import shopIcon from "../../assets/shopping-cart.png";
 import heartIcon from "../../assets/heart.png";

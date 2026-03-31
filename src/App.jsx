@@ -6,7 +6,7 @@ import { Routes, Route } from "react-router-dom";
 import Login from "./pages/Login/Login.jsx";
 import Signup from "./pages/Signup/Signup.jsx";
 import Catalog from "./pages/Catalog/Catalog.jsx";
-import Product from "./pages/Product.jsx";
+import Product from "./pages/ProductPage/Product.jsx";
 import Profile from "./pages/ProfilePage/ProfilePage.jsx";
 import Checkout from "./pages/Checkout.jsx";
 import Wishlist from "./pages/Wishlist/Wishlist.jsx";
@@ -19,6 +19,7 @@ import Layout from "./layouts/Layout.jsx";
 import LandingPage from "./pages/LandingPage/LandingPage.jsx";
 import { ToastProvider } from "./context/ToastContext.jsx";
 import ToastContainer from "./components/UI/Toast/ToastContainer.jsx";
+import { mockProducts } from "../MockData/mockProducts.js";
 import { UserProvider } from "./context/UserContext.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword.jsx";
@@ -36,7 +37,7 @@ createRoot(document.getElementById("root")).render(
             <Route path="/signup" element={<Signup />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/pass-reset" element={<ResetPassword />} />
-            <Route path="/product/:id" element={<Product />} />
+            <Route path="/product/:id" element={<Product products={mockProducts}/>
             <Route
               path="/profile"
               element={
