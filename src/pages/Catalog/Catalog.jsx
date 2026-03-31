@@ -124,7 +124,7 @@ export default function Catalog() {
             )}
           </div>
 
-          {!isLoading && totalPages > 1 && (
+          {!isLoading && (
             <div className={styles.paginationContainer}>
               <Pagination
                 currentPage={currentPage}

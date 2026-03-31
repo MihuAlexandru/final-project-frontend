@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import SearchBar from "../../../../components/UI/SearchBar/SearchBar.jsx";
 import UserRow from "../UserRow/UserRow.jsx";
-import Pagination from "../Pagination/Pagination.jsx";
+import Pagination from "../../../../components/Pagination/Pagination.jsx";
 import { useToast } from "../../../../context/ToastContext.jsx";
 import style from "./UsersPanel.module.css";
 import ConfirmDeleteModal from "../../../../components/ConfirmDeleteModal/ConfirmDeleteModal.jsx";
