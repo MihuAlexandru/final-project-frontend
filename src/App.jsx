@@ -20,6 +20,7 @@ import { ToastProvider } from "./context/ToastContext.jsx";
 import ToastContainer from "./components/UI/Toast/ToastContainer.jsx";
 import { UserProvider } from "./context/UserContext.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import AdminPanel from "./pages/AdminPanelPage/AdminPanel.jsx"
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
