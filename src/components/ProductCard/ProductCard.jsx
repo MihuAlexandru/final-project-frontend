@@ -10,6 +10,7 @@ import { getFavorites, toggleFavoriteInStorage } from "../../utils/favorites";
 import { useToast } from "../../context/ToastContext";
 import { useUser } from "../../context/UserContext";
 import LoginPromptModal from "../LoginPromptModal/LoginPromptModal";
+import { addToCart } from "../../services/cartService";
 // const API_URL = import.meta.env.VITE_API_BASE_URL;
 
 export default function ProductCard({ product }) {
@@ -71,8 +72,8 @@ export default function ProductCard({ product }) {
 
     setIsAddingToCart(true);
 
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 600));
+  try {
+      await addToCart(product.id, 1);
 
       addToast({
         type: "success",
@@ -81,9 +82,8 @@ export default function ProductCard({ product }) {
     } catch (error) {
       addToast({
         type: "error",
-        message: "Failed to add product to cart. Please try again.",
+        message: error.message || "Failed to add product to cart. Please try again.",
       });
-      console.error(error);
     } finally {
       setIsAddingToCart(false);
     }
