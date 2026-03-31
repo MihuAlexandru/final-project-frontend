@@ -34,11 +34,7 @@ export default function ProfileActions() {
         Edit profile
       </Button>
 
-      <Button
-        disabled
-        aria-disabled="true"
-        className={style.resetBtn}
-      >
+      <Button disabled aria-disabled="true" className={style.resetBtn}>
         Reset password
       </Button>
 

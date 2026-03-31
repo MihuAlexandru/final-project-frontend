@@ -18,6 +18,7 @@ export default function Login() {
   const [errors, setErrors] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const nextErrors = {
@@ -95,6 +96,11 @@ export default function Login() {
           <p className={styles.signupText}>
             Don’t have an account? <Link to="/signup">Sign up</Link>
           </p>
+
+          <p className={styles.signupText}>
+            <Link to="/forgot-password">Forgot your password?</Link>
+          </p>
+
 
           <Button className={styles.loginButton} disabled={loading}>
             {loading ? "Logging in..." : "Login"}

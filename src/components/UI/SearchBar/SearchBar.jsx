@@ -17,7 +17,7 @@ export default function SearchBar({ onSearch, delay = 300 }) {
     <div className={styles.searchBarWrapper}>
       <Input
         type="text"
-        placeholder="Search products..."
+        placeholder="Search..."
         value={value}
         onChange={(e) => setValue(e.target.value)}
         className={styles.searchBar}

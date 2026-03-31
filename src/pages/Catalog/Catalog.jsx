@@ -1,66 +1,85 @@
-import { useState } from "react";
-import ConfirmDeleteModal from "../../components/ConfirmDeleteModal/ConfirmDeleteModal";
-import { mockProducts } from "../../../MockData/mockProducts";
+import { useState, useEffect, useRef } from "react";
+
 import ProductCard from "../../components/ProductCard/ProductCard";
+import Pagination from "../../components/Pagination/Pagination";
 import styles from "./Catalog.module.css";
 import SearchBar from "../../components/UI/SearchBar/SearchBar";
 import Filters from "../../components/Filters/Filters";
+import { getProductsPaginated } from "../../services/productService";
 
 export default function Catalog() {
-  //const { addToast } = useToast();
-  const [deleteModal, setDeleteModal] = useState({ open: false, type: "" });
-
-  const openDelete = (type) => setDeleteModal({ open: true, type });
-  const closeDelete = () => setDeleteModal({ open: false, type: "" });
-
-  const handleConfirmDelete = () => {
-    // addToast({
-    //   type: "success",
-    //   message: `${deleteModal.type} deleted successfully!`,
-    //  });
-    closeDelete();
-  };
+  const topRef = useRef(null);
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [sortType, setSortType] = useState("");
-
   const [priceRange, setPriceRange] = useState({
     min: 0,
     max: 10000,
   });
-
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [inStockOnly, setInStockOnly] = useState(false);
 
-  const filteredProducts = mockProducts
-    .filter((item) =>
-      item.name.toLowerCase().includes(debouncedSearch.toLowerCase()),
-    )
-    .filter(
-      (item) => item.price >= priceRange.min && item.price <= priceRange.max,
-    )
-    .filter((item) =>
-      selectedCategories.length === 0
-        ? true
-        : selectedCategories.includes(item.category_id),
-    )
-    .filter((item) => (inStockOnly ? item.stock_quantity > 0 : true))
-    .sort((a, b) => {
-      switch (sortType) {
-        case "name-asc":
-          return a.name.localeCompare(b.name);
-        case "name-desc":
-          return b.name.localeCompare(a.name);
-        case "price-asc":
-          return a.price - b.price;
-        case "price-desc":
-          return b.price - a.price;
-        default:
-          return 0;
+  const [currentProducts, setCurrentProducts] = useState([]);
+  const [totalPages, setTotalPages] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 12;
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [debouncedSearch, sortType, priceRange, selectedCategories, inStockOnly]);
+
+  useEffect(() => {
+    const fetchCatalog = async () => {
+      setIsLoading(true);
+      try {
+        const categoryId =
+          selectedCategories.length > 0 ? selectedCategories[0] : null;
+
+        const data = await getProductsPaginated(
+          currentPage,
+          itemsPerPage,
+          debouncedSearch,
+          categoryId,
+          priceRange.min,
+          priceRange.max,
+        );
+
+        setCurrentProducts(data.items || []);
+
+        const calculatedPages = Math.ceil(
+          (data.total_items || 0) / itemsPerPage,
+        );
+        setTotalPages(calculatedPages || 1);
+      } catch (error) {
+        console.error("Failed to fetch catalog data:", error);
+      } finally {
+        setIsLoading(false);
       }
-    });
+    };
+
+    fetchCatalog();
+  }, [
+    currentPage,
+    debouncedSearch,
+    sortType,
+    priceRange,
+    selectedCategories,
+    inStockOnly,
+  ]);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    if (topRef.current) {
+      setTimeout(() => {
+        topRef.current.scrollIntoView({ behavior: "auto", block: "start" });
+      }, 100);
+    } else {
+      window.scrollTo({ top: 0, behavior: "auto" });
+    }
+  };
 
   return (
-    <div className={styles.catalogPage}>
+    <div className={styles.catalogPage} ref={topRef}>
       <h1 className={styles.pageTitle}>Catalog page</h1>
       <div className={styles.topBar}>
         <SearchBar onSearch={setDebouncedSearch} delay={1000} />
@@ -87,29 +106,35 @@ export default function Catalog() {
           setInStockOnly={setInStockOnly}
         />
 
-        <div className={styles.catalogContainer}>
-          {filteredProducts.length > 0 ? (
-            filteredProducts.map((item) => (
-              <ProductCard key={item.id} product={item} />
-            ))
-          ) : (
-            <p>Niciun produs găsit.</p>
+        <div className={styles.gridWrapper}>
+          <div className={styles.catalogContainer}>
+            {isLoading ? (
+              <p style={{ fontWeight: "bold", padding: "20px" }}>
+                Loading products...
+              </p>
+            ) : currentProducts.length > 0 ? (
+              currentProducts.map((item) => (
+                <ProductCard key={item.id} product={item} />
+              ))
+            ) : (
+              <div className={styles.noProductsMessage}>
+                <h2>No products found</h2>
+                <p>Try adjusting your filters or search query.</p>
+              </div>
+            )}
+          </div>
+
+          {!isLoading && (
+            <div className={styles.paginationContainer}>
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
+            </div>
           )}
         </div>
       </div>
-
-      <h2 style={{ marginTop: "32px" }}>Delete Modal Test</h2>
-      <div style={{ display: "flex", gap: "8px", marginTop: "8px" }}>
-        <button onClick={() => openDelete("User")}>Delete User</button>
-        <button onClick={() => openDelete("Product")}>Delete Product</button>
-      </div>
-
-      <ConfirmDeleteModal
-        open={deleteModal.open}
-        onClose={closeDelete}
-        onConfirm={handleConfirmDelete}
-        itemName={deleteModal.type}
-      />
     </div>
   );
 }
