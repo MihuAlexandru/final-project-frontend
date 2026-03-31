@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styles from "./CheckoutCartDetails.module.css";
 import { getCart } from "../../services/cartService";
 
-export default function CheckoutCartDetails({ onTotalChange, onItemsLoad }) {
+export default function CheckoutCartDetails({ onItemsLoad }) {
   const [cartData, setCartData] = useState({ items: [], total: 0 });
   const [loading, setLoading] = useState(true);
 
@@ -24,10 +24,6 @@ export default function CheckoutCartDetails({ onTotalChange, onItemsLoad }) {
             },
           }));
           onItemsLoad(itemsForOrder);
-        }
-
-        if (onTotalChange) {
-          onTotalChange(data.total);
         }
       } catch (error) {
         console.error("Error loading cart data:", error);

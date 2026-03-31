@@ -7,6 +7,7 @@ import { placeOrder } from "../services/orderService";
 import { getMyProfile } from "../services/userService";
 import { useNavigate } from "react-router-dom";
 import Button from "../components/UI/Button/Button";
+import { PartyPopper } from "lucide-react";
 
 export default function Checkout() {
   const [itemsToOrder, setItemsToOrder] = useState([]);
@@ -43,7 +44,9 @@ export default function Checkout() {
     return (
       <div className={styles.container}>
         <div className={styles.successCard}>
-          <div className={styles.successIcon}>🎉</div>
+          <div className={styles.successIcon}>
+            <PartyPopper size={80} strokeWidth={1.5} />
+          </div>
           <h1 className={styles.successTitle}>Order Placed Successfully!</h1>
           <p className={styles.successText}>
             Thank you for your purchase. Your order has been received and is

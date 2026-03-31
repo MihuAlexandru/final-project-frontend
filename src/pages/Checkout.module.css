@@ -32,8 +32,11 @@
 }
 
 .successIcon {
-  font-size: 4rem;
   margin-bottom: var(--space-md);
+  color: var(--color-orange);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .successTitle {
