@@ -37,7 +37,7 @@ createRoot(document.getElementById("root")).render(
             <Route path="/signup" element={<Signup />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/pass-reset" element={<ResetPassword />} />
-            <Route path="/product/:id" element={<Product products={mockProducts}/>
+            <Route path="/product/:id" element={<Product products={mockProducts}/>}/>
             <Route
               path="/profile"
               element={

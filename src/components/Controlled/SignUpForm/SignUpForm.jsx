@@ -25,7 +25,6 @@ export default function SignUpForm() {
     confirmPassword: "",
   });
 
-  const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
