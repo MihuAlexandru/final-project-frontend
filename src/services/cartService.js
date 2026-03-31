@@ -100,6 +100,15 @@ export async function getCart() {
   };
 }
 
+export async function addToCart(productId, quantity = 1) {
+  const data = await requestCart("/cart/", {
+    method: "POST",
+    body: JSON.stringify({ product_id: productId, quantity }),
+  });
+
+  return data;
+}
+
 export async function updateCartItem(productId, quantity) {
   await requestCart(`/cart/${productId}`, {
     method: "PATCH",
