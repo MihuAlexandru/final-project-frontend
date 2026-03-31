@@ -117,7 +117,10 @@ export default function Catalog() {
                 <ProductCard key={item.id} product={item} />
               ))
             ) : (
-              <p>No product found</p>
+              <div className={styles.noProductsMessage}>
+                <h2>No products found</h2>
+                <p>Try adjusting your filters or search query.</p>
+              </div>
             )}
           </div>
 
