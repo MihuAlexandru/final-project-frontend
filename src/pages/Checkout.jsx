@@ -31,9 +31,7 @@ export default function Checkout() {
       alert("The order was placed successfully!");
     } catch (error) {
       console.error("Checkout Error:", error);
-      alert(
-        "Oops, unfortunately the order could not be placed: " + error.message,
-      );
+      alert("Oops, unfortunately the order could not be placed!");
     }
   };
 

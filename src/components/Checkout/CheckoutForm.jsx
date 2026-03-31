@@ -14,18 +14,30 @@ export default function CheckoutForm({ onSubmit }) {
     payment_type: "cash",
   });
 
+  const [errors, setErrors] = useState({});
+
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData((prev) => ({ ...prev, [id]: value }));
+    if (errors[id]) {
+      setErrors((prev) => ({ ...prev, [id]: null }));
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const validationErrors = validate(formData);
+
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
     onSubmit(formData);
   };
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit}>
+    <form className={styles.form} onSubmit={handleSubmit} noValidate>
       <h2 className={styles.sectionTitle}>Delivery Details</h2>
 
       <div className={styles.inputGrid}>
@@ -35,7 +47,7 @@ export default function CheckoutForm({ onSubmit }) {
           placeholder="e.g., Romania"
           value={formData.country}
           onChange={handleChange}
-          required
+          error={errors.country}
         />
 
         <FormInput
@@ -44,7 +56,7 @@ export default function CheckoutForm({ onSubmit }) {
           placeholder="e.g., Iasi"
           value={formData.state}
           onChange={handleChange}
-          required
+          error={errors.state}
         />
 
         <FormInput
@@ -53,7 +65,7 @@ export default function CheckoutForm({ onSubmit }) {
           placeholder="e.g., Letcani"
           value={formData.city}
           onChange={handleChange}
-          required
+          error={errors.city}
         />
 
         <FormInput
@@ -62,7 +74,7 @@ export default function CheckoutForm({ onSubmit }) {
           placeholder="e.g., 700001"
           value={formData.postal_code}
           onChange={handleChange}
-          required
+          error={errors.postal_code}
         />
 
         <FormInput
@@ -72,7 +84,7 @@ export default function CheckoutForm({ onSubmit }) {
           className={styles.fullWidth}
           value={formData.street}
           onChange={handleChange}
-          required
+          error={errors.street}
         />
 
         <FormInput
@@ -81,7 +93,7 @@ export default function CheckoutForm({ onSubmit }) {
           placeholder="e.g., Nr. 5, Bl. A, Ap. 12"
           value={formData.house_number}
           onChange={handleChange}
-          required
+          error={errors.house_number}
         />
       </div>
 
@@ -93,6 +105,7 @@ export default function CheckoutForm({ onSubmit }) {
           label="Choose payment method"
           value={formData.payment_type}
           onChange={handleChange}
+          error={errors.payment_type}
           options={[
             { value: "cash", label: "Cash on delivery" },
             { value: "card", label: "Card" },
@@ -107,4 +120,30 @@ export default function CheckoutForm({ onSubmit }) {
       </div>
     </form>
   );
+}
+
+function validate(data) {
+  const newErrors = {};
+
+  if (!data.country.trim()) newErrors.country = "Country is required";
+  if (!data.state.trim()) newErrors.state = "State is required";
+  if (!data.city.trim()) newErrors.city = "City is required";
+
+  const postalRegex = /^\d{6}$/;
+  if (!data.postal_code.trim()) {
+    newErrors.postal_code = "Postal code is required";
+  } else if (!postalRegex.test(data.postal_code.trim())) {
+    newErrors.postal_code = "Postal code must be exactly 6 digits";
+  }
+
+  if (!data.street.trim()) newErrors.street = "Street name is required";
+  if (!data.house_number.trim()) {
+    newErrors.house_number = "House number is required";
+  }
+
+  if (!["cash", "card"].includes(data.payment_type)) {
+    newErrors.payment_type = "Invalid payment method";
+  }
+
+  return newErrors;
 }

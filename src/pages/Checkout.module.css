@@ -1,5 +1,6 @@
 .container {
   max-width: 1200px;
+  min-width: 1400px;
   margin: 3rem auto;
   padding: 0 1.5rem;
 }
@@ -14,19 +15,7 @@
 
 .layout {
   display: grid;
-  grid-template-columns: 1fr 400px; /* Formularul ia restul spațiului, Sumarul are 400px */
+  grid-template-columns: 1fr 400px;
   gap: 3rem;
   align-items: start;
-}
-
-/* Dacă ecranul e mic (tabletă/telefon), le punem una sub alta */
-@media (max-width: 1024px) {
-  .layout {
-    grid-template-columns: 1fr;
-  }
-
-  .sidebar {
-    order: -1; /* Opțional: aduce sumarul sus pe mobil ca să vadă user-ul ce cumpără */
-    margin-bottom: 2rem;
-  }
 }
