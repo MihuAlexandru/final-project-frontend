@@ -97,6 +97,11 @@ export default function Login() {
             Don’t have an account? <Link to="/signup">Sign up</Link>
           </p>
 
+          <p className={styles.signupText}>
+            <Link to="/forgot-password">Forgot your password?</Link>
+          </p>
+
+
           <Button className={styles.loginButton} disabled={loading}>
             {loading ? "Logging in..." : "Login"}
           </Button>

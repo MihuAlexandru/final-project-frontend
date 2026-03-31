@@ -22,7 +22,13 @@ function PersonIcon() {
   );
 }
 
-export default function UserRow({ user, onPromote, onDemote, onDelete, onReactivate }) {
+export default function UserRow({
+  user,
+  onPromote,
+  onDemote,
+  onDelete,
+  onReactivate,
+}) {
   const { user: currentUser } = useUser();
 
   const isTargetAdmin = user.role === "admin";
@@ -38,16 +44,25 @@ export default function UserRow({ user, onPromote, onDemote, onDelete, onReactiv
           <span className={style.email}>
             {user.email}
             {!user.is_active && (
-              <span className={style.deactivatedTag} aria-label="Deactivated account">
+              <span
+                className={style.deactivatedTag}
+                aria-label="Deactivated account"
+              >
                 Deactivated
               </span>
             )}
           </span>
-          <span className={`${style.role} ${style[user.role]}`}>{user.role}</span>
+          <span className={`${style.role} ${style[user.role]}`}>
+            {user.role}
+          </span>
         </div>
       </div>
 
-      <div className={style.actions} role="group" aria-label={`Actions for ${user.email}`}>
+      <div
+        className={style.actions}
+        role="group"
+        aria-label={`Actions for ${user.email}`}
+      >
         {!isTargetAdmin && (
           <Button
             className={style.promoteBtn}

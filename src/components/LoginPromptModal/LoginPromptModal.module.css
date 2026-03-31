@@ -1,0 +1,78 @@
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+}
+
+.modalContent {
+  background-color: var(--color-surface, #fff);
+  padding: var(--space-xl, 32px);
+  border-radius: var(--radius-lg, 12px);
+  box-shadow: var(--shadow-xl, 0 10px 25px rgba(0, 0, 0, 0.2));
+  max-width: 400px;
+  width: 90%;
+  position: relative;
+  text-align: center;
+}
+
+.closeButton {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--color-gray-600, #666);
+}
+
+.modalContent h2 {
+  margin-top: 0;
+  color: var(--color-text, #333);
+}
+
+.modalContent p {
+  color: var(--color-gray-600, #666);
+  margin-bottom: var(--space-lg, 24px);
+}
+
+.modalActions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm, 12px);
+}
+
+.loginButton {
+  background-color: var(--color-button, #000);
+  color: var(--color-white, #fff);
+  padding: 12px;
+  border: none;
+  border-radius: var(--radius-md, 8px);
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.signupButton {
+  background-color: transparent;
+  color: var(--color-button, #000);
+  padding: 12px;
+  border: 1px solid var(--color-button, #000);
+  border-radius: var(--radius-md, 8px);
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.loginButton:hover {
+  background-color: var(--color-button-hover, #333);
+}
+
+.signupButton:hover {
+  background-color: var(--color-gray-100, #f5f5f5);
+}
