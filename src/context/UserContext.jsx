@@ -44,7 +44,9 @@ export function UserProvider({ children }) {
   }
 
   return (
-    <UserContext.Provider value={{ user, setUser, address, setAddress, loading, login, logout }}>
+    <UserContext.Provider
+      value={{ user, setUser, address, setAddress, loading, login, logout }}
+    >
       {children}
     </UserContext.Provider>
   );
