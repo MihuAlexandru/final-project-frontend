@@ -7,8 +7,9 @@ import { useCallback, useState } from "react";
 import heartEmpty from "../../assets/heart.png";
 import heartFilled from "../../assets/heart-filled.png";
 import { getFavorites, toggleFavoriteInStorage } from "../../utils/favorites";
+import { Pencil } from "lucide-react";
 
-export default function ProductCard({ product }) {
+export default function ProductCard({ product, isAdmin, onEdit }) {
   const isOutOfStock = product.stock_quantity === 0;
   const isUnavailable = product.is_available === false;
   const [isFavorite, setIsFavorite] = useState(() => {
@@ -29,19 +30,31 @@ export default function ProductCard({ product }) {
     >
       <Card>
         <div className={styles.productCardContainer}>
-          <button
-            className={`${styles.iconBtn} ${isFavorite ? styles.favoriteActive : ""}`}
-            aria-label={
-              isFavorite ? "Remove from favorites" : "Add to favorites"
-            }
-            onClick={toggleFavorite}
-          >
-            <img
-              src={isFavorite ? heartFilled : heartEmpty}
-              alt="Favorite Icon"
-              className={styles.heartIcon}
-            />
-          </button>
+          <div className={styles.topActions}>
+            <button
+              className={`${styles.iconBtn} ${isFavorite ? styles.favoriteActive : ""}`}
+              aria-label={
+                isFavorite ? "Remove from favorites" : "Add to favorites"
+              }
+              onClick={toggleFavorite}
+            >
+              <img
+                src={isFavorite ? heartFilled : heartEmpty}
+                alt="Favorite Icon"
+                className={styles.heartIcon}
+              />
+            </button>
+
+            {isAdmin && (
+              <button
+                className={styles.editBtn}
+                onClick={() => onEdit(product.id)}
+                title="Edit Product"
+              >
+                <Pencil size={18} />
+              </button>
+            )}
+          </div>
           <Link to={`/product/${product.id}`} className={styles.productLink}>
             <div className={styles.imageContainer}>
               <img

@@ -1,9 +1,15 @@
 import { useState, useEffect } from "react";
-import { getProductById, updateProduct } from "../services/productService";
+import {
+  getProductById,
+  updateProduct,
+  addProductAttribute,
+  removeProductAttribute,
+} from "../services/productService";
 import { useToast } from "../context/ToastContext";
 
 export function useProductForm(productId, onSubmit, onClose) {
   const [product, setProduct] = useState(null);
+  const [initialAttributes, setInitialAttributes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const { addToast } = useToast();
 
@@ -12,7 +18,11 @@ export function useProductForm(productId, onSubmit, onClose) {
       try {
         setIsLoading(true);
         const data = await getProductById(productId);
+        if (data.attributes) {
+          data.attributes.sort((a, b) => a.name.localeCompare(b.name));
+        }
         setProduct(data);
+        setInitialAttributes(data.attributes || []);
       } catch (error) {
         console.error("Failed to load product:", error);
       } finally {
@@ -46,7 +56,9 @@ export function useProductForm(productId, onSubmit, onClose) {
     setProduct((prev) => ({
       ...prev,
       attributes: prev.attributes.map((attr) =>
-        attr.id === id ? { ...attr, [field]: newValue } : attr,
+        attr.id === id
+          ? { ...attr, [field]: newValue, isModified: !attr.isNew }
+          : attr,
       ),
     }));
   };
@@ -61,21 +73,47 @@ export function useProductForm(productId, onSubmit, onClose) {
       price: parseFloat(formData.get("price")),
       stock_quantity: parseInt(formData.get("stock"), 10),
       category_id: parseInt(formData.get("category"), 10),
-      attributes: product.attributes,
     };
 
-    const errorMessage = validateProductData(updatedFields);
+    const errorMessage = validateProductData({
+      ...updatedFields,
+      attributes: product.attributes,
+    });
     if (errorMessage) {
       return addToast({ type: "error", message: errorMessage });
     }
 
     try {
-      const updatedProduct = await updateProduct(productId, updatedFields);
+      await updateProduct(productId, updatedFields);
+
+      const toRemove = initialAttributes.filter((oldAttr) => {
+        const current = product.attributes.find((a) => a.id === oldAttr.id);
+        return !current || current.isModified;
+      });
+
+      for (const attr of toRemove) {
+        await removeProductAttribute(productId, attr.id);
+      }
+
+      const toCreate = product.attributes.filter(
+        (attr) => attr.isNew || attr.isModified,
+      );
+
+      for (const attr of toCreate) {
+        await addProductAttribute(productId, {
+          name: attr.name,
+          value: attr.value,
+        });
+      }
+
+      const finalUpdatedProduct = await getProductById(productId);
+
       addToast({
         type: "success",
         message: "Product updated successfully!",
       });
-      if (onSubmit) onSubmit(updatedProduct);
+
+      if (onSubmit) onSubmit(finalUpdatedProduct);
       onClose();
     } catch (error) {
       addToast({
@@ -99,24 +137,19 @@ function validateProductData(data) {
   if (!data.name || data.name.trim().length < 3) {
     return "The product name must have at least 3 characters.";
   }
-
   if (isNaN(data.price) || data.price <= 0) {
     return "Please enter a valid price (greater than 0).";
   }
-
   if (isNaN(data.stock_quantity) || data.stock_quantity < 0) {
     return "Stock cannot be a negative number.";
   }
-
   if (!data.category_id) {
     return "Please select a category for the product.";
   }
-
   for (const attr of data.attributes) {
     if (!attr.name.trim() || !attr.value.trim()) {
       return "All attributes must have both a name and a value.";
     }
   }
-
   return null;
 }

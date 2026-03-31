@@ -1,37 +1,62 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ConfirmDeleteModal from "../../components/ConfirmDeleteModal/ConfirmDeleteModal";
-import { mockProducts } from "../../../MockData/mockProducts";
 import ProductCard from "../../components/ProductCard/ProductCard";
 import styles from "./Catalog.module.css";
 import SearchBar from "../../components/UI/SearchBar/SearchBar";
 import Filters from "../../components/Filters/Filters";
+import { getProductById } from "../../services/productService";
+import ProductEditModal from "../../components/Admin/ProductEditModal";
+import { useUser } from "../../context/UserContext"; // Importăm contextul
 
 export default function Catalog() {
-  //const { addToast } = useToast();
+  const { user, loading: userLoading } = useUser(); // Extragem user-ul și starea de loading din context
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [deleteModal, setDeleteModal] = useState({ open: false, type: "" });
+  const [editingProductId, setEditingProductId] = useState(null);
+
+  // Verificăm dacă user-ul este admin folosind datele din context
+  const isAdmin = user?.role === "admin" || user?.is_admin === true;
+
+  const handleEditSubmit = (updatedProduct) => {
+    setProducts((prev) =>
+      prev.map((p) => (p.id === updatedProduct.id ? updatedProduct : p)),
+    );
+    setEditingProductId(null);
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const ids = [1, 2, 3];
+        const productPromises = ids.map((id) => getProductById(id));
+        const results = await Promise.all(productPromises);
+        setProducts(results);
+      } catch (error) {
+        console.error("Eroare la încărcarea produselor:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const openDelete = (type) => setDeleteModal({ open: true, type });
   const closeDelete = () => setDeleteModal({ open: false, type: "" });
 
   const handleConfirmDelete = () => {
-    // addToast({
-    //   type: "success",
-    //   message: `${deleteModal.type} deleted successfully!`,
-    //  });
     closeDelete();
   };
+
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [sortType, setSortType] = useState("");
-
-  const [priceRange, setPriceRange] = useState({
-    min: 0,
-    max: 10000,
-  });
-
+  const [priceRange, setPriceRange] = useState({ min: 0, max: 10000 });
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [inStockOnly, setInStockOnly] = useState(false);
 
-  const filteredProducts = mockProducts
+  const filteredProducts = products
     .filter((item) =>
       item.name.toLowerCase().includes(debouncedSearch.toLowerCase()),
     )
@@ -59,12 +84,16 @@ export default function Catalog() {
       }
     });
 
+  // Dacă contextul încă încarcă datele profilului, putem afișa un loader
+  if (userLoading) {
+    return <p>Se verifică profilul...</p>;
+  }
+
   return (
     <div className={styles.catalogPage}>
       <h1 className={styles.pageTitle}>Catalog page</h1>
       <div className={styles.topBar}>
         <SearchBar onSearch={setDebouncedSearch} delay={1000} />
-
         <select
           className={styles.sortDropdown}
           onChange={(e) => setSortType(e.target.value)}
@@ -88,9 +117,16 @@ export default function Catalog() {
         />
 
         <div className={styles.catalogContainer}>
-          {filteredProducts.length > 0 ? (
+          {loading ? (
+            <p>Se încarcă produsele din API...</p>
+          ) : filteredProducts.length > 0 ? (
             filteredProducts.map((item) => (
-              <ProductCard key={item.id} product={item} />
+              <ProductCard
+                key={item.id}
+                product={item}
+                isAdmin={isAdmin}
+                onEdit={(id) => setEditingProductId(id)}
+              />
             ))
           ) : (
             <p>Niciun produs găsit.</p>
@@ -98,11 +134,17 @@ export default function Catalog() {
         </div>
       </div>
 
-      <h2 style={{ marginTop: "32px" }}>Delete Modal Test</h2>
-      <div style={{ display: "flex", gap: "8px", marginTop: "8px" }}>
-        <button onClick={() => openDelete("User")}>Delete User</button>
-        <button onClick={() => openDelete("Product")}>Delete Product</button>
-      </div>
+      {isAdmin && (
+        <>
+          <h2 style={{ marginTop: "32px" }}>Delete Modal Test</h2>
+          <div style={{ display: "flex", gap: "8px", marginTop: "8px" }}>
+            <button onClick={() => openDelete("User")}>Delete User</button>
+            <button onClick={() => openDelete("Product")}>
+              Delete Product
+            </button>
+          </div>
+        </>
+      )}
 
       <ConfirmDeleteModal
         open={deleteModal.open}
@@ -110,6 +152,14 @@ export default function Catalog() {
         onConfirm={handleConfirmDelete}
         itemName={deleteModal.type}
       />
+
+      {isAdmin && editingProductId && (
+        <ProductEditModal
+          productId={editingProductId}
+          onClose={() => setEditingProductId(null)}
+          onSubmit={handleEditSubmit}
+        />
+      )}
     </div>
   );
 }
