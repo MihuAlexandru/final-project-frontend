@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import ProfileHeader from "./components/ProfileHeader/ProfileHeader.jsx";
 import ProfileField from "./components/ProfileField/ProfileField.jsx";
 import ProfileActions from "./components/ProfileActions/ProfileActions.jsx";
@@ -15,26 +13,7 @@ const ADDRESS_FIELDS = [
 ];
 
 export default function ProfilePage() {
-  const navigate = useNavigate();
-  const { user, loading } = useUser();
-
-  useEffect(() => {
-    if (!loading && !user) {
-      navigate("/login", { replace: true });
-    }
-  }, [loading, user, navigate]);
-
-  if (loading) {
-    return (
-      <section className={style.page}>
-        <p className={style.statusMsg} aria-live="polite">
-          Loading profile...
-        </p>
-      </section>
-    );
-  }
-
-  if (!user) return null;
+  const { user, address } = useUser();
 
   return (
     <section className={style.page}>
@@ -56,7 +35,7 @@ export default function ProfilePage() {
           <h2 className={style.sectionTitle}>Delivery Address</h2>
           <dl className={style.fieldList}>
             {ADDRESS_FIELDS.map(({ label, key }) => (
-              <ProfileField key={key} label={label} value={null} />
+              <ProfileField key={key} label={label} value={address?.[key] ?? null} />
             ))}
           </dl>
         </section>
