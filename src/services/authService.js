@@ -35,7 +35,7 @@ export async function requestPasswordReset(email) {
 
 export async function resetPassword(token, new_password) {
   const response = await fetch(`${BASE_URL}/auth/reset-password`, { 
-    method: "POST",
+    method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ token, new_password }),
   });

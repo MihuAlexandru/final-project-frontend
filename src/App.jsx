@@ -21,6 +21,8 @@ import ToastContainer from "./components/UI/Toast/ToastContainer.jsx";
 import { UserProvider } from "./context/UserContext.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import AdminPanel from "./pages/AdminPanelPage/AdminPanel.jsx"
+import ForgotPassword from "./pages/ForgotPassword/ForgotPassword.jsx";
+import ResetPassword from "./pages/ResetPassword/ResetPassword.jsx";
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
@@ -32,6 +34,8 @@ createRoot(document.getElementById("root")).render(
             <Route path="/catalog" element={<Catalog />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/pass-reset" element={<ResetPassword />} />
             <Route path="/product/:id" element={<Product />} />
             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
             <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
