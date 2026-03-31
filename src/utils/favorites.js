@@ -1,5 +1,12 @@
 export const getFavorites = () => {
-  return JSON.parse(localStorage.getItem("favorites") || "[]");
+  try {
+    const parsedFavorites = JSON.parse(
+      localStorage.getItem("favorites") || "[]",
+    );
+    return Array.isArray(parsedFavorites) ? parsedFavorites : [];
+  } catch {
+    return [];
+  }
 };
 
 export const toggleFavoriteInStorage = (productId, isCurrentlyFavorite) => {
@@ -13,5 +20,6 @@ export const toggleFavoriteInStorage = (productId, isCurrentlyFavorite) => {
   }
 
   localStorage.setItem("favorites", JSON.stringify(newFavorites));
+  window.dispatchEvent(new CustomEvent("favoritesUpdated"));
   return newFavorites;
 };

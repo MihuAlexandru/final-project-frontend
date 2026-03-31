@@ -5,6 +5,7 @@ const UserContext = createContext();
 
 export function UserProvider({ children }) {
   const [user, setUser] = useState(null);
+  const [address, setAddress] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -15,7 +16,10 @@ export function UserProvider({ children }) {
     }
 
     fetchCurrentUser()
-      .then(setUser)
+      .then(({ address, ...userData }) => {
+        setUser(userData);
+        if (address) setAddress(address);
+      })
       .catch(() => {
         localStorage.removeItem("access_token");
         localStorage.removeItem("token_type");
@@ -26,17 +30,21 @@ export function UserProvider({ children }) {
   function login(token, tokenType) {
     localStorage.setItem("access_token", token);
     if (tokenType) localStorage.setItem("token_type", tokenType);
-    return fetchCurrentUser().then(setUser);
+    return fetchCurrentUser().then(({ address, ...userData }) => {
+      setUser(userData);
+      if (address) setAddress(address);
+    });
   }
 
   function logout() {
     localStorage.removeItem("access_token");
     localStorage.removeItem("token_type");
     setUser(null);
+    setAddress(null);
   }
 
   return (
-    <UserContext.Provider value={{ user, setUser, loading, login, logout }}>
+    <UserContext.Provider value={{ user, setUser, address, setAddress, loading, login, logout }}>
       {children}
     </UserContext.Provider>
   );

@@ -26,3 +26,14 @@
 .deleteBtn:hover {
   background: color-mix(in srgb, var(--color-danger) 85%, black);
 }
+
+.resetBtn {
+  padding: var(--space-sm) var(--space-lg);
+  font-size: var(--text-sm);
+  border-radius: var(--radius-xl);
+  border: 1.5px solid var(--color-border);
+  background: transparent;
+  color: var(--color-text-light);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
