@@ -10,7 +10,7 @@ import Product from "./pages/Product.jsx";
 import Profile from "./pages/ProfilePage/ProfilePage.jsx";
 import Checkout from "./pages/Checkout.jsx";
 import Wishlist from "./pages/Wishlist/Wishlist.jsx";
-import Cart from "./pages/Cart.jsx";
+import Cart from "./pages/Cart/Cart.jsx";
 import NotFound from "./pages/NotFound/NotFound.jsx";
 import AdminPanel from "./pages/AdminPanelPage/AdminPanel.jsx";
 import "./styles/variables.css";
