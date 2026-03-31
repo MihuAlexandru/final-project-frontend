@@ -35,7 +35,11 @@ export default function ProfilePage() {
           <h2 className={style.sectionTitle}>Delivery Address</h2>
           <dl className={style.fieldList}>
             {ADDRESS_FIELDS.map(({ label, key }) => (
-              <ProfileField key={key} label={label} value={address?.[key] ?? null} />
+              <ProfileField
+                key={key}
+                label={label}
+                value={address?.[key] ?? null}
+              />
             ))}
           </dl>
         </section>
