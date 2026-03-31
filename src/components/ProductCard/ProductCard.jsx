@@ -3,7 +3,7 @@ import Card from "../UI/Card/Card";
 import styles from "./ProductCard.module.css";
 import { Link } from "react-router-dom";
 import noImage from "../../assets/no-image-available.png";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import heartEmpty from "../../assets/heart.png";
 import heartFilled from "../../assets/heart-filled.png";
 import { getFavorites, toggleFavoriteInStorage } from "../../utils/favorites";
@@ -21,8 +21,12 @@ export default function ProductCard({ product }) {
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [isFavorite, setIsFavorite] = useState(() => {
-    return getFavorites().some((fav) => fav.id === product.id);
+    return user ? getFavorites(user.id).some((fav) => fav.id === product.id) : false;
   });
+
+  useEffect(() => {
+    setIsFavorite(user ? getFavorites(user.id).some((fav) => fav.id === product.id) : false);
+  }, [user, product.id]);
 
   const toggleFavorite = useCallback(
     (e) => {
@@ -33,7 +37,7 @@ export default function ProductCard({ product }) {
         return;
       }
 
-      toggleFavoriteInStorage(product, isFavorite);
+      toggleFavoriteInStorage(product, isFavorite, user.id);
       setIsFavorite((prev) => !prev);
     },
     [product, isFavorite, user],

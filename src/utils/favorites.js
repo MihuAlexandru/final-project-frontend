@@ -1,7 +1,9 @@
-export const getFavorites = () => {
+export const getFavorites = (userId) => {
+  if (!userId) return [];
+  
   try {
     const parsedFavorites = JSON.parse(
-      localStorage.getItem("favorites") || "[]",
+      localStorage.getItem(`favorites_${userId}`) || "[]",
     );
     return Array.isArray(parsedFavorites) ? parsedFavorites : [];
   } catch {
@@ -9,8 +11,10 @@ export const getFavorites = () => {
   }
 };
 
-export const toggleFavoriteInStorage = (product, isCurrentlyFavorite) => {
-  const savedFavorites = getFavorites();
+export const toggleFavoriteInStorage = (product, isCurrentlyFavorite, userId) => {
+  if (!userId) return [];
+  
+  const savedFavorites = getFavorites(userId);
   let newFavorites;
 
   if (isCurrentlyFavorite) {
@@ -19,7 +23,7 @@ export const toggleFavoriteInStorage = (product, isCurrentlyFavorite) => {
     newFavorites = [...savedFavorites, product];
   }
 
-  localStorage.setItem("favorites", JSON.stringify(newFavorites));
+  localStorage.setItem(`favorites_${userId}`, JSON.stringify(newFavorites));
   window.dispatchEvent(new CustomEvent("favoritesUpdated"));
   return newFavorites;
 };

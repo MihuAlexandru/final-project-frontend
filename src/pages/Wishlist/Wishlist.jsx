@@ -3,15 +3,16 @@ import ProductCard from "../../components/ProductCard/ProductCard";
 import EmptyWishlistState from "../../components/Wishlist/EmptyWishlistState/EmptyWishlistState";
 import { getFavorites } from "../../utils/favorites";
 import styles from "./Wishlist.module.css";
+import { useUser } from "../../context/UserContext";
 
 export default function Wishlist() {
+  const { user } = useUser();
   const [favoriteProducts, setFavoriteProducts] = useState(() =>
-    getFavorites(),
-  );
+    getFavorites(user?.id));
 
   useEffect(() => {
     const syncFavorites = () => {
-      setFavoriteProducts(getFavorites());
+      setFavoriteProducts(getFavorites(user?.id));
     };
 
     window.addEventListener("focus", syncFavorites);
