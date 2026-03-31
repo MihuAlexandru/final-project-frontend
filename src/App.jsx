@@ -21,7 +21,6 @@ import { ToastProvider } from "./context/ToastContext.jsx";
 import ToastContainer from "./components/UI/Toast/ToastContainer.jsx";
 import { UserProvider } from "./context/UserContext.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
-import AdminPanel from "./pages/AdminPanelPage/AdminPanel.jsx"
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword.jsx";
 import ResetPassword from "./pages/ResetPassword/ResetPassword.jsx";
 
