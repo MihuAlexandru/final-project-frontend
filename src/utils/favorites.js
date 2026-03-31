@@ -9,14 +9,14 @@ export const getFavorites = () => {
   }
 };
 
-export const toggleFavoriteInStorage = (productId, isCurrentlyFavorite) => {
+export const toggleFavoriteInStorage = (product, isCurrentlyFavorite) => {
   const savedFavorites = getFavorites();
   let newFavorites;
 
   if (isCurrentlyFavorite) {
-    newFavorites = savedFavorites.filter((id) => id !== productId);
+    newFavorites = savedFavorites.filter((fav) => fav.id !== product.id);
   } else {
-    newFavorites = [...savedFavorites, productId];
+    newFavorites = [...savedFavorites, product];
   }
 
   localStorage.setItem("favorites", JSON.stringify(newFavorites));

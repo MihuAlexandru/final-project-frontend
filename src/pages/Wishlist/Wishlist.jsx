@@ -1,16 +1,17 @@
-import { useEffect, useMemo, useState } from "react";
-import { mockProducts } from "../../../MockData/mockProducts";
+import { useEffect, useState } from "react";
 import ProductCard from "../../components/ProductCard/ProductCard";
 import EmptyWishlistState from "../../components/Wishlist/EmptyWishlistState/EmptyWishlistState";
 import { getFavorites } from "../../utils/favorites";
 import styles from "./Wishlist.module.css";
 
 export default function Wishlist() {
-  const [favoriteIds, setFavoriteIds] = useState(() => getFavorites());
+  const [favoriteProducts, setFavoriteProducts] = useState(() =>
+    getFavorites(),
+  );
 
   useEffect(() => {
     const syncFavorites = () => {
-      setFavoriteIds(getFavorites());
+      setFavoriteProducts(getFavorites());
     };
 
     window.addEventListener("focus", syncFavorites);
@@ -23,11 +24,6 @@ export default function Wishlist() {
       window.removeEventListener("favoritesUpdated", syncFavorites);
     };
   }, []);
-
-  const favoriteProducts = useMemo(() => {
-    const favoriteSet = new Set(favoriteIds);
-    return mockProducts.filter((product) => favoriteSet.has(product.id));
-  }, [favoriteIds]);
 
   return (
     <div className={styles.wishlistPage}>

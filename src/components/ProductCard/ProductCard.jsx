@@ -7,22 +7,79 @@ import { useCallback, useState } from "react";
 import heartEmpty from "../../assets/heart.png";
 import heartFilled from "../../assets/heart-filled.png";
 import { getFavorites, toggleFavoriteInStorage } from "../../utils/favorites";
+import { useToast } from "../../context/ToastContext";
+
+// const API_URL = import.meta.env.VITE_API_BASE_URL;
 
 export default function ProductCard({ product }) {
   const isOutOfStock = product.stock_quantity === 0;
-  const isUnavailable = product.is_available === false;
+  const isUnavailable = product.is_active === false;
+
+  const { addToast } = useToast();
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
+
   const [isFavorite, setIsFavorite] = useState(() => {
-    return getFavorites().includes(product.id);
+    return getFavorites().some((fav) => fav.id === product.id);
   });
 
   const toggleFavorite = useCallback(
     (e) => {
       e.preventDefault();
-      toggleFavoriteInStorage(product.id, isFavorite);
+      toggleFavoriteInStorage(product, isFavorite);
       setIsFavorite((prev) => !prev);
     },
-    [product.id, isFavorite],
+    [product, isFavorite],
   );
+
+  const handleAddToCart = async (e) => {
+    e.preventDefault();
+
+    if (isUnavailable) {
+      addToast({
+        type: "error",
+        message: "This product is currently unavailable.",
+      });
+      return;
+    }
+
+    if (isOutOfStock) {
+      addToast({
+        type: "error",
+        message: "This product is out of stock.",
+      });
+      return;
+    }
+
+    if (isAddingToCart) return;
+
+    setIsAddingToCart(true);
+
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 600));
+
+      addToast({
+        type: "success",
+        message: `${product.name} was added to your cart!`,
+      });
+    } catch (error) {
+      addToast({
+        type: "error",
+        message: "Failed to add product to cart. Please try again.",
+      });
+      console.error(error);
+    } finally {
+      setIsAddingToCart(false);
+    }
+  };
+
+  // const rawImagePath = product.images?.[0]?.image_path;
+  // const imageUrl = rawImagePath
+  //   ? rawImagePath.startsWith("http")
+  //     ? rawImagePath
+  //     : `${API_URL}${rawImagePath}`
+  //   : noImage;
+  const imageUrl = noImage;
+
   return (
     <div
       className={`${styles.cardHoverWrapper} ${isUnavailable ? styles.unavailable : ""}`}
@@ -45,7 +102,7 @@ export default function ProductCard({ product }) {
           <Link to={`/product/${product.id}`} className={styles.productLink}>
             <div className={styles.imageContainer}>
               <img
-                src={product.images?.[0]?.url || noImage}
+                src={imageUrl}
                 alt={product.name}
                 className={styles.image}
                 loading="lazy"
@@ -72,16 +129,21 @@ export default function ProductCard({ product }) {
               </p>
             )}
             <p className={styles.price}>
-              {product.price.toLocaleString("ro-RO")} Lei
+              {product?.price?.toLocaleString("ro-RO")} Lei
             </p>
           </div>
           <div className={styles.action}>
-            <Button disabled={isOutOfStock || isUnavailable}>
-              {isUnavailable
-                ? "Unavailable"
-                : isOutOfStock
-                  ? "Out of stock"
-                  : "Add to Cart"}
+            <Button
+              disabled={isOutOfStock || isUnavailable || isAddingToCart}
+              onClick={handleAddToCart}
+            >
+              {isAddingToCart
+                ? "Adding..."
+                : isUnavailable
+                  ? "Unavailable"
+                  : isOutOfStock
+                    ? "Out of stock"
+                    : "Add to Cart"}
             </Button>
           </div>
         </div>
