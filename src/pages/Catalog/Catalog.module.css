@@ -11,6 +11,7 @@
   gap: var(--space-lg);
   margin: var(--space-xl) auto;
   max-width: 1400px;
+  width: 100%;
   box-sizing: border-box;
 }
 
@@ -62,7 +63,8 @@
 
 @media (max-width: 1400px) {
   .catalogPage {
-    margin: var(--space-lg);
+    padding: var(--space-lg);
+    margin: 0 auto;
   }
 }
 
@@ -94,7 +96,8 @@
 
 @media (max-width: 576px) {
   .catalogPage {
-    margin: var(--space-md) var(--space-sm);
+    padding: var(--space-md) var(--space-sm);
+    margin: 0 auto;
     gap: var(--space-md);
   }
 

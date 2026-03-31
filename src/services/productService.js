@@ -8,7 +8,7 @@ export async function getProductsPaginated(
   minPrice = null,
   maxPrice = null,
 ) {
-  const token = localStorage.getItem("access_token");
+
 
   try {
     let url = `${API_URL}/products/?page=${page}&limit=${limit}`;
@@ -22,7 +22,6 @@ export async function getProductsPaginated(
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
       },
     });
 
