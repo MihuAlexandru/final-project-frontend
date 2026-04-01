@@ -1,0 +1,97 @@
+.container {
+  background-color: var(--color-surface);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--color-border);
+}
+
+.title {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  margin-bottom: var(--space-lg);
+  color: var(--color-text);
+  border-bottom: 2px solid var(--color-gray-200);
+  padding-bottom: var(--space-sm);
+}
+
+.itemList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.itemInfo h4 {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--color-text);
+}
+
+.itemInfo p {
+  margin: 0;
+  font-size: var(--text-xs);
+  color: var(--color-text-light);
+}
+
+.price {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.divider {
+  height: 1px;
+  background-color: var(--color-gray-300);
+  margin: var(--space-md) 0;
+}
+
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--text-md);
+  font-weight: 800;
+  color: var(--color-dark);
+  margin-top: var(--space-md);
+}
+
+.totalAmount {
+  color: var(--color-orange);
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xl) 0;
+  text-align: center;
+}
+
+.emptyIcon {
+  font-size: 3rem;
+  margin-bottom: var(--space-md);
+  opacity: 0.5;
+  filter: grayscale(1);
+}
+
+.emptyTitle {
+  font-size: var(--text-md);
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0 0 var(--space-xs) 0;
+}
+
+.emptySubtitle {
+  font-size: var(--text-sm);
+  color: var(--color-text-light);
+  margin: 0;
+  max-width: 220px;
+  line-height: 1.4;
+}

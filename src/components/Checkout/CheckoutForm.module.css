@@ -1,0 +1,48 @@
+.form {
+  background-color: var(--color-surface);
+  border-radius: var(--radius-md);
+  padding: var(--text-xxl);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--color-border);
+}
+
+.sectionTitle {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  margin-bottom: var(--space-lg);
+  color: var(--color-text);
+  border-bottom: 1px solid var(--color-gray-200);
+  padding-bottom: var(--space-sm);
+}
+
+.inputGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl);
+}
+
+.fullWidth {
+  grid-column: span 2;
+}
+
+.paymentContainer {
+  margin-bottom: var(--text-xxl);
+  max-width: 300px;
+}
+
+.submitBtn {
+  width: 100%;
+  padding: var(--space-md) !important;
+  font-size: var(--text-md) !important;
+  background-color: var(--color-button);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.submitBtn:hover {
+  background-color: var(--color-button-hover);
+}
