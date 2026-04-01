@@ -3,29 +3,57 @@ import productImg from "../../assets/dark-surface-illustration.jpg";
 import Ratings from "../../components/Rating/Rating";
 import Button from "../../components/UI/Button/Button";
 import { getFavorites, toggleFavoriteInStorage } from "../../utils/favorites";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import heartEmpty from "../../assets/heart.png";
 import heartFilled from "../../assets/heart-filled.png";
+import { getProductById } from "../../services/productService";
 
-export default function Product({ products }) {
+export default function Product() {
   const { id } = useParams();
+  const [loading, setLoading] = useState(true);
+  const [product, setProduct] = useState(null);
+  const [isFavorite, setIsFavorite] = useState(false);
 
-  const product = products.find((item) => item.id == id);
+  useEffect(() => {
+    async function fetchProduct() {
+      try {
+        setLoading(true);
+        const data = await getProductById(id);
+        setProduct(data);
 
-  const isOutOfStock = product.stock_quantity === 0;
-  const isUnavailable = product.is_available === false;
-  const [isFavorite, setIsFavorite] = useState(() => {
-    return getFavorites().includes(product.id);
-  });
+        if (data && data.id) {
+          setIsFavorite(getFavorites().includes(data.id));
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchProduct();
+  }, [id]);
+
   const toggleFavorite = useCallback(
     (e) => {
       e.preventDefault();
+      if (!product) return;
       toggleFavoriteInStorage(product.id, isFavorite);
       setIsFavorite((prev) => !prev);
     },
-    [product.id, isFavorite],
+    [product?.id, isFavorite],
   );
+
+  if (loading || !product) {
+    return (
+      <div className={styles.container}>Product information is loading</div>
+    );
+  }
+
+  const isOutOfStock = product.stock_quantity === 0;
+  const isUnavailable = product.is_available === false;
+
   return (
     <div className={styles.container}>
       {
@@ -37,9 +65,10 @@ export default function Product({ products }) {
               <img
                 src={
                   product.images && product.images.length > 0
-                    ? product.images[0].url
+                    ? product.images[0].image_path
                     : productImg
                 }
+                alt="Product picture"
               />
             </div>
           </section>
