@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import { MapPin } from "lucide-react";
 import styles from "./CheckoutForm.module.css";
 import FormInput from "../UI/Input/FormInput";
 import Button from "../UI/Button/FormButton";
+import AddressModal from "./AddressModal";
 
 export default function CheckoutForm({ onSubmit }) {
   const [formData, setFormData] = useState({
@@ -15,6 +17,7 @@ export default function CheckoutForm({ onSubmit }) {
   });
 
   const [errors, setErrors] = useState({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -22,6 +25,20 @@ export default function CheckoutForm({ onSubmit }) {
     if (errors[id]) {
       setErrors((prev) => ({ ...prev, [id]: null }));
     }
+  };
+
+  const handleSelectAddress = (addr) => {
+    setFormData({
+      city: addr.city,
+      street: addr.street,
+      house_number: addr.house_number,
+      postal_code: addr.postal_code,
+      state: addr.state,
+      country: addr.country,
+      payment_type: formData.payment_type,
+    });
+    setErrors({});
+    setIsModalOpen(false);
   };
 
   const handleSubmit = (e) => {
@@ -38,7 +55,17 @@ export default function CheckoutForm({ onSubmit }) {
 
   return (
     <form className={styles.form} onSubmit={handleSubmit} noValidate>
-      <h2 className={styles.sectionTitle}>Delivery Details</h2>
+      <div className={styles.sectionHeader}>
+        <h2 className={styles.sectionTitle}>Delivery Details</h2>
+        <button
+          type="button"
+          className={styles.chooseAddressBtn}
+          onClick={() => setIsModalOpen(true)}
+        >
+          <MapPin size={18} />
+          Choose saved address
+        </button>
+      </div>
 
       <div className={styles.inputGrid}>
         <FormInput
@@ -97,7 +124,8 @@ export default function CheckoutForm({ onSubmit }) {
         />
       </div>
 
-      <h2 className={styles.sectionTitle}>Payment Method</h2>
+      <h2 className={styles.paymentSectionTitle}>Payment Method</h2>
+
       <div className={styles.paymentContainer}>
         <FormInput
           id="payment_type"
@@ -118,6 +146,12 @@ export default function CheckoutForm({ onSubmit }) {
           Send Order
         </Button>
       </div>
+
+      <AddressModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSelect={handleSelectAddress}
+      />
     </form>
   );
 }
