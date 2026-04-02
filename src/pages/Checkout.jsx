@@ -14,20 +14,38 @@ export default function Checkout() {
   const [orderResponse, setOrderResponse] = useState(null);
   const navigate = useNavigate();
 
-  const { user } = useUser();
+  const { user, setUser } = useUser();
 
   const handleOrderSubmit = async (formData) => {
+    if (!user) return alert("Please login");
+
     try {
       const { payment_type, ...addressData } = formData;
 
-      await updateMyAddress(addressData);
+      const existingAddress = user.addresses?.find(
+        (addr) =>
+          addr.street.toLowerCase().trim() ===
+            addressData.street.toLowerCase().trim() &&
+          addr.city.toLowerCase().trim() ===
+            addressData.city.toLowerCase().trim() &&
+          addr.postal_code.trim() === addressData.postal_code.trim(),
+      );
 
-      if (!user) {
-        alert("Please login to place an order.");
-        return;
+      let finalAddressId;
+
+      if (existingAddress) {
+        finalAddressId = existingAddress.id;
+      } else {
+        const savedAddress = await updateMyAddress(addressData);
+        finalAddressId = savedAddress.id;
+
+        if (setUser) {
+          setUser({
+            ...user,
+            addresses: [...(user.addresses || []), savedAddress],
+          });
+        }
       }
-
-      const finalAddressId = user.address_id;
 
       const orderPayload = {
         items: itemsToOrder.map((item) => ({
@@ -42,8 +60,8 @@ export default function Checkout() {
       const response = await placeOrder(orderPayload);
       setOrderResponse(response);
     } catch (error) {
-      console.error("Checkout Error:", error);
-      alert("Oops, unfortunately the order could not be placed!");
+      console.error("Error:", error);
+      alert(error.message);
     }
   };
 

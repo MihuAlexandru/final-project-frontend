@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+import { useCart } from "../../context/CartContext.jsx";
+import style from "./NavItems.module.css";
 
 import shopIcon from "../../assets/shopping-cart.png";
 import heartIcon from "../../assets/heart.png";
@@ -13,13 +14,14 @@ const leftLinks = [
 
 const rightLinks = [
   { path: "/wishlist", icon: heartIcon, label: "Wishlist", auth: true },
-  { path: "/cart", icon: shopIcon, label: "Cart", auth: true },
+  { path: "/cart", icon: shopIcon, label: "Cart", auth: true, isCart: true },
   { path: "/profile", icon: userIcon, label: "Profile", auth: true },
   { path: "/login", label: "Login", guest: true },
   { path: "/signup", label: "Signup", guest: true },
 ];
 
 export default function NavItems({ closeMenu, position, isMobile, user }) {
+  const { cartCount } = useCart();
   const list = position === "left" ? leftLinks : rightLinks;
 
   const filtered = list.filter((item) => {
@@ -32,15 +34,27 @@ export default function NavItems({ closeMenu, position, isMobile, user }) {
   return (
     <>
       {filtered.map((item, idx) => {
+        if (item.isCart) {
+          if (isMobile) {
+            return (
+              <Link key={idx} to={item.path} onClick={closeMenu}>
+                {cartCount > 0 ? `${item.label} (${cartCount})` : item.label}
+              </Link>
+            );
+          }
+          return (
+            <Link key={idx} to={item.path} onClick={closeMenu} className={style.cartWrapper}>
+              <img src={item.icon} alt="" />
+              {cartCount > 0 && (
+                <span className={style.bubble}>{cartCount > 99 ? "99+" : cartCount}</span>
+              )}
+            </Link>
+          );
+        }
+
         return (
           <Link key={idx} to={item.path} onClick={closeMenu}>
-            {isMobile ? (
-              item.label || item.path.replace("/", "")
-            ) : item.icon ? (
-              <img src={item.icon} alt="" />
-            ) : (
-              item.label
-            )}
+            {isMobile ? (item.label || item.path.replace("/", "")) : item.icon ? <img src={item.icon} alt="" /> : item.label}
           </Link>
         );
       })}

@@ -78,6 +78,43 @@ export default function Catalog() {
     }
   };
 
+  const filteredProducts = currentProducts
+
+    .filter((item) =>
+      item.name.toLowerCase().includes(debouncedSearch.toLowerCase()),
+    )
+
+    .filter(
+      (item) => item.price >= priceRange.min && item.price <= priceRange.max,
+    )
+
+    .filter((item) =>
+      selectedCategories.length === 0
+        ? true
+        : selectedCategories.includes(item.category_id),
+    )
+
+    .filter((item) => (inStockOnly ? item.stock_quantity > 0 : true))
+
+    .sort((a, b) => {
+      switch (sortType) {
+        case "name-asc":
+          return a.name.localeCompare(b.name);
+
+        case "name-desc":
+          return b.name.localeCompare(a.name);
+
+        case "price-asc":
+          return a.price - b.price;
+
+        case "price-desc":
+          return b.price - a.price;
+
+        default:
+          return 0;
+      }
+    });
+
   return (
     <div className={styles.catalogPage} ref={topRef}>
       <h1 className={styles.pageTitle}>Catalog page</h1>
@@ -112,8 +149,8 @@ export default function Catalog() {
               <p style={{ fontWeight: "bold", padding: "20px" }}>
                 Loading products...
               </p>
-            ) : currentProducts.length > 0 ? (
-              currentProducts.map((item) => (
+            ) : filteredProducts.length > 0 ? (
+              filteredProducts.map((item) => (
                 <ProductCard key={item.id} product={item} />
               ))
             ) : (
