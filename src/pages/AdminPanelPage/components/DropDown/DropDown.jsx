@@ -5,13 +5,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
-export default function DropDown() {
-  const [age, setAge] = React.useState("");
-
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
-
+export default function DropDown({ value, onChange }) {
   return (
     <Box sx={{ minWidth: 120 }}>
       <FormControl fullWidth>
@@ -19,19 +13,19 @@ export default function DropDown() {
         <Select
           labelId="category"
           id="category"
-          value={age}
+          value={value}
           label="Category"
-          onChange={handleChange}
+          onChange={(e) => onChange(e.target.value)}
         >
-          <MenuItem value={10}>Electronic & Gadgets</MenuItem>
-          <MenuItem value={20}>TV, Audio & Photo</MenuItem>
-          <MenuItem value={30}>Home, Garden & DIY</MenuItem>
-          <MenuItem value={40}>Appliances</MenuItem>
-          <MenuItem value={50}>Fashion & Accessories</MenuItem>
-          <MenuItem value={60}>Beauty & Personal Care</MenuItem>
-          <MenuItem value={70}>Toys, Kids & Baby</MenuItem>
-          <MenuItem value={80}>Sport & Outdoors</MenuItem>
-          <MenuItem value={90}>Auto & Moto</MenuItem>
+          <MenuItem value={1}>Electronic & Gadgets</MenuItem>
+          <MenuItem value={2}>TV, Audio & Photo</MenuItem>
+          <MenuItem value={3}>Home, Garden & DIY</MenuItem>
+          <MenuItem value={4}>Appliances</MenuItem>
+          <MenuItem value={5}>Fashion & Accessories</MenuItem>
+          <MenuItem value={6}>Beauty & Personal Care</MenuItem>
+          <MenuItem value={7}>Toys, Kids & Baby</MenuItem>
+          <MenuItem value={8}>Sport & Outdoors</MenuItem>
+          <MenuItem value={9}>Auto & Moto</MenuItem>
         </Select>
       </FormControl>
     </Box>
