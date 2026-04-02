@@ -5,7 +5,7 @@ import {
   updateMyAddress,
   editAnAddress,
 } from "../../../../services/addressService.js";
-import Input from "../../../../components/UI/Input/Input.jsx";
+import FormInput from "../../../../components/UI/Input/FormInput.jsx";
 import style from "../EditProfileModal/EditProfileModal.module.css";
 
 const EMPTY_ADDRESS = {
@@ -19,35 +19,76 @@ const EMPTY_ADDRESS = {
 export default function ManageAddressModal({ open, onClose, addressToEdit }) {
   const { user, setUser } = useUser();
   const { addToast } = useToast();
+
   const [addressForm, setAddressForm] = useState(EMPTY_ADDRESS);
+  const [errors, setErrors] = useState({});
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     if (open) {
       setAddressForm(addressToEdit || EMPTY_ADDRESS);
+      setErrors({});
     }
   }, [open, addressToEdit]);
 
   if (!open) return null;
 
+  function validateAddress(data) {
+    const newErrors = {};
+
+    if (!(data.country || "").trim()) newErrors.country = "Country is required";
+    if (!(data.state || "").trim())
+      newErrors.state = "State / Region is required";
+    if (!(data.city || "").trim()) newErrors.city = "City is required";
+
+    const postalRegex = /^\d{6}$/;
+    const postalCode = (data.postal_code || "").trim();
+
+    if (!postalCode) {
+      newErrors.postal_code = "Postal code is required";
+    } else if (!postalRegex.test(postalCode)) {
+      newErrors.postal_code = "Postal code must be 6 digits";
+    }
+
+    if (!(data.street || "").trim()) {
+      newErrors.street = "Street address is required";
+    }
+
+    return newErrors;
+  }
+
+  function validateField(name, value) {
+    const fieldErrors = validateAddress({ ...addressForm, [name]: value });
+    setErrors((prev) => ({
+      ...prev,
+      [name]: fieldErrors[name] || null,
+    }));
+  }
+
   function handleChange(e) {
     const { name, value } = e.target;
     setAddressForm((prev) => ({ ...prev, [name]: value }));
+
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: null }));
+    }
+  }
+
+  function handleBlur(e) {
+    const { name, value } = e.target;
+    validateField(name, value);
   }
 
   async function handleSubmit(e) {
     e.preventDefault();
-    setIsSaving(true);
 
-    const addressValues = Object.values(addressForm);
-    if (addressValues.some((v) => String(v).trim() === "")) {
-      addToast({
-        type: "warning",
-        message: "Please fill in all address fields.",
-      });
-      setIsSaving(false);
+    const validationErrors = validateAddress(addressForm);
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
       return;
     }
+
+    setIsSaving(true);
 
     try {
       if (addressToEdit?.id) {
@@ -87,46 +128,66 @@ export default function ManageAddressModal({ open, onClose, addressToEdit }) {
           </button>
         </header>
 
-        <form onSubmit={handleSubmit} className={style.form}>
+        <form onSubmit={handleSubmit} className={style.form} noValidate>
           <div className={style.formBody}>
             <section className={style.section}>
-              <Input
+              <FormInput
+                id="street"
                 label="Street"
                 type="text"
                 name="street"
+                placeholder="e.g., Strada Aristide Demetriade nr. 1"
                 value={addressForm.street}
                 onChange={handleChange}
+                onBlur={handleBlur}
+                error={errors.street}
               />
               <div className={style.grid}>
-                <Input
+                <FormInput
+                  id="city"
                   label="City"
                   type="text"
                   name="city"
+                  placeholder="e.g., Timisoara"
                   value={addressForm.city}
                   onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={errors.city}
                 />
-                <Input
+                <FormInput
+                  id="state"
                   label="State / Region"
                   type="text"
                   name="state"
+                  placeholder="e.g., Timis"
                   value={addressForm.state}
                   onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={errors.state}
                 />
               </div>
               <div className={style.grid}>
-                <Input
+                <FormInput
+                  id="postal_code"
                   label="Postal code"
                   type="text"
                   name="postal_code"
+                  placeholder="e.g., 300627"
                   value={addressForm.postal_code}
                   onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={errors.postal_code}
                 />
-                <Input
+                <FormInput
+                  id="country"
                   label="Country"
                   type="text"
                   name="country"
+                  placeholder="e.g., Romania"
                   value={addressForm.country}
                   onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={errors.country}
                 />
               </div>
             </section>
