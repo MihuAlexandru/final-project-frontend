@@ -9,6 +9,7 @@ import heartFilled from "../../assets/heart-filled.png";
 import { getFavorites, toggleFavoriteInStorage } from "../../utils/favorites";
 import { useToast } from "../../context/ToastContext";
 import { useUser } from "../../context/UserContext";
+import { useCart } from "../../context/CartContext";
 import LoginPromptModal from "../LoginPromptModal/LoginPromptModal";
 import { addToCart } from "../../services/cartService";
 // const API_URL = import.meta.env.VITE_API_BASE_URL;
@@ -19,6 +20,7 @@ export default function ProductCard({ product }) {
 
   const { addToast } = useToast();
   const { user } = useUser();
+  const { refreshCart } = useCart();
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [isFavorite, setIsFavorite] = useState(() => {
@@ -74,7 +76,7 @@ export default function ProductCard({ product }) {
 
   try {
       await addToCart(product.id, 1);
-
+      refreshCart();
       addToast({
         type: "success",
         message: `${product.name} was added to your cart!`,
