@@ -17,22 +17,34 @@ export default function Checkout() {
   const { user, setUser } = useUser();
 
   const handleOrderSubmit = async (formData) => {
-    if (!user) {
-      alert("Please login to place an order.");
-      return;
-    }
+    if (!user) return alert("Please login");
 
     try {
       const { payment_type, ...addressData } = formData;
 
-      const savedAddress = await updateMyAddress(addressData);
-      const finalAddressId = savedAddress.id;
+      const existingAddress = user.addresses?.find(
+        (addr) =>
+          addr.street.toLowerCase().trim() ===
+            addressData.street.toLowerCase().trim() &&
+          addr.city.toLowerCase().trim() ===
+            addressData.city.toLowerCase().trim() &&
+          addr.postal_code.trim() === addressData.postal_code.trim(),
+      );
 
-      if (setUser && user) {
-        setUser({
-          ...user,
-          addresses: [...(user.addresses || []), savedAddress],
-        });
+      let finalAddressId;
+
+      if (existingAddress) {
+        finalAddressId = existingAddress.id;
+      } else {
+        const savedAddress = await updateMyAddress(addressData);
+        finalAddressId = savedAddress.id;
+
+        if (setUser) {
+          setUser({
+            ...user,
+            addresses: [...(user.addresses || []), savedAddress],
+          });
+        }
       }
 
       const orderPayload = {
@@ -48,8 +60,8 @@ export default function Checkout() {
       const response = await placeOrder(orderPayload);
       setOrderResponse(response);
     } catch (error) {
-      console.error("Checkout Error:", error);
-      alert(error.message || "Oops, order failed!");
+      console.error("Error:", error);
+      alert(error.message);
     }
   };
 
