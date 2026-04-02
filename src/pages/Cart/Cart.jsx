@@ -11,6 +11,7 @@ import {
   updateCartItem,
 } from "../../services/cartService";
 import { useToast } from "../../context/ToastContext";
+import { useCart } from "../../context/CartContext";
 import style from "./Cart.module.css";
 
 function getItemCountLabel(itemCount) {
@@ -46,6 +47,7 @@ export default function Cart() {
   const [checkingOut, setCheckingOut] = useState(false);
   const navigate = useNavigate();
   const { addToast } = useToast();
+  const { setCartCount } = useCart();
   const itemCount = items.length;
   const { subtotal, shipping, total } = calculateCartTotals(items);
   const itemCountLabel = getItemCountLabel(itemCount);
@@ -86,6 +88,7 @@ export default function Cart() {
     try {
       const updatedCart = await removeCartItem(id);
       setItems(updatedCart.items);
+      setCartCount(updatedCart.items.reduce((sum, item) => sum + item.quantity, 0));
       addToast({
         type: "info",
         message: "Item removed from cart.",
@@ -104,6 +107,7 @@ export default function Cart() {
     try {
       const updatedCart = await updateCartItem(id, newQty);
       setItems(updatedCart.items);
+      setCartCount(updatedCart.items.reduce((sum, item) => sum + item.quantity, 0));
     } catch (error) {
       addToast({
         type: "error",

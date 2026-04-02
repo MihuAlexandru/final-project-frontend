@@ -21,6 +21,7 @@ import { ToastProvider } from "./context/ToastContext.jsx";
 import ToastContainer from "./components/UI/Toast/ToastContainer.jsx";
 import { mockProducts } from "../MockData/mockProducts.js";
 import { UserProvider } from "./context/UserContext.jsx";
+import { CartProvider } from "./context/CartContext.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword.jsx";
 import ResetPassword from "./pages/ResetPassword/ResetPassword.jsx";
@@ -29,6 +30,7 @@ import OrderHistory from "./pages/OrderHistoryPage/OrderHistory.jsx";
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
     <UserProvider>
+      <CartProvider>
       <ToastProvider>
         <Layout>
           <Routes>
@@ -92,6 +94,7 @@ createRoot(document.getElementById("root")).render(
         </Layout>
         <ToastContainer />
       </ToastProvider>
+      </CartProvider>
     </UserProvider>
   </BrowserRouter>,
 );
