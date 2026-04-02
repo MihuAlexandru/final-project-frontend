@@ -1,29 +1,66 @@
-import React from "react";
-import { MapPin, X } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { MapPin, X, Trash2 } from "lucide-react";
 import styles from "./AddressModal.module.css";
-
-const DUMMY_ADDRESSES = [
-  {
-    id: "addr_1",
-    street: "Strada Palat",
-    house_number: "Nr. 1, Bl. A",
-    city: "Iasi",
-    state: "Iasi",
-    postal_code: "700032",
-    country: "Romania",
-  },
-  {
-    id: "addr_2",
-    street: "Bulevardul Stefan cel Mare",
-    house_number: "Nr. 10, Ap. 5",
-    city: "Iasi",
-    state: "Iasi",
-    postal_code: "700028",
-    country: "Romania",
-  },
-];
+import { getMyAddresses, deleteMyAddress } from "../../services/addressService";
+import { useUser } from "../../context/UserContext";
+import { useToast } from "../../context/ToastContext";
 
 export default function AddressModal({ isOpen, onClose, onSelect }) {
+  const [addresses, setAddresses] = useState([]);
+  const { setUser, user } = useUser();
+  const { addToast } = useToast();
+
+  useEffect(() => {
+    if (isOpen) {
+      fetchAddresses();
+    }
+  }, [isOpen]);
+
+  const fetchAddresses = async () => {
+    try {
+      const data = await getMyAddresses();
+      setAddresses(data);
+
+      if (setUser && user) {
+        setUser({ ...user, addresses: data });
+      }
+    } catch (error) {
+      console.error("Fetch error:", error);
+    }
+  };
+
+  const handleDelete = async (e, addressId) => {
+    e.stopPropagation();
+
+    if (!window.confirm("Are you sure you want to delete this address?"))
+      return;
+
+    try {
+      await deleteMyAddress(addressId);
+
+      setAddresses((prev) => prev.filter((a) => a.id !== addressId));
+
+      if (setUser && user) {
+        setUser({
+          ...user,
+          addresses: user.addresses.filter((a) => a.id !== addressId),
+        });
+      }
+
+      addToast({
+        type: "success",
+        message: "Address deleted successfully!",
+        duration: 3000,
+      });
+    } catch (error) {
+      addToast({
+        type: "error",
+        message: error.message || "Failed to delete address.",
+        duration: 5000,
+      });
+    }
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -36,26 +73,35 @@ export default function AddressModal({ isOpen, onClose, onSelect }) {
           </button>
         </div>
         <div className={styles.addressList}>
-          {DUMMY_ADDRESSES.map((addr) => (
-            <div
-              key={addr.id}
-              className={styles.addressCard}
-              onClick={() => onSelect(addr)}
-            >
-              <div className={styles.icon}>
-                <MapPin size={18} strokeWidth={2} />
+          {addresses && addresses.length > 0 ? (
+            addresses.map((addr) => (
+              <div
+                key={addr.id}
+                className={styles.addressCard}
+                onClick={() => onSelect(addr)}
+              >
+                <div className={styles.icon}>
+                  <MapPin size={18} strokeWidth={2} />
+                </div>
+                <div className={styles.details}>
+                  <p className={styles.street}>{addr.street}</p>
+                  <p className={styles.city}>
+                    {addr.city}, {addr.state}, {addr.postal_code}
+                  </p>
+                </div>
+
+                <button
+                  className={styles.deleteBtn}
+                  onClick={(e) => handleDelete(e, addr.id)}
+                  title="Delete address"
+                >
+                  <Trash2 size={18} />
+                </button>
               </div>
-              <div className={styles.details}>
-                <p className={styles.street}>
-                  {addr.street}, {addr.house_number}
-                </p>
-                <p className={styles.city}>
-                  {addr.city}, {addr.state}, {addr.postal_code}
-                </p>
-                <p className={styles.country}>{addr.country}</p>
-              </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            <p className={styles.noAddresses}>No saved addresses found.</p>
+          )}
         </div>
       </div>
     </div>

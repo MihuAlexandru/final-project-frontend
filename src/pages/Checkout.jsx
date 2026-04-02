@@ -14,20 +14,26 @@ export default function Checkout() {
   const [orderResponse, setOrderResponse] = useState(null);
   const navigate = useNavigate();
 
-  const { user } = useUser();
+  const { user, setUser } = useUser();
 
   const handleOrderSubmit = async (formData) => {
+    if (!user) {
+      alert("Please login to place an order.");
+      return;
+    }
+
     try {
       const { payment_type, ...addressData } = formData;
 
-      await updateMyAddress(addressData);
+      const savedAddress = await updateMyAddress(addressData);
+      const finalAddressId = savedAddress.id;
 
-      if (!user) {
-        alert("Please login to place an order.");
-        return;
+      if (setUser && user) {
+        setUser({
+          ...user,
+          addresses: [...(user.addresses || []), savedAddress],
+        });
       }
-
-      const finalAddressId = user.address_id;
 
       const orderPayload = {
         items: itemsToOrder.map((item) => ({
@@ -43,7 +49,7 @@ export default function Checkout() {
       setOrderResponse(response);
     } catch (error) {
       console.error("Checkout Error:", error);
-      alert("Oops, unfortunately the order could not be placed!");
+      alert(error.message || "Oops, order failed!");
     }
   };
 
