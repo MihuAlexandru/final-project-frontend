@@ -1,9 +1,44 @@
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
-const getHeaders = () => ({
-  "Content-Type": "application/json",
-  Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-});
+const getHeaders = () => {
+  const token = localStorage.getItem("access_token");
+  return {
+    "Content-Type": "application/json",
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  };
+};
+
+export async function getProductsPaginated(
+  page = 1,
+  limit = 12,
+  search = "",
+  categoryId = null,
+  minPrice = null,
+  maxPrice = null,
+) {
+  try {
+    let url = `${API_URL}/products/?page=${page}&limit=${limit}`;
+
+    if (search) url += `&search=${encodeURIComponent(search)}`;
+    if (categoryId) url += `&category_id=${categoryId}`;
+    if (minPrice !== null) url += `&min_price=${minPrice}`;
+    if (maxPrice !== null) url += `&max_price=${maxPrice}`;
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: getHeaders(),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching paginated products:", error);
+    throw error;
+  }
+}
 
 export async function getProductById(id) {
   try {

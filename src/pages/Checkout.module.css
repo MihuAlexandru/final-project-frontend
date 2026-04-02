@@ -1,0 +1,129 @@
+.container {
+  max-width: 1400px;
+  margin: var(--space-xl) auto;
+  padding: 0 var(--space-md);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.title {
+  font-size: var(--text-xxl);
+  font-weight: 700;
+  margin-bottom: var(--space-xl);
+  color: var(--color-text);
+  text-align: left;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: var(--space-lg);
+  align-items: start;
+}
+
+.successCard {
+  background-color: var(--color-surface);
+  border-radius: var(--radius-md);
+  padding: var(--space-xl);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--color-border);
+  text-align: center;
+  max-width: 500px;
+  margin: var(--space-xl) auto;
+  animation: fadeIn 0.4s ease-out;
+}
+
+.successIcon {
+  margin-bottom: var(--space-md);
+  color: var(--color-orange);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.successTitle {
+  font-size: var(--text-xl);
+  font-weight: 800;
+  color: var(--color-text);
+  margin-bottom: var(--space-md);
+}
+
+.successText {
+  color: var(--color-text-light);
+  margin-bottom: var(--space-lg);
+  line-height: 1.6;
+}
+
+.orderIdBox {
+  background-color: var(--color-gray-100);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+  display: inline-block;
+  margin-bottom: var(--space-xl);
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.idNumber {
+  color: var(--color-orange);
+  font-family: monospace;
+  font-size: var(--text-md);
+}
+
+.successActions {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.blackBtn {
+  background-color: var(--color-button) !important;
+  color: var(--color-white) !important;
+  padding: var(--space-sm) var(--space-xl) !important;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  width: auto !important;
+  min-width: 200px;
+  transition: background-color 0.2s ease;
+}
+
+.blackBtn:hover {
+  background-color: var(--color-button-hover) !important;
+}
+
+@media (max-width: 1024px) {
+  .container {
+    min-width: unset;
+    margin-top: var(--space-md);
+  }
+
+  .layout {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: var(--space-xl);
+  }
+
+  .sidebar {
+    width: 100%;
+  }
+
+  .mainContent {
+    width: 100%;
+  }
+
+  .title {
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-lg);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

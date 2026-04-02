@@ -10,23 +10,31 @@ function FormInput(
     className = "",
     options = [],
     onClick,
+    error,
     ...props
   },
   ref,
 ) {
   const isTextArea = type === "textarea";
   const isSelect = type === "select";
+  const inputClass = `${error ? styles.inputError : ""} ${props.className || ""}`;
 
   return (
     <div className={`${styles.inputGroup} ${className}`} onClick={onClick}>
       {label && <label htmlFor={id}>{label}</label>}
 
       {isTextArea && (
-        <textarea ref={ref} id={id} placeholder={placeholder} {...props} />
+        <textarea
+          ref={ref}
+          id={id}
+          placeholder={placeholder}
+          className={inputClass}
+          {...props}
+        />
       )}
 
       {isSelect && (
-        <select ref={ref} id={id} {...props}>
+        <select ref={ref} id={id} className={inputClass} {...props}>
           {placeholder && (
             <option value="" disabled>
               {placeholder}
@@ -46,9 +54,12 @@ function FormInput(
           id={id}
           type={type}
           placeholder={placeholder}
+          className={inputClass}
           {...props}
         />
       )}
+
+      {error && <span className={styles.errorMessage}>{error}</span>}
     </div>
   );
 }

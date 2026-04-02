@@ -1,54 +1,25 @@
-import { useState, useEffect } from "react";
-import ConfirmDeleteModal from "../../components/ConfirmDeleteModal/ConfirmDeleteModal";
-import ProductCard from "../../components/ProductCard/ProductCard";
+import { useState, useEffect, useRef } from "react";
 import styles from "./Catalog.module.css";
+
+import ProductCard from "../../components/ProductCard/ProductCard";
+import Pagination from "../../components/Pagination/Pagination";
 import SearchBar from "../../components/UI/SearchBar/SearchBar";
 import Filters from "../../components/Filters/Filters";
-import { getProductById } from "../../services/productService";
+import ConfirmDeleteModal from "../../components/ConfirmDeleteModal/ConfirmDeleteModal";
 import ProductEditModal from "../../components/Admin/ProductEditModal";
+
+import { getProductsPaginated } from "../../services/productService";
 import { useUser } from "../../context/UserContext";
-import { mockProducts } from "../../../MockData/mockProducts";
 
 export default function Catalog() {
   const { user, loading: userLoading } = useUser();
-  const [apiProducts, setApiProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [deleteModal, setDeleteModal] = useState({ open: false, type: "" });
-  const [editingProductId, setEditingProductId] = useState(null);
+  const topRef = useRef(null);
 
-  const isAdmin = user?.role === "admin" || user?.is_admin === true;
-
-  const handleEditSubmit = (updatedProduct) => {
-    setApiProducts((prev) =>
-      prev.map((p) => (p.id === updatedProduct.id ? updatedProduct : p)),
-    );
-    setEditingProductId(null);
-  };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const ids = [1, 2, 3];
-        const productPromises = ids.map((id) => getProductById(id));
-        const results = await Promise.all(productPromises);
-        setApiProducts(results);
-      } catch (error) {
-        console.error("Error loading API products:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  const openDelete = (type) => setDeleteModal({ open: true, type });
-  const closeDelete = () => setDeleteModal({ open: false, type: "" });
-
-  const handleConfirmDelete = () => {
-    closeDelete();
-  };
+  const [currentProducts, setCurrentProducts] = useState([]);
+  const [totalPages, setTotalPages] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
+  const itemsPerPage = 12;
 
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [sortType, setSortType] = useState("");
@@ -56,43 +27,75 @@ export default function Catalog() {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [inStockOnly, setInStockOnly] = useState(false);
 
-  const allProducts = [...apiProducts, ...mockProducts];
+  const [deleteModal, setDeleteModal] = useState({ open: false, type: "" });
+  const [editingProductId, setEditingProductId] = useState(null);
 
-  const filteredProducts = allProducts
-    .filter((item) =>
-      item.name.toLowerCase().includes(debouncedSearch.toLowerCase()),
-    )
-    .filter(
-      (item) => item.price >= priceRange.min && item.price <= priceRange.max,
-    )
-    .filter((item) =>
-      selectedCategories.length === 0
-        ? true
-        : selectedCategories.includes(item.category_id),
-    )
-    .filter((item) => (inStockOnly ? item.stock_quantity > 0 : true))
-    .sort((a, b) => {
-      switch (sortType) {
-        case "name-asc":
-          return a.name.localeCompare(b.name);
-        case "name-desc":
-          return b.name.localeCompare(a.name);
-        case "price-asc":
-          return a.price - b.price;
-        case "price-desc":
-          return b.price - a.price;
-        default:
-          return 0;
+  const isAdmin = user?.role === "admin" || user?.is_admin === true;
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [debouncedSearch, priceRange, selectedCategories, inStockOnly]);
+
+  useEffect(() => {
+    const fetchCatalog = async () => {
+      setIsLoading(true);
+      try {
+        const categoryId =
+          selectedCategories.length > 0 ? selectedCategories[0] : null;
+        const data = await getProductsPaginated(
+          currentPage,
+          itemsPerPage,
+          debouncedSearch,
+          categoryId,
+          priceRange.min,
+          priceRange.max,
+        );
+
+        setCurrentProducts(data.items || []);
+        setTotalPages(Math.ceil((data.total_items || 0) / itemsPerPage) || 1);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsLoading(false);
       }
-    });
+    };
+    fetchCatalog();
+  }, [
+    currentPage,
+    debouncedSearch,
+    priceRange,
+    selectedCategories,
+    inStockOnly,
+  ]);
 
-  if (userLoading) {
-    return <p>Verifying profile...</p>;
-  }
+  const handleEditSubmit = (updatedProduct) => {
+    setCurrentProducts((prev) =>
+      prev.map((p) => (p.id === updatedProduct.id ? updatedProduct : p)),
+    );
+    setEditingProductId(null);
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    if (topRef.current) {
+      topRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const sortedProducts = [...currentProducts].sort((a, b) => {
+    if (sortType === "name-asc") return a.name.localeCompare(b.name);
+    if (sortType === "name-desc") return b.name.localeCompare(a.name);
+    if (sortType === "price-asc") return a.price - b.price;
+    if (sortType === "price-desc") return b.price - a.price;
+    return 0;
+  });
+
+  if (userLoading) return <p>Verifying profile...</p>;
 
   return (
-    <div className={styles.catalogPage}>
+    <div className={styles.catalogPage} ref={topRef}>
       <h1 className={styles.pageTitle}>Catalog page</h1>
+
       <div className={styles.topBar}>
         <SearchBar onSearch={setDebouncedSearch} delay={1000} />
         <select
@@ -117,40 +120,50 @@ export default function Catalog() {
           setInStockOnly={setInStockOnly}
         />
 
-        <div className={styles.catalogContainer}>
-          {loading && apiProducts.length === 0 ? (
-            <p>Loading products...</p>
-          ) : filteredProducts.length > 0 ? (
-            filteredProducts.map((item) => (
-              <ProductCard
-                key={item.id}
-                product={item}
-                isAdmin={isAdmin}
-                onEdit={(id) => setEditingProductId(id)}
+        <div className={styles.gridWrapper}>
+          <div className={styles.catalogContainer}>
+            {isLoading ? (
+              <p>Loading products...</p>
+            ) : sortedProducts.length > 0 ? (
+              sortedProducts.map((item) => (
+                <ProductCard
+                  key={item.id}
+                  product={item}
+                  isAdmin={isAdmin}
+                  onEdit={(id) => setEditingProductId(id)}
+                />
+              ))
+            ) : (
+              <p>No products found.</p>
+            )}
+          </div>
+
+          {!isLoading && (
+            <div className={styles.paginationContainer}>
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
               />
-            ))
-          ) : (
-            <p>No products found.</p>
+            </div>
           )}
         </div>
       </div>
 
       {isAdmin && (
-        <>
-          <h2 style={{ marginTop: "32px" }}>Delete Modal Test</h2>
-          <div style={{ display: "flex", gap: "8px", marginTop: "8px" }}>
-            <button onClick={() => openDelete("User")}>Delete User</button>
-            <button onClick={() => openDelete("Product")}>
-              Delete Product
-            </button>
-          </div>
-        </>
+        <div style={{ marginTop: "20px" }}>
+          <button
+            onClick={() => setDeleteModal({ open: true, type: "Product" })}
+          >
+            Delete Test
+          </button>
+        </div>
       )}
 
       <ConfirmDeleteModal
         open={deleteModal.open}
-        onClose={closeDelete}
-        onConfirm={handleConfirmDelete}
+        onClose={() => setDeleteModal({ open: false, type: "" })}
+        onConfirm={() => setDeleteModal({ open: false, type: "" })}
         itemName={deleteModal.type}
       />
 
