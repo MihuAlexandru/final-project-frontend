@@ -72,7 +72,7 @@
   transition:
     transform 0.2s ease,
     color 0.2s ease;
-  color: var(--color-gray-600);
+  color: var(--color-black);
 }
 
 .editBtn:hover {
