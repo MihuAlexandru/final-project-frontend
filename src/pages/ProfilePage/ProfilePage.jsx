@@ -7,6 +7,7 @@ import { useUser } from "../../context/UserContext.jsx";
 import { useToast } from "../../context/ToastContext.jsx";
 import { deleteMyAddress } from "../../services/addressService.js";
 import style from "./ProfilePage.module.css";
+import { Pencil, Trash2 } from "lucide-react";
 import ConfirmDeleteModal from "../../components/ConfirmDeleteModal/ConfirmDeleteModal.jsx";
 
 const ADDRESS_FIELDS = [
@@ -93,14 +94,16 @@ export default function ProfilePage() {
                       <button
                         onClick={() => handleEditAddress(addr)}
                         className={`${style.addressActionBtn} ${style.edit}`}
+                        title="Edit address"
                       >
-                        Edit
+                        <Pencil size={18} />
                       </button>
                       <button
                         onClick={() => setAddressToDelete(addr.id)}
                         className={`${style.addressActionBtn} ${style.delete}`}
+                        title="Delete address"
                       >
-                        Delete
+                        <Trash2 size={18} />
                       </button>
                     </div>
                   </div>
