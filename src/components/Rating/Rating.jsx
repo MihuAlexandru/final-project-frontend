@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Rating from "@mui/material/Rating";
 import Box from "@mui/material/Box";
 import StarIcon from "@mui/icons-material/Star";
@@ -20,16 +20,21 @@ function getLabelText(value) {
   return `${value} Star${value !== 1 ? "s" : ""}, ${labels[value]}`;
 }
 
-export default function Ratings() {
-  const [value, setValue] = useState(2);
+export default function Ratings({ valueProp = 0, readOnly = true }) {
+  const [value, setValue] = useState(valueProp);
   const [hover, setHover] = useState(-1);
+
+  useEffect(() => {
+    setValue(valueProp);
+  }, [valueProp]);
 
   return (
     <Box sx={{ width: 200, display: "flex", alignItems: "center" }}>
       <Rating
-        name="hover-feedback"
+        name="product-rating"
         value={value}
         precision={0.5}
+        readOnly={readOnly}
         getLabelText={getLabelText}
         onChange={(event, newValue) => {
           setValue(newValue);

@@ -8,8 +8,6 @@ export async function getProductsPaginated(
   minPrice = null,
   maxPrice = null,
 ) {
-
-
   try {
     let url = `${API_URL}/products/?page=${page}&limit=${limit}`;
 
