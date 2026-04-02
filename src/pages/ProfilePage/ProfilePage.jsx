@@ -7,6 +7,7 @@ import { useUser } from "../../context/UserContext.jsx";
 import { useToast } from "../../context/ToastContext.jsx";
 import { deleteMyAddress } from "../../services/addressService.js";
 import style from "./ProfilePage.module.css";
+import ConfirmDeleteModal from "../../components/ConfirmDeleteModal/ConfirmDeleteModal.jsx";
 
 const ADDRESS_FIELDS = [
   { label: "Street", key: "street" },
@@ -22,6 +23,7 @@ export default function ProfilePage() {
 
   const [showAddressModal, setShowAddressModal] = useState(false);
   const [addressToEdit, setAddressToEdit] = useState(null);
+  const [addressToDelete, setAddressToDelete] = useState(null);
 
   const handleAddAddress = () => {
     setAddressToEdit(null);
@@ -33,18 +35,19 @@ export default function ProfilePage() {
     setShowAddressModal(true);
   };
 
-  const handleDeleteAddress = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this address?"))
-      return;
+  const confirmDeleteAddress = async () => {
+    if (!addressToDelete) return;
     try {
-      await deleteMyAddress(id);
+      await deleteMyAddress(addressToDelete);
       setUser({
         ...user,
-        addresses: user.addresses.filter((a) => a.id !== id),
+        addresses: user.addresses.filter((a) => a.id !== addressToDelete),
       });
       addToast({ type: "success", message: "Address deleted successfully." });
     } catch (err) {
       addToast({ type: "error", message: err.message });
+    } finally {
+      setAddressToDelete(null);
     }
   };
 
@@ -94,7 +97,7 @@ export default function ProfilePage() {
                         Edit
                       </button>
                       <button
-                        onClick={() => handleDeleteAddress(addr.id)}
+                        onClick={() => setAddressToDelete(addr.id)}
                         className={`${style.addressActionBtn} ${style.delete}`}
                       >
                         Delete
@@ -123,6 +126,13 @@ export default function ProfilePage() {
         open={showAddressModal}
         onClose={() => setShowAddressModal(false)}
         addressToEdit={addressToEdit}
+      />
+
+      <ConfirmDeleteModal
+        open={!!addressToDelete}
+        onClose={() => setAddressToDelete(null)}
+        onConfirm={confirmDeleteAddress}
+        itemName="address"
       />
     </section>
   );
