@@ -7,13 +7,14 @@ import { useCallback, useEffect, useState } from "react";
 import heartEmpty from "../../assets/heart.png";
 import heartFilled from "../../assets/heart-filled.png";
 import { getFavorites, toggleFavoriteInStorage } from "../../utils/favorites";
+import { Pencil } from "lucide-react";
 import { useToast } from "../../context/ToastContext";
 import { useUser } from "../../context/UserContext";
 import { useCart } from "../../context/CartContext";
 import LoginPromptModal from "../LoginPromptModal/LoginPromptModal";
 import { addToCart } from "../../services/cartService";
 
-export default function ProductCard({ product }) {
+export default function ProductCard({ product, isAdmin, onEdit }) {
   const isOutOfStock = product.stock_quantity === 0;
   const isUnavailable = product.is_active === false;
 
@@ -107,19 +108,35 @@ export default function ProductCard({ product }) {
       >
         <Card>
           <div className={styles.productCardContainer}>
-            <button
-              className={`${styles.iconBtn} ${isFavorite ? styles.favoriteActive : ""}`}
-              aria-label={
-                isFavorite ? "Remove from favorites" : "Add to favorites"
-              }
-              onClick={toggleFavorite}
-            >
-              <img
-                src={isFavorite ? heartFilled : heartEmpty}
-                alt="Favorite Icon"
-                className={styles.heartIcon}
-              />
-            </button>
+            <div className={styles.topActions}>
+              <button
+                className={`${styles.iconBtn} ${isFavorite ? styles.favoriteActive : ""}`}
+                aria-label={
+                  isFavorite ? "Remove from favorites" : "Add to favorites"
+                }
+                onClick={toggleFavorite}
+              >
+                <img
+                  src={isFavorite ? heartFilled : heartEmpty}
+                  alt="Favorite Icon"
+                  className={styles.heartIcon}
+                />
+              </button>
+
+              {isAdmin && (
+                <button
+                  className={styles.editBtn}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onEdit(product.id);
+                  }}
+                  title="Edit Product"
+                >
+                  <Pencil size={18} />
+                </button>
+              )}
+            </div>
+
             <Link to={`/product/${product.id}`} className={styles.productLink}>
               <div className={styles.imageContainer}>
                 <img
@@ -131,6 +148,7 @@ export default function ProductCard({ product }) {
               </div>
               <h3 className={styles.title}>{product.name}</h3>
             </Link>
+
             <div className={styles.details}>
               {isUnavailable ? (
                 <p className={styles.stock} style={{ color: "grey" }}>
@@ -153,6 +171,7 @@ export default function ProductCard({ product }) {
                 {product?.price?.toLocaleString("ro-RO")} Lei
               </p>
             </div>
+
             <div className={styles.action}>
               <Button
                 disabled={isOutOfStock || isUnavailable || isAddingToCart}
