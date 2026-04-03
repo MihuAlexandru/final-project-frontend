@@ -13,7 +13,6 @@ import { useUser } from "../../context/UserContext";
 import { useCart } from "../../context/CartContext";
 import LoginPromptModal from "../LoginPromptModal/LoginPromptModal";
 import { addToCart } from "../../services/cartService";
-// const API_URL = import.meta.env.VITE_API_BASE_URL;
 
 export default function ProductCard({ product, isAdmin, onEdit }) {
   const isOutOfStock = product.stock_quantity === 0;
@@ -96,14 +95,11 @@ export default function ProductCard({ product, isAdmin, onEdit }) {
       setIsAddingToCart(false);
     }
   };
-  // TO BE MODIFIED
-  // const rawImagePath = product.images?.[0]?.image_path;
-  // const imageUrl = rawImagePath
-  //   ? rawImagePath.startsWith("http")
-  //     ? rawImagePath
-  //     : `${API_URL}${rawImagePath}`
-  //   : noImage;
-  const imageUrl = noImage;
+
+  const imageUrl =
+    product.images && product.images.length > 0
+      ? product.images[0].image_path
+      : noImage;
 
   return (
     <>
