@@ -25,6 +25,7 @@ import { CartProvider } from "./context/CartContext.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword.jsx";
 import ResetPassword from "./pages/ResetPassword/ResetPassword.jsx";
+import OrderHistory from "./pages/OrderHistoryPage/OrderHistory.jsx";
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
@@ -77,6 +78,14 @@ createRoot(document.getElementById("root")).render(
               element={
                 <ProtectedRoute adminOnly>
                   <AdminPanel />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/order-history"
+              element={
+                <ProtectedRoute>
+                  <OrderHistory />
                 </ProtectedRoute>
               }
             />

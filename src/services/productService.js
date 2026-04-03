@@ -1,5 +1,13 @@
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
+const getHeaders = () => {
+  const token = localStorage.getItem("access_token");
+  return {
+    "Content-Type": "application/json",
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  };
+};
+
 export async function getProductsPaginated(
   page = 1,
   limit = 12,
@@ -18,9 +26,7 @@ export async function getProductsPaginated(
 
     const response = await fetch(url, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: getHeaders(),
     });
 
     if (!response.ok) {
@@ -35,15 +41,10 @@ export async function getProductsPaginated(
 }
 
 export async function getProductById(id) {
-  const token = localStorage.getItem("access_token");
-
   try {
     const response = await fetch(`${API_URL}/products/${id}`, {
       method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
+      headers: getHeaders(),
     });
 
     if (!response.ok) {
@@ -57,27 +58,47 @@ export async function getProductById(id) {
 }
 
 export async function updateProduct(productId, updateData) {
-  const token = localStorage.getItem("access_token");
-
   const response = await fetch(`${API_URL}/products/${productId}`, {
     method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
+    headers: getHeaders(),
     body: JSON.stringify(updateData),
   });
 
   if (!response.ok) {
     const errorData = await response.json();
-
-    if (response.status === 401) {
-      console.error("Session expired. Please log in again.");
-    }
-
     throw new Error(errorData.detail || "Failed to update product");
   }
 
+  return await response.json();
+}
+
+export async function addProductAttribute(productId, attributeData) {
+  const response = await fetch(`${API_URL}/products/${productId}/attributes`, {
+    method: "POST",
+    headers: getHeaders(),
+    body: JSON.stringify(attributeData),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.detail || "Failed to add attribute");
+  }
+  return await response.json();
+}
+
+export async function removeProductAttribute(productId, attributeId) {
+  const response = await fetch(
+    `${API_URL}/products/${productId}/attributes/${attributeId}`,
+    {
+      method: "DELETE",
+      headers: getHeaders(),
+    },
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.detail || "Failed to remove attribute");
+  }
   return await response.json();
 }
 

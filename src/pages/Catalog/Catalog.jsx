@@ -1,32 +1,40 @@
 import { useState, useEffect, useRef } from "react";
+import styles from "./Catalog.module.css";
 
 import ProductCard from "../../components/ProductCard/ProductCard";
 import Pagination from "../../components/Pagination/Pagination";
-import styles from "./Catalog.module.css";
 import SearchBar from "../../components/UI/SearchBar/SearchBar";
 import Filters from "../../components/Filters/Filters";
+import ConfirmDeleteModal from "../../components/ConfirmDeleteModal/ConfirmDeleteModal";
+import ProductEditModal from "../../components/Admin/ProductEditModal";
+
 import { getProductsPaginated } from "../../services/productService";
+import { useUser } from "../../context/UserContext";
 
 export default function Catalog() {
+  const { user, loading: userLoading } = useUser();
   const topRef = useRef(null);
-  const [debouncedSearch, setDebouncedSearch] = useState("");
-  const [sortType, setSortType] = useState("");
-  const [priceRange, setPriceRange] = useState({
-    min: 0,
-    max: 10000,
-  });
-  const [selectedCategories, setSelectedCategories] = useState([]);
-  const [inStockOnly, setInStockOnly] = useState(false);
 
   const [currentProducts, setCurrentProducts] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
-  const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
   const itemsPerPage = 12;
+
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [sortType, setSortType] = useState("");
+  const [priceRange, setPriceRange] = useState({ min: 0, max: 10000 });
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [inStockOnly, setInStockOnly] = useState(false);
+
+  const [deleteModal, setDeleteModal] = useState({ open: false, type: "" });
+  const [editingProductId, setEditingProductId] = useState(null);
+
+  const isAdmin = user?.role === "admin" || user?.is_admin === true;
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [debouncedSearch, sortType, priceRange, selectedCategories, inStockOnly]);
+  }, [debouncedSearch, priceRange, selectedCategories, inStockOnly]);
 
   useEffect(() => {
     const fetchCatalog = async () => {
@@ -34,7 +42,6 @@ export default function Catalog() {
       try {
         const categoryId =
           selectedCategories.length > 0 ? selectedCategories[0] : null;
-
         const data = await getProductsPaginated(
           currentPage,
           itemsPerPage,
@@ -45,82 +52,52 @@ export default function Catalog() {
         );
 
         setCurrentProducts(data.items || []);
-
-        const calculatedPages = Math.ceil(
-          (data.total_items || 0) / itemsPerPage,
-        );
-        setTotalPages(calculatedPages || 1);
+        setTotalPages(Math.ceil((data.total_items || 0) / itemsPerPage) || 1);
       } catch (error) {
-        console.error("Failed to fetch catalog data:", error);
+        console.error(error);
       } finally {
         setIsLoading(false);
       }
     };
-
     fetchCatalog();
   }, [
     currentPage,
     debouncedSearch,
-    sortType,
     priceRange,
     selectedCategories,
     inStockOnly,
   ]);
 
+  const handleEditSubmit = (updatedProduct) => {
+    setCurrentProducts((prev) =>
+      prev.map((p) => (p.id === updatedProduct.id ? updatedProduct : p)),
+    );
+    setEditingProductId(null);
+  };
+
   const handlePageChange = (page) => {
     setCurrentPage(page);
     if (topRef.current) {
-      setTimeout(() => {
-        topRef.current.scrollIntoView({ behavior: "auto", block: "start" });
-      }, 100);
-    } else {
-      window.scrollTo({ top: 0, behavior: "auto" });
+      topRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
 
-  const filteredProducts = currentProducts
+  const sortedProducts = [...currentProducts].sort((a, b) => {
+    if (sortType === "name-asc") return a.name.localeCompare(b.name);
+    if (sortType === "name-desc") return b.name.localeCompare(a.name);
+    if (sortType === "price-asc") return a.price - b.price;
+    if (sortType === "price-desc") return b.price - a.price;
+    return 0;
+  });
 
-    .filter((item) =>
-      item.name.toLowerCase().includes(debouncedSearch.toLowerCase()),
-    )
-
-    .filter(
-      (item) => item.price >= priceRange.min && item.price <= priceRange.max,
-    )
-
-    .filter((item) =>
-      selectedCategories.length === 0
-        ? true
-        : selectedCategories.includes(item.category_id),
-    )
-
-    .filter((item) => (inStockOnly ? item.stock_quantity > 0 : true))
-
-    .sort((a, b) => {
-      switch (sortType) {
-        case "name-asc":
-          return a.name.localeCompare(b.name);
-
-        case "name-desc":
-          return b.name.localeCompare(a.name);
-
-        case "price-asc":
-          return a.price - b.price;
-
-        case "price-desc":
-          return b.price - a.price;
-
-        default:
-          return 0;
-      }
-    });
+  if (userLoading) return <p>Verifying profile...</p>;
 
   return (
     <div className={styles.catalogPage} ref={topRef}>
       <h1 className={styles.pageTitle}>Catalog page</h1>
+
       <div className={styles.topBar}>
         <SearchBar onSearch={setDebouncedSearch} delay={1000} />
-
         <select
           className={styles.sortDropdown}
           onChange={(e) => setSortType(e.target.value)}
@@ -146,18 +123,18 @@ export default function Catalog() {
         <div className={styles.gridWrapper}>
           <div className={styles.catalogContainer}>
             {isLoading ? (
-              <p style={{ fontWeight: "bold", padding: "20px" }}>
-                Loading products...
-              </p>
-            ) : filteredProducts.length > 0 ? (
-              filteredProducts.map((item) => (
-                <ProductCard key={item.id} product={item} />
+              <p>Loading products...</p>
+            ) : sortedProducts.length > 0 ? (
+              sortedProducts.map((item) => (
+                <ProductCard
+                  key={item.id}
+                  product={item}
+                  isAdmin={isAdmin}
+                  onEdit={(id) => setEditingProductId(id)}
+                />
               ))
             ) : (
-              <div className={styles.noProductsMessage}>
-                <h2>No products found</h2>
-                <p>Try adjusting your filters or search query.</p>
-              </div>
+              <p>No products found.</p>
             )}
           </div>
 
@@ -172,6 +149,31 @@ export default function Catalog() {
           )}
         </div>
       </div>
+
+      {isAdmin && (
+        <div style={{ marginTop: "20px" }}>
+          <button
+            onClick={() => setDeleteModal({ open: true, type: "Product" })}
+          >
+            Delete Test
+          </button>
+        </div>
+      )}
+
+      <ConfirmDeleteModal
+        open={deleteModal.open}
+        onClose={() => setDeleteModal({ open: false, type: "" })}
+        onConfirm={() => setDeleteModal({ open: false, type: "" })}
+        itemName={deleteModal.type}
+      />
+
+      {isAdmin && editingProductId && (
+        <ProductEditModal
+          productId={editingProductId}
+          onClose={() => setEditingProductId(null)}
+          onSubmit={handleEditSubmit}
+        />
+      )}
     </div>
   );
 }
