@@ -7,7 +7,9 @@ import { useCallback, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import heartEmpty from "../../assets/heart.png";
 import heartFilled from "../../assets/heart-filled.png";
+import AddReview from "../../components/AddReview/AddReview";
 import { getProductById } from "../../services/productService";
+import { getProductReviews } from "../../services/reviewsService";
 import { addToCart } from "../../services/cartService";
 import { useCart } from "../../context/CartContext";
 import { useToast } from "../../context/ToastContext";
@@ -17,27 +19,33 @@ export default function Product() {
   const [loading, setLoading] = useState(true);
   const [product, setProduct] = useState(null);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [reviews, setReviews] = useState(false);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const { refreshCart } = useCart();
   const { addToast } = useToast();
 
-  useEffect(() => {
-    async function fetchProduct() {
-      try {
-        setLoading(true);
-        const data = await getProductById(id);
-        setProduct(data);
+  async function fetchProduct() {
+    try {
+      setLoading(true);
+      const [productData, reviewsData] = await Promise.all([
+        getProductById(id),
+        getProductReviews(id),
+      ]);
 
-        if (data && data.id) {
-          setIsFavorite(getFavorites().includes(data.id));
-        }
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
+      setProduct(productData);
+      setReviews(reviewsData);
+
+      if (productData?.id) {
+        setIsFavorite(getFavorites().includes(productData?.id));
       }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
+  }
 
+  useEffect(() => {
     fetchProduct();
   }, [id]);
 
@@ -108,8 +116,8 @@ export default function Product() {
             </button>
             <h2>Product specifications</h2>
             <p>{product.description}</p>
-            <Ratings />
-            <h6>[number] ratings</h6>
+            <Ratings valueProp={reviews?.average_rating || 0} />
+            <h6>{reviews?.total_reviews || 0} ratings</h6>
             <div className={styles.infoWrapper}>
               <h4>Price: {product.price} Lei</h4>
               <h4>Quantity in stock: {product.stock_quantity}</h4>
@@ -131,6 +139,23 @@ export default function Product() {
           </section>
         </div>
       }
+      <div className={styles.reviewsContainer}>
+        <AddReview productId={id} onReviewAdded={() => fetchProduct()} />
+        <h3>Customer Reviews</h3>
+        {reviews?.items?.length > 0 ? (
+          reviews.items.map((item) => (
+            <div key={item.id} className={styles.reviewsItem}>
+              <Ratings valueProp={item.rating} readOnly={true} />
+              <p>
+                User #{item.user_id} -{" "}
+                {new Date(item.created_at).toLocaleDateString()}
+              </p>
+            </div>
+          ))
+        ) : (
+          <p>No reviews yet. Be the first to rate this product!</p>
+        )}
+      </div>
     </div>
   );
 }

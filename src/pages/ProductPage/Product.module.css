@@ -1,7 +1,7 @@
 .container {
   display: flex;
-  flex-direction: row;
   justify-content: center;
+  flex-direction: column;
 }
 
 .card {
@@ -137,4 +137,25 @@ img {
     padding: 20px;
     margin: 10px;
   }
+}
+
+.reviewsContainer {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-left: 100px;
+  padding-right: 100px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.reviewsItem {
+  justify-content: flex-start;
+  align-items: center;
+  background-color: var(--color-gray-300);
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
 }
