@@ -1,0 +1,85 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  max-width: 600px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-lg);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--color-text);
+}
+
+.content {
+  padding: var(--space-lg);
+}
+
+.orderInfo {
+  margin-bottom: var(--space-lg);
+}
+
+.orderInfo p {
+  margin: 0 0 var(--space-sm) 0;
+}
+
+.address {
+  margin-bottom: var(--space-md);
+}
+
+.address h4 {
+  margin: 0 0 var(--space-sm) 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.address p {
+  margin: 0 0 var(--space-xs) 0;
+  font-size: 0.9rem;
+}
+
+.items h3 {
+  margin: 0 0 var(--space-md) 0;
+}
+
+.item {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-md);
+  margin-bottom: var(--space-sm);
+}
+
+.item p {
+  margin: 0 0 var(--space-xs) 0;
+}

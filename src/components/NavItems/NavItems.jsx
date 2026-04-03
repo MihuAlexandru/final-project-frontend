@@ -5,6 +5,7 @@ import style from "./NavItems.module.css";
 import shopIcon from "../../assets/shopping-cart.png";
 import heartIcon from "../../assets/heart.png";
 import userIcon from "../../assets/user.png";
+import historyOrder from "../../assets/history.png";
 
 const leftLinks = [
   { path: "/", label: "Home" },
@@ -14,6 +15,7 @@ const leftLinks = [
 
 const rightLinks = [
   { path: "/wishlist", icon: heartIcon, label: "Wishlist", auth: true },
+  { path: "/order-history", icon: historyOrder, label: "Order History", auth: true },
   { path: "/cart", icon: shopIcon, label: "Cart", auth: true, isCart: true },
   { path: "/profile", icon: userIcon, label: "Profile", auth: true },
   { path: "/login", label: "Login", guest: true },
